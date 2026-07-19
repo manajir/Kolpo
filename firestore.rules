@@ -1,0 +1,212 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 1. Global default-deny safety net
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // 2. Primitive Global Helpers
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isSignedIn() && request.auth.uid == uid;
+    }
+
+    function isVerifiedUser() {
+      return isSignedIn() && (request.auth.token.email_verified == true);
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    // 3. Entity Validator Functions
+    function isValidUserProfile(data) {
+      return data.keys().hasAll(['uid', 'email'])
+        && data.keys().size() <= 10
+        && data.uid is string && data.uid.size() <= 128
+        && data.email is string && data.email.size() <= 128
+        && (!data.keys().hasAny(['displayName']) || (data.displayName is string && data.displayName.size() <= 128))
+        && (!data.keys().hasAny(['currentStage']) || (data.currentStage is string && data.currentStage in ['menstruating', 'pregnancy', 'perimenopause', 'postmenopause']))
+        && (!data.keys().hasAny(['cycleLength']) || (data.cycleLength is int && data.cycleLength >= 10 && data.cycleLength <= 100))
+        && (!data.keys().hasAny(['periodLength']) || (data.periodLength is int && data.periodLength >= 1 && data.periodLength <= 20))
+        && (!data.keys().hasAny(['lastPeriodDate']) || (data.lastPeriodDate is string && data.lastPeriodDate.size() <= 50))
+        && (!data.keys().hasAny(['pregnancyDueDate']) || (data.pregnancyDueDate is string && data.pregnancyDueDate.size() <= 50))
+        && (!data.keys().hasAny(['createdAt']) || (data.createdAt is string && data.createdAt.size() <= 50))
+        && (!data.keys().hasAny(['subActive']) || (data.subActive is bool));
+    }
+
+    function isValidTrackingLog(data) {
+      return data.keys().hasAll(['logDate'])
+        && data.keys().size() <= 11
+        && data.logDate is string && data.logDate.size() <= 20
+        && (!data.keys().hasAny(['periodBleeding']) || (data.periodBleeding is string && data.periodBleeding.size() <= 20 && data.periodBleeding in ['none', 'light', 'medium', 'heavy']))
+        && (!data.keys().hasAny(['cervicalMucus']) || (data.cervicalMucus is string && data.cervicalMucus.size() <= 20 && data.cervicalMucus in ['dry', 'sticky', 'creamy', 'watery', 'raw-egg-white', 'none']))
+        && (!data.keys().hasAny(['symptoms']) || (data.symptoms is list && data.symptoms.size() <= 50 && (data.symptoms.size() == 0 || data.symptoms[0] is string)))
+        && (!data.keys().hasAny(['moods']) || (data.moods is list && data.moods.size() <= 50 && (data.moods.size() == 0 || data.moods[0] is string)))
+        && (!data.keys().hasAny(['energyLevel']) || (data.energyLevel is string && data.energyLevel.size() <= 20 && data.energyLevel in ['high', 'medium', 'low']))
+        && (!data.keys().hasAny(['notes']) || (data.notes is string && data.notes.size() <= 5000))
+        && (!data.keys().hasAny(['weight']) || (data.weight is number))
+        && (!data.keys().hasAny(['temperature']) || (data.temperature is number))
+        && (!data.keys().hasAny(['updatedAt']) || (data.updatedAt is string && data.updatedAt.size() <= 50));
+    }
+
+    function isValidUserFile(data) {
+      return data.keys().hasAll(['fileId', 'fileName', 'fileUrl'])
+        && data.keys().size() <= 6
+        && data.fileId is string && data.fileId.size() <= 128
+        && data.fileName is string && data.fileName.size() <= 256
+        && data.fileUrl is string && data.fileUrl.size() <= 1000
+        && (!data.keys().hasAny(['fileType']) || (data.fileType is string && data.fileType.size() <= 50))
+        && (!data.keys().hasAny(['uploadedAt']) || (data.uploadedAt is string && data.uploadedAt.size() <= 50))
+        && (!data.keys().hasAny(['sizeBytes']) || (data.sizeBytes is int));
+    }
+
+    function isValidClinicReport(data) {
+      return data.keys().hasAll(['reportId', 'userId'])
+        && data.keys().size() <= 11
+        && data.reportId is string && data.reportId.size() <= 128
+        && data.userId is string && data.userId.size() <= 128
+        && (!data.keys().hasAny(['title']) || (data.title is string && data.title.size() <= 256))
+        && (!data.keys().hasAny(['createdAt']) || (data.createdAt is string && data.createdAt.size() <= 50))
+        && (!data.keys().hasAny(['startDate']) || (data.startDate is string && data.startDate.size() <= 50))
+        && (!data.keys().hasAny(['endDate']) || (data.endDate is string && data.endDate.size() <= 50))
+        && (!data.keys().hasAny(['symptomsSummary']) || (data.symptomsSummary is string && data.symptomsSummary.size() <= 5000))
+        && (!data.keys().hasAny(['stageSummary']) || (data.stageSummary is string && data.stageSummary.size() <= 5000))
+        && (!data.keys().hasAny(['additionalDoctorNotes']) || (data.additionalDoctorNotes is string && data.additionalDoctorNotes.size() <= 5000))
+        && (!data.keys().hasAny(['reportData']) || (data.reportData is string && data.reportData.size() <= 10000))
+        && (!data.keys().hasAny(['clinicianAccessCode']) || (data.clinicianAccessCode is string && data.clinicianAccessCode.size() <= 50));
+    }
+
+    function isValidForumPost(data) {
+      return data.keys().hasAll(['postId', 'authorId', 'title', 'content'])
+        && data.keys().size() <= 9
+        && data.postId is string && data.postId.size() <= 128
+        && data.authorId is string && data.authorId.size() <= 128
+        && data.title is string && data.title.size() <= 256
+        && data.content is string && data.content.size() <= 10000
+        && (!data.keys().hasAny(['authorName']) || (data.authorName is string && data.authorName.size() <= 128))
+        && (!data.keys().hasAny(['category']) || (data.category is string && data.category.size() <= 100))
+        && (!data.keys().hasAny(['createdAt']) || (data.createdAt is string && data.createdAt.size() <= 50))
+        && (!data.keys().hasAny(['likes']) || (data.likes is list && data.likes.size() <= 5000 && (data.likes.size() == 0 || data.likes[0] is string)))
+        && (!data.keys().hasAny(['commentsCount']) || (data.commentsCount is int));
+    }
+
+    // 4. Match Rules
+
+    // User profiles matching
+    match /users/{uid} {
+      allow get: if isOwner(uid);
+      allow list: if false; // Profiles are strictly non-listable
+      
+      allow create: if isOwner(uid)
+        && isValidUserProfile(incoming())
+        && incoming().uid == uid
+        && incoming().email == request.auth.token.email;
+
+      allow update: if isOwner(uid)
+        && isValidUserProfile(incoming())
+        && incoming().uid == existing().uid
+        && incoming().email == existing().email
+        && incoming().createdAt == existing().createdAt;
+
+      allow delete: if isOwner(uid);
+    }
+
+    // Daily tracking logs matching (Subcollection)
+    match /users/{uid}/tracking/{logDate} {
+      allow get: if isOwner(uid);
+      allow list: if isOwner(uid);
+
+      allow create: if isOwner(uid)
+        && isValidId(logDate)
+        && isValidTrackingLog(incoming())
+        && incoming().logDate == logDate;
+
+      allow update: if isOwner(uid)
+        && isValidId(logDate)
+        && isValidTrackingLog(incoming())
+        && incoming().logDate == existing().logDate;
+
+      allow delete: if isOwner(uid);
+    }
+
+    // Secure files matching (Subcollection)
+    match /users/{uid}/files/{fileId} {
+      allow get: if isOwner(uid);
+      allow list: if isOwner(uid);
+
+      allow create: if isOwner(uid)
+        && isValidId(fileId)
+        && isValidUserFile(incoming())
+        && incoming().fileId == fileId;
+
+      allow update: if isOwner(uid)
+        && isValidId(fileId)
+        && isValidUserFile(incoming())
+        && incoming().fileId == existing().fileId;
+
+      allow delete: if isOwner(uid);
+    }
+
+    // Clinician reports matching (Subcollection)
+    match /users/{uid}/clinic_reports/{reportId} {
+      allow get: if isOwner(uid);
+      allow list: if isOwner(uid);
+
+      allow create: if isOwner(uid)
+        && isValidId(reportId)
+        && isValidClinicReport(incoming())
+        && incoming().reportId == reportId
+        && incoming().userId == uid;
+
+      allow update: if isOwner(uid)
+        && isValidId(reportId)
+        && isValidClinicReport(incoming())
+        && incoming().reportId == existing().reportId
+        && incoming().userId == existing().userId;
+
+      allow delete: if isOwner(uid);
+    }
+
+    // Public community forum matching
+    match /forum/{postId} {
+      allow get: if isSignedIn();
+      allow list: if isSignedIn();
+
+      allow create: if isVerifiedUser()
+        && isValidId(postId)
+        && isValidForumPost(incoming())
+        && incoming().postId == postId
+        && incoming().authorId == request.auth.uid;
+
+      allow update: if isVerifiedUser()
+        && isValidId(postId)
+        && isValidForumPost(incoming())
+        && incoming().postId == existing().postId
+        && incoming().authorId == existing().authorId
+        && (
+          // Action: Full Edit by the Author
+          (existing().authorId == request.auth.uid && incoming().diff(existing()).affectedKeys().hasAll([]) )
+          || 
+          // Action: Toggle Like (by any authenticated user)
+          (incoming().diff(existing()).affectedKeys().hasOnly(['likes']))
+        );
+
+      allow delete: if isVerifiedUser()
+        && existing().authorId == request.auth.uid;
+    }
+  }
+}

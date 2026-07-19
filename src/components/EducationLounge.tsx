@@ -1,0 +1,326 @@
+import React, { useState } from 'react';
+import { useAppState } from '../AppContext';
+import { CourseMaterial, HealthStage } from '../types';
+import { Search, Compass, BookOpen, Video, GraduationCap, Award, Lock, Sparkles, Check, Play, ChevronRight, HelpCircle } from 'lucide-react';
+
+export const EducationLounge: React.FC = () => {
+  const { articles, profile, upgradeSubscription, triggerSimulationNotification } = useAppState();
+
+  const [search, setSearch] = useState('');
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+  const [selectedType, setSelectedType] = useState<string>('all');
+
+  // Currently reading or playing item state
+  const [activeItem, setActiveItem] = useState<CourseMaterial | null>(null);
+  const [showBillingModal, setShowBillingModal] = useState(false);
+
+  const handleOpenItem = (item: CourseMaterial) => {
+    if (item.premiumOnly && !profile?.subActive) {
+      setShowBillingModal(true);
+    } else {
+      setActiveItem(item);
+    }
+  };
+
+  const handleUpgradeAction = async () => {
+    await upgradeSubscription();
+    setShowBillingModal(false);
+    triggerSimulationNotification(
+      'সাবস্ক্রিপশন সফল!',
+      'ধন্যবাদ! আপনি সফলভাবে কল্প প্রো+ অল-রাউন্ডার ফিচারসমূহ অ্যাক্টিভেট করেছেন।'
+    );
+  };
+
+  const filteredItems = articles.filter(item => {
+    const matchesSearch = item.title.toLowerCase().includes(search.toLowerCase()) || 
+                          item.bengaliTitle.toLowerCase().includes(search.toLowerCase());
+    const matchesCat = selectedCategory === 'all' || item.category === selectedCategory;
+    const matchesType = selectedType === 'all' || item.type === selectedType;
+    return matchesSearch && matchesCat && matchesType;
+  });
+
+  const getCategoryBengaliTag = (cat: string) => {
+    switch (cat) {
+      case 'period': return 'পিরিয়ড কেয়ার';
+      case 'pregnancy': return 'গর্ভাবস্থা';
+      case 'menopause': return 'পেরিমেনোপজ';
+      default: return 'সামগ্রিক সুস্থতা';
+    }
+  };
+
+  const toBengaliNumber = (num: number) => {
+    const search = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
+    const replace = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
+    return num.toString().split('').map(char => {
+      const index = search.indexOf(char);
+      return index !== -1 ? replace[index] : char;
+    }).join('');
+  };
+
+  return (
+    <div className="space-y-6">
+      
+      {/* Search Header Banner */}
+      <div className="bg-gradient-to-br from-[#7e5541]/10 to-[#894f42]/10 rounded-3xl p-6 border border-[#ffe9e8]">
+        <div className="flex flex-col md:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="bg-[#7e5541] text-white p-3 rounded-2xl">
+              <Compass className="w-6 h-6" />
+            </div>
+            <div>
+              <h3 className="font-sans font-bold text-lg text-[#261818]">কল্প লার্নিং অ্যান্ড এডুকেশন কর্নার</h3>
+              <p className="text-xs text-[#524340] font-sans">সীমাহীন তথ্যসমৃদ্ধ গাইনোকোলজিক্যাল অনুচ্ছেদ, শিক্ষণীয় ভিডিও লেকচার ও বিশেষ হেলথ কোর্সসমূহ</p>
+            </div>
+          </div>
+
+          <div className="flex gap-2">
+            {!profile?.subActive && (
+              <button
+                onClick={() => setShowBillingModal(true)}
+                className="bg-gradient-to-r from-[#894f42] to-[#7e5541] text-white font-sans font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-md cursor-pointer hover:brightness-105 active:scale-95"
+              >
+                <Award className="w-4 h-4 fill-white" />
+                কল্প প্রো+ এ মেম্বারশিপ নিন
+              </button>
+            )}
+          </div>
+        </div>
+
+        {/* Filters */}
+        <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
+          <input
+            type="text"
+            placeholder="আর্টিকেল, ভিডিও বা হেলথ কোর্স সার্চ করুন..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            className="bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3.5 py-1.5 text-xs text-gray-800 focus:outline-none"
+          />
+
+          <select
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="bg-white border border-[#ffe9e8] rounded-xl px-3 py-1.5 focus:outline-none"
+          >
+            <option value="all">সব ক্যাটাগরি (All Topics)</option>
+            <option value="period">মাসিক ও পিরিয়ড কেয়ার (Period Care)</option>
+            <option value="pregnancy">গর্ভধারণ ও মেটারনিটি (Pregnancy/Lactation)</option>
+            <option value="menopause">পেরিমেনোপজ ও হরমোন (Menopause/Bio Hrt)</option>
+            <option value="wellness">শারীরিক ইয়োগা ও ধ্যান (Wellness)</option>
+          </select>
+
+          <select
+            value={selectedType}
+            onChange={(e) => setSelectedType(e.target.value)}
+            className="bg-white border border-[#ffe9e8] rounded-xl px-3 py-1.5 focus:outline-none"
+          >
+            <option value="all">সব ফরম্যাট (All resources)</option>
+            <option value="article">গবেষণাধর্মী অনুচ্ছেদ (Articles)</option>
+            <option value="video">ভিডিও লার্নিং (Videos)</option>
+            <option value="course">সবগুলো কোর্স লেকচার (Courses)</option>
+          </select>
+        </div>
+      </div>
+
+      {/* RENDER DETAILED ACTIVE READING OR PLAYING COMPONENT */}
+      {activeItem && (
+        <div className="bg-white border-2 border-[#ffe9e8] rounded-3xl p-6 shadow-md space-y-4 animate-fade-in text-xs font-sans">
+          
+          <div className="flex justify-between items-center pb-3 border-b border-[#ffe9e8]">
+            <div>
+              <span className="text-[10px] text-[#45645e] uppercase tracking-wider font-bold block bg-[#ebf8f5] px-2.5 py-0.5 rounded-full w-max">
+                {getCategoryBengaliTag(activeItem.category)} • {activeItem.type.toUpperCase()}
+              </span>
+              <h4 className="font-sans font-bold text-base text-[#261818] mt-1">{activeItem.bengaliTitle}</h4>
+            </div>
+            
+            <button
+              onClick={() => setActiveItem(null)}
+              className="text-gray-400 hover:text-gray-800 border border-gray-200 hover:bg-gray-100 rounded-xl px-3 py-1 bg-white cursor-pointer"
+            >
+              বন্ধ করুন
+            </button>
+          </div>
+
+          {/* If video tutorial format */}
+          {activeItem.type === 'video' && activeItem.videoUrl && (
+            <div className="relative aspect-video rounded-2xl overflow-hidden border border-[#ffe9e8] bg-black">
+              <iframe
+                title={activeItem.title}
+                src={activeItem.videoUrl}
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute top-0 left-0 w-full h-full"
+              />
+            </div>
+          )}
+
+          {/* Detailed Course Syllabus layout */}
+          {activeItem.type === 'course' && activeItem.lessons && (
+            <div className="bg-[#fff9f8] p-4 rounded-2xl border border-[#ffe9e8] mb-4">
+              <p className="font-bold text-[#894f42] mb-2.5">কোর্স কারিকুলাম ও অধ্যায়সমূহ:</p>
+              <div className="space-y-2">
+                {activeItem.lessons.map((lesson, idx) => (
+                  <div key={idx} className="flex items-center justify-between bg-white border border-[#fff0f0] px-4 py-2.5 rounded-xl text-[11px]">
+                    <div className="flex items-center gap-2">
+                      <span className="bg-[#fff0f0] text-[#894f42] w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px]">
+                        {toBengaliNumber(idx+1)}
+                      </span>
+                      <span className="font-semibold text-gray-850">{lesson.title}</span>
+                    </div>
+                    <span className="text-gray-400 font-mono">{lesson.duration}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Renders dynamic health library documents markup */}
+          {activeItem.contentMarkup && (
+            <div className="prose prose-sm max-w-none text-[#261818] font-sans leading-relaxed space-y-3 pt-2 text-[11px]">
+              {activeItem.contentMarkup.split('\n\n').map((paragraph, i) => {
+                if (paragraph.trim().startsWith('##')) {
+                  return <h5 key={i} className="font-bold text-[#894f42] text-xs pt-2">{paragraph.replace(/##/g, '').trim()}</h5>;
+                }
+                if (paragraph.trim().startsWith('-')) {
+                  return (
+                    <ul key={i} className="list-disc pl-5 space-y-1.5">
+                      {paragraph.split('\n').map((li, j) => (
+                        <li key={j} className="list-item">{li.replace(/-/g, '').trim()}</li>
+                      ))}
+                    </ul>
+                  );
+                }
+                return <p key={i}>{paragraph.trim()}</p>;
+              })}
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ITEMS LISTING GRID DISPLAY */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {filteredItems.map((item) => {
+          const isLocked = item.premiumOnly && !profile?.subActive;
+
+          return (
+            <div
+              key={item.id}
+              onClick={() => handleOpenItem(item)}
+              className="bg-white border border-[#ffe9e8] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
+            >
+              <div>
+                {/* Cover Image Header */}
+                <div className="relative h-44 bg-gray-100 overflow-hidden select-none">
+                  <img
+                    src={item.coverImage}
+                    alt={item.title}
+                    referrerPolicy="no-referrer"
+                    className="w-full h-full object-cover transition-all hover:scale-105 duration-500"
+                  />
+                  {isLocked && (
+                    <div className="absolute inset-0 bg-[#261818]/60 backdrop-blur-xs flex flex-col items-center justify-center text-white p-3 text-center">
+                      <Lock className="w-8 h-8 text-yellow-400 mb-1" />
+                      <span className="text-[11px] font-bold font-sans">কল্প প্রো+ মেম্বারশিপ লক</span>
+                    </div>
+                  )}
+
+                  <span className="absolute top-3 left-3 bg-[#fff8f7] border border-[#ffe9e8] text-[#894f42] font-sans font-bold text-[9px] px-2 py-0.5 rounded-full shadow-sm">
+                    {getCategoryBengaliTag(item.category)}
+                  </span>
+                </div>
+
+                <div className="p-4 space-y-1.5">
+                  <div className="flex items-center gap-1.5 text-gray-400 font-mono text-[9px] uppercase tracking-wider font-bold">
+                    {item.type === 'video' ? <Video className="w-3.5 h-3.5 text-red-500" /> : item.type === 'course' ? <GraduationCap className="w-3.5 h-3.5 text-purple-500" /> : <BookOpen className="w-3.5 h-3.5 text-amber-500" />}
+                    <span>{item.type} • {item.duration}</span>
+                  </div>
+
+                  <h4 className="font-sans font-bold text-[#261818] text-xs leading-snug line-clamp-2">
+                    {item.bengaliTitle}
+                  </h4>
+                </div>
+              </div>
+
+              <div className="px-4 pb-4 pt-1.5 flex items-center justify-between border-t border-[#fff0f0] text-[10px]">
+                <span className="text-gray-400 font-mono">আইডি: {item.id}</span>
+                <span className="text-[#894f42] font-bold font-sans flex items-center gap-0.5">
+                  {isLocked ? 'আনলক করুন' : 'বিস্তারিত দেখুন'}
+                  <ChevronRight className="w-3.5 h-3.5" />
+                </span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {/* SUBSCRIPTION MANAGEMENT MODAL (Upgrading Free to Premium simulated billing) */}
+      {showBillingModal && (
+        <div className="fixed inset-0 bg-black/55 backdrop-blur-xs flex items-center justify-center z-50 p-4">
+          <div className="bg-white border-2 border-[#ffe9e8]" style={{ borderRadius: '24px', maxWidth: '440px', width: '100%' }}>
+            
+            {/* Header */}
+            <div className="p-6 text-center border-b border-[#fff0f0] relative">
+              <button 
+                onClick={() => setShowBillingModal(false)}
+                className="absolute right-4 top-4 text-gray-400 hover:text-gray-800"
+              >
+                ✕
+              </button>
+              
+              <div className="bg-[#ffdbcc] text-[#6d382d] p-3.5 rounded-2xl w-max mx-auto mb-3 flex items-center justify-center shadow-inner">
+                <Award className="w-8 h-8 fill-current text-amber-800 animate-spin-slow" />
+              </div>
+              <h3 className="font-sans font-bold text-lg text-[#261818]">কল্প প্রো+ সাবস্ক্রিপশন</h3>
+              <p className="text-xs text-[#524340] font-sans mt-1">নারীদের নিরাপদ, সীমাহীন দীর্ঘমেয়াদী পূর্ণাঙ্গ স্বাস্থ্য সুরক্ষা</p>
+            </div>
+
+            <div className="p-6 space-y-4">
+              <p className="text-[11px] text-[#261818] font-sans font-semibold">সীমাহীন বিশেষজ্ঞ সেবা ও ফিচারসমূহ এক ক্লিকে আনলক করুন:</p>
+              
+              <div className="space-y-2.5 text-[11px] font-sans">
+                <div className="flex items-start gap-2 text-[#524340]">
+                  <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>১০+ গাইনোকোলজিস্ট ও ইয়োগা টিউটরের ফুল এইচডি ভিডিও এবং লাইভ গাইড</span>
+                </div>
+                <div className="flex items-start gap-2 text-[#524340]">
+                  <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>নিরাপদ ক্লাউড ডাটা ভল্ট (মেডিকেল প্রেসক্রিপশন ও আল্ট্রাসウンド ফাইল সংরক্ষণে সীমাহীন স্টোরেজ)</span>
+                </div>
+                <div className="flex items-start gap-2 text-[#524340]">
+                  <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                  <span>দৈনিক হরমোন পরিবর্তন ও মানসিক সুস্থতাবিষয়ক এআই ইন্টেলিজেন্ট এনালাইসিস</span>
+                </div>
+              </div>
+
+              {/* Price card layout */}
+              <div className="bg-[#fff9f8] border border-[#ffe9e8] p-4 rounded-2xl text-center flex items-center justify-between">
+                <div className="text-left font-sans">
+                  <span className="text-[9px] text-gray-400 uppercase tracking-widest block font-bold">বার্ষিক বিশেষ ছাড়</span>
+                  <span className="text-xl font-black text-[#894f42] block mt-0.5">৮০০ ৳ <span className="text-xs font-normal text-gray-500">/ বছর</span></span>
+                </div>
+                <span className="bg-red-100 text-red-800 text-[10px] font-bold font-sans px-2.5 py-0.5 rounded-full">মেগা ৭০% ডিসকাউন্ট!</span>
+              </div>
+
+              <div className="flex gap-3 pt-2">
+                <button
+                  onClick={() => setShowBillingModal(false)}
+                  className="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-500 font-bold font-sans py-2.5 rounded-xl text-xs transition-all cursor-pointer"
+                >
+                  পরে ভাববো
+                </button>
+                <button
+                  onClick={handleUpgradeAction}
+                  className="flex-1 bg-gradient-to-r from-[#894f42] to-[#7e5541] text-white font-bold font-sans py-2.5 rounded-xl text-xs hover:brightness-115 transition-all shadow-md cursor-pointer"
+                >
+                  হ্যাঁ, প্রো+ যোগ হোন
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      )}
+
+    </div>
+  );
+};
