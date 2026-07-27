@@ -77,7 +77,7 @@ export const Navbar: React.FC = () => {
                   : 'text-gray-500 hover:text-gray-800'
               }`}
             >
-              🇬🇧 <span className="hidden xs:inline">EN</span>
+              EN
             </button>
           </div>
           

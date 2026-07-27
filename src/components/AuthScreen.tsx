@@ -61,7 +61,7 @@ export const AuthScreen: React.FC = () => {
               : 'text-gray-500 hover:text-gray-800'
           }`}
         >
-          🇬🇧 English
+          EN
         </button>
       </div>
 
