@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useAppState } from '../AppContext';
-import { Sparkles, MessageSquare, Send, RefreshCw, Heart, AlertTriangle, ShieldCheck, HeartPulse } from 'lucide-react';
+import { Sparkles, MessageSquare, Send, RefreshCw, ShieldCheck } from 'lucide-react';
 
 export const DailyInsights: React.FC = () => {
-  const { profile, trackingLogs } = useAppState();
+  const { profile, trackingLogs, language, t } = useAppState();
   
   const [insight, setInsight] = useState<{
     prediction: string;
@@ -13,22 +13,32 @@ export const DailyInsights: React.FC = () => {
   
   const [loadingInsight, setLoadingInsight] = useState(false);
   
+  const isEn = language === 'en';
+
   // Chat companion state
-  const [messages, setMessages] = useState<{ sender: 'user' | 'assistant'; text: string }[]>([
-    {
-      sender: 'assistant',
-      text: 'আসসালামু আলাইকুম আপু! আমি আপনার ব্যক্তিগত সহকারী "কল্প সহকারী"। পিরিয়ড ব্যথার প্রতিকার, গর্ভাবস্থার পুষ্টি, বা পেরিমেনোপজের অস্থিরতা নিয়ে গোপনীয়তা বজায় রেখে যেকোনো প্রশ্ন করতে পারেন। (তথ্যগুলো শিক্ষামূলক এবং চিকিৎসকের বিকল্প নয়)'
-    }
-  ]);
+  const [messages, setMessages] = useState<{ sender: 'user' | 'assistant'; text: string }[]>([]);
   const [userInput, setUserInput] = useState('');
   const [loadingChat, setLoadingChat] = useState(false);
+
+  // Initialize welcome message when language changes or mounts
+  useEffect(() => {
+    const welcomeMsg = isEn
+      ? "Welcome! I am your personal health companion, Kalpa Assistant. Feel free to ask any confidential questions about period cramp relief, pregnancy nutrition, or perimenopause symptoms. (Information provided is educational and not a substitute for clinical advice)."
+      : "আসসালামু আলাইকুম আপু! আমি আপনার ব্যক্তিগত সহকারী \"কল্প সহকারী\"। পিরিয়ড ব্যথার প্রতিকার, গর্ভাবস্থার পুষ্টি, বা পেরিমেনোপজের অস্থিরতা নিয়ে গোপনীয়তা বজায় রেখে যেকোনো প্রশ্ন করতে পারেন। (তথ্যগুলো শিক্ষামূলক এবং চিকিৎসকের বিকল্প নয়)";
+
+    setMessages([
+      {
+        sender: 'assistant',
+        text: welcomeMsg
+      }
+    ]);
+  }, [language]);
 
   // Load daily insight depending on logged metrics
   const fetchDailyInsight = async () => {
     if (!profile) return;
     setLoadingInsight(true);
     
-    // Find logs for today
     const todayStr = new Date().toISOString().split('T')[0];
     const todaysLog = trackingLogs[todayStr];
     
@@ -43,7 +53,8 @@ export const DailyInsights: React.FC = () => {
           symptoms: todaysLog?.symptoms || [],
           moods: todaysLog?.moods || [],
           energyLevel: todaysLog?.energyLevel || 'medium',
-          logDate: todayStr
+          logDate: todayStr,
+          language
         })
       });
       
@@ -60,7 +71,7 @@ export const DailyInsights: React.FC = () => {
 
   useEffect(() => {
     fetchDailyInsight();
-  }, [profile, trackingLogs]);
+  }, [profile, trackingLogs, language]);
 
   // Send message to Gemini chat server
   const handleSendMessage = async (e: React.FormEvent) => {
@@ -80,7 +91,8 @@ export const DailyInsights: React.FC = () => {
         },
         body: JSON.stringify({
           message: userMsg,
-          currentStage: profile?.currentStage || 'menstruating'
+          currentStage: profile?.currentStage || 'menstruating',
+          language
         })
       });
       
@@ -88,11 +100,27 @@ export const DailyInsights: React.FC = () => {
       if (data && data.response) {
         setMessages(prev => [...prev, { sender: 'assistant', text: data.response }]);
       } else {
-        setMessages(prev => [...prev, { sender: 'assistant', text: 'দুঃখিত আপু, আমার সার্ভার সংযোগ কিছুটা ধীরগতির। দয়া করে পুষ্টিকর খাবার গ্রহণ করুন এবং পর্যাপ্ত বিশ্রাম নিন।' }]);
+        setMessages(prev => [
+          ...prev, 
+          { 
+            sender: 'assistant', 
+            text: isEn 
+              ? 'Sorry, my server connection is a bit slow. Please stay hydrated and get adequate rest.' 
+              : 'দুঃখিত আপু, আমার সার্ভার সংযোগ কিছুটা ধীরগতির। দয়া করে পুষ্টিকর খাবার গ্রহণ করুন এবং পর্যাপ্ত বিশ্রাম নিন।' 
+          }
+        ]);
       }
     } catch (error) {
       console.error('Chat error:', error);
-      setMessages(prev => [...prev, { sender: 'assistant', text: 'সংযোগ বিচ্ছিন্ন হয়েছে আপু। তবে পিরিয়ডের তীব্র ব্যথায় আদা-পানি বা কুসুম গরম জলের সেঁক খুবই উপকারী ঘরোয়া টোকা।' }]);
+      setMessages(prev => [
+        ...prev, 
+        { 
+          sender: 'assistant', 
+          text: isEn 
+            ? 'Connection interrupted. For severe cramps, applying a warm compress or drinking ginger tea is very helpful.' 
+            : 'সংযোগ বিচ্ছিন্ন হয়েছে আপু। তবে পিরিয়ডের তীব্র ব্যথায় আদা-পানি বা কুসুম গরম জলের সেঁক খুবই উপকারী ঘরোয়া টোকা।' 
+        }
+      ]);
     } finally {
       setLoadingChat(false);
     }
@@ -112,12 +140,12 @@ export const DailyInsights: React.FC = () => {
           <div className="flex items-center justify-between pb-4 border-b border-[#ffe9e8] relative z-10">
             <h3 className="font-sans font-bold text-base text-[#261818] flex items-center gap-2">
               <Sparkles className="w-5 h-5 text-[#894f42]" />
-              আপনার আজকের ব্যক্তিগত পরামর্শ ও ভবিষ্যৎবাণী
+              {isEn ? "Today's Personal Insight & Predictions" : "আপনার আজকের ব্যক্তিগত পরামর্শ ও ভবিষ্যৎবাণী"}
             </h3>
             <button 
               onClick={fetchDailyInsight}
               className="p-1.5 hover:bg-[#fff0f0] rounded-lg transition-all text-[#894f42]"
-              title="নতুন পরামর্শ লোড করুন"
+              title={isEn ? "Reload Advice" : "নতুন পরামর্শ লোড করুন"}
               disabled={loadingInsight}
             >
               <RefreshCw className={`w-4 h-4 ${loadingInsight ? 'animate-spin' : ''}`} />
@@ -128,31 +156,37 @@ export const DailyInsights: React.FC = () => {
             {loadingInsight ? (
               <div className="py-12 flex flex-col items-center justify-center gap-3">
                 <RefreshCw className="w-8 h-8 text-[#894f42] animate-spin" />
-                <p className="text-xs text-[#524340] font-sans font-semibold">আপনার স্বাস্থ্যলগ পর্যবেক্ষণ করছে কল্প AI...</p>
+                <p className="text-xs text-[#524340] font-sans font-semibold">
+                  {isEn ? "Kalpa AI is analyzing your health logs..." : "আপনার স্বাস্থ্যলগ পর্যবেক্ষণ করছে কল্প AI..."}
+                </p>
               </div>
             ) : (
               <>
                 {/* Prediction text */}
                 <div className="bg-white/80 backdrop-blur-sm p-4 rounded-2xl border border-[#ffe9e8]">
                   <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-amber-800 bg-amber-50 px-2 py-0.5 rounded">
-                    আজকের অবস্থা
+                    {isEn ? "Today's Status" : "আজকের অবস্থা"}
                   </span>
                   <p className="text-xs font-bold text-[#261818] font-sans mt-2 leading-relaxed">
-                    {insight?.prediction || 'আপনার হরমোনের মাত্রা স্বাভাবিক এবং স্থিতিশীল রয়েছে।'}
+                    {insight?.prediction || (isEn ? "Your hormonal levels are currently stable and normal." : "আপনার হরমোনের মাত্রা স্বাভাবিক এবং স্থিতিশীল রয়েছে।")}
                   </p>
                 </div>
 
                 {/* Insight block */}
                 <div>
-                  <h4 className="text-xs font-bold text-[#894f42] font-sans mb-1">শারীরিক অন্তর্দৃষ্টি (Insights):</h4>
+                  <h4 className="text-xs font-bold text-[#894f42] font-sans mb-1">
+                    {isEn ? "Physical Insights:" : "শারীরিক অন্তর্দৃষ্টি (Insights):"}
+                  </h4>
                   <p className="text-xs text-[#524340] font-sans leading-relaxed">
-                    {insight?.insight || 'মাসিক চক্রের বা গর্ভাবস্থার হরমোনের পরিবর্তনের সাথে শরীরের ক্লান্তি, মন খারাপের একটি গভীর সংযোগ থাকে যা শতভাগ স্বাভাবিক।'}
+                    {insight?.insight || (isEn ? "Hormonal shifts during menstrual or pregnancy cycles naturally affect energy and emotions." : "মাসিক চক্রের বা গর্ভাবস্থার হরমোনের পরিবর্তনের সাথে শরীরের ক্লান্তি, মন খারাপের একটি গভীর সংযোগ থাকে যা শতভাগ স্বাভাবিক।")}
                   </p>
                 </div>
 
                 {/* Wellness suggestions */}
                 <div className="pt-2 border-t border-[#ffe9e8]/60">
-                  <h4 className="text-xs font-bold text-[#45645e] font-sans mb-2.5">সুস্থতা টিপস (Wellness Tips):</h4>
+                  <h4 className="text-xs font-bold text-[#45645e] font-sans mb-2.5">
+                    {isEn ? "Wellness Tips:" : "সুস্থতা টিপস (Wellness Tips):"}
+                  </h4>
                   <ul className="space-y-2">
                     {insight?.wellnessTips && insight.wellnessTips.length > 0 ? (
                       insight.wellnessTips.map((tip, i) => (
@@ -166,12 +200,12 @@ export const DailyInsights: React.FC = () => {
                     ) : (
                       <>
                         <li className="flex items-start gap-2 text-xs text-[#524340] font-sans">
-                          <span className="bg-[#c7eae1] text-[#2d4c46] w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">১</span>
-                          <span>প্রচুর পরিমাণে পানি পান করুন এবং রাতে ক্যাফেইন এড়িয়ে চলুন।</span>
+                          <span className="bg-[#c7eae1] text-[#2d4c46] w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">1</span>
+                          <span>{isEn ? "Drink plenty of water and avoid late-night caffeine." : "প্রচুর পরিমাণে পানি পান করুন এবং রাতে ক্যাফেইন এড়িয়ে চলুন।"}</span>
                         </li>
                         <li className="flex items-start gap-2 text-xs text-[#524340] font-sans">
-                          <span className="bg-[#c7eae1] text-[#2d4c46] w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">২</span>
-                          <span>তলপেটের ব্যথায় হালকা গরম ভাপ একটি উৎকৃষ্ট প্রাকৃতিক রেমেডি।</span>
+                          <span className="bg-[#c7eae1] text-[#2d4c46] w-4 h-4 rounded-full flex items-center justify-center text-[10px] font-bold shrink-0 mt-0.5">2</span>
+                          <span>{isEn ? "A warm heating compress on the lower abdomen is an excellent natural remedy." : "তলপেটের ব্যথায় হালকা গরম ভাপ একটি উৎকৃষ্ট প্রাকৃতিক রেমেডি।"}</span>
                         </li>
                       </>
                     )}
@@ -188,9 +222,13 @@ export const DailyInsights: React.FC = () => {
             <ShieldCheck className="w-8 h-8" />
           </div>
           <div>
-            <h4 className="font-sans font-bold text-[#2d4c46] text-xs">আপনার গোপনীয়তা সর্বদাই সংরক্ষিত ও শতভাগ সুরক্ষিত 🔒</h4>
+            <h4 className="font-sans font-bold text-[#2d4c46] text-xs">
+              {isEn ? "Your Privacy is Always 100% Encrypted & Protected 🔒" : "আপনার গোপনীয়তা সর্বদাই সংরক্ষিত ও শতভাগ সুরক্ষিত 🔒"}
+            </h4>
             <p className="text-[11px] text-[#524340] font-sans mt-1 leading-relaxed">
-              কল্প আপনার সমস্ত শারীরিক তথ্য যেমন পিরিয়ড তারিখ, গর্ভাবস্থার বিবরণ এবং ফাইলগুলো এন্ড-টু-এন্ড লোকাল এনক্রিপ্ট করে ক্লাউডে ট্রান্সফার করে। কোনো তৃতীয় পক্ষ বা বিজ্ঞাপনী সার্ভার আপনার এই ব্যক্তিগত স্বাস্থ্য স্পর্শকাতর ডাটা শেয়ার করতে পারবে না।
+              {isEn 
+                ? "Kalpa end-to-end encrypts all your health logs, dates, and medical records. No third-party or advertising server ever accesses your private sensitive data." 
+                : "কল্প আপনার সমস্ত শারীরিক তথ্য যেমন পিরিয়ড তারিখ, গর্ভাবস্থার বিবরণ এবং ফাইলগুলো এন্ড-টু-এন্ড লোকাল এনক্রিপ্ট করে ক্লাউডে ট্রান্সফার করে। কোনো তৃতীয় পক্ষ বা বিজ্ঞাপনী সার্ভার আপনার এই ব্যক্তিগত স্বাস্থ্য স্পর্শকাতর ডাটা শেয়ার করতে পারবে না।"}
             </p>
           </div>
         </div>
@@ -205,8 +243,12 @@ export const DailyInsights: React.FC = () => {
               <MessageSquare className="w-4 h-4" />
             </div>
             <div>
-              <h4 className="text-xs font-bold text-[#261818] font-sans">কল্প সহকারী (AI Doctor bot)</h4>
-              <p className="text-[9px] text-[#524340] font-sans">ব্যক্তিগত ও সম্পূর্ণ সিকিউরড চ্যাট</p>
+              <h4 className="text-xs font-bold text-[#261818] font-sans">
+                {isEn ? "Kalpa Assistant (AI Bot)" : "কল্প সহকারী (AI Doctor bot)"}
+              </h4>
+              <p className="text-[9px] text-[#524340] font-sans">
+                {isEn ? "Private & Confidential Chat" : "ব্যক্তিগত ও সম্পূর্ণ সিকিউরড চ্যাট"}
+              </p>
             </div>
           </div>
           <span className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse" />
@@ -234,7 +276,7 @@ export const DailyInsights: React.FC = () => {
             <div className="flex justify-start">
               <div className="bg-[#fff0f0] rounded-2xl px-3 py-2 text-[#524340] text-[10px] rounded-tl-none animate-pulse font-sans flex items-center gap-1.5">
                 <RefreshCw className="w-3 h-3 animate-spin text-[#894f42]" />
-                সহকারী ভাবছে...
+                {isEn ? "Assistant is thinking..." : "সহকারী ভাবছে..."}
               </div>
             </div>
           )}
@@ -244,7 +286,7 @@ export const DailyInsights: React.FC = () => {
         <form onSubmit={handleSendMessage} className="flex gap-2">
           <input
             type="text"
-            placeholder="ব্যথা, ডায়েট বা উপসর্গ নিয়ে বাংলায় প্রশ্ন করুন..."
+            placeholder={t('askAiPlaceholder')}
             value={userInput}
             onChange={(e) => setUserInput(e.target.value)}
             disabled={loadingChat}
@@ -263,3 +305,4 @@ export const DailyInsights: React.FC = () => {
     </div>
   );
 };
+

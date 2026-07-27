@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useAppState } from '../AppContext';
-import { CourseMaterial, HealthStage } from '../types';
-import { Search, Compass, BookOpen, Video, GraduationCap, Award, Lock, Sparkles, Check, Play, ChevronRight, HelpCircle } from 'lucide-react';
+import { CourseMaterial } from '../types';
+import { toLocalizedNumber } from '../i18n';
+import { Compass, BookOpen, Video, GraduationCap, Award, Lock, ChevronRight, Check } from 'lucide-react';
 
 export const EducationLounge: React.FC = () => {
-  const { articles, profile, upgradeSubscription, triggerSimulationNotification } = useAppState();
+  const { articles, profile, upgradeSubscription, triggerSimulationNotification, language } = useAppState();
+  const isEn = language === 'en';
 
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -26,8 +28,10 @@ export const EducationLounge: React.FC = () => {
     await upgradeSubscription();
     setShowBillingModal(false);
     triggerSimulationNotification(
-      'সাবস্ক্রিপশন সফল!',
-      'ধন্যবাদ! আপনি সফলভাবে কল্প প্রো+ অল-রাউন্ডার ফিচারসমূহ অ্যাক্টিভেট করেছেন।'
+      isEn ? 'Subscription Activated!' : 'সাবস্ক্রিপশন সফল!',
+      isEn 
+        ? 'Thank you! You have successfully unlocked Kalpa Pro+ features.' 
+        : 'ধন্যবাদ! আপনি সফলভাবে কল্প প্রো+ অল-রাউন্ডার ফিচারসমূহ অ্যাক্টিভেট করেছেন।'
     );
   };
 
@@ -39,22 +43,21 @@ export const EducationLounge: React.FC = () => {
     return matchesSearch && matchesCat && matchesType;
   });
 
-  const getCategoryBengaliTag = (cat: string) => {
+  const getCategoryTag = (cat: string) => {
+    if (isEn) {
+      switch (cat) {
+        case 'period': return 'Period Care';
+        case 'pregnancy': return 'Pregnancy';
+        case 'menopause': return 'Perimenopause';
+        default: return 'Wellness';
+      }
+    }
     switch (cat) {
       case 'period': return 'পিরিয়ড কেয়ার';
       case 'pregnancy': return 'গর্ভাবস্থা';
       case 'menopause': return 'পেরিমেনোপজ';
       default: return 'সামগ্রিক সুস্থতা';
     }
-  };
-
-  const toBengaliNumber = (num: number) => {
-    const search = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const replace = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    return num.toString().split('').map(char => {
-      const index = search.indexOf(char);
-      return index !== -1 ? replace[index] : char;
-    }).join('');
   };
 
   return (
@@ -68,8 +71,14 @@ export const EducationLounge: React.FC = () => {
               <Compass className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-sans font-bold text-lg text-[#261818]">কল্প লার্নিং অ্যান্ড এডুকেশন কর্নার</h3>
-              <p className="text-xs text-[#524340] font-sans">সীমাহীন তথ্যসমৃদ্ধ গাইনোকোলজিক্যাল অনুচ্ছেদ, শিক্ষণীয় ভিডিও লেকচার ও বিশেষ হেলথ কোর্সসমূহ</p>
+              <h3 className="font-sans font-bold text-lg text-[#261818]">
+                {isEn ? 'Kalpa Health Education & Learning' : 'কল্প লার্নিং অ্যান্ড এডুকেশন কর্নার'}
+              </h3>
+              <p className="text-xs text-[#524340] font-sans">
+                {isEn 
+                  ? 'Comprehensive gynecological health articles, video lectures, and wellness courses.' 
+                  : 'সীমাহীন তথ্যসমৃদ্ধ গাইনোকোলজিক্যাল অনুচ্ছেদ, শিক্ষণীয় ভিডিও লেকচার ও বিশেষ হেলথ কোর্সসমূহ'}
+              </p>
             </div>
           </div>
 
@@ -80,7 +89,7 @@ export const EducationLounge: React.FC = () => {
                 className="bg-gradient-to-r from-[#894f42] to-[#7e5541] text-white font-sans font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-md cursor-pointer hover:brightness-105 active:scale-95"
               >
                 <Award className="w-4 h-4 fill-white" />
-                কল্প প্রো+ এ মেম্বারশিপ নিন
+                {isEn ? 'Get Kalpa Pro+' : 'কল্প প্রো+ এ মেম্বারশিপ নিন'}
               </button>
             )}
           </div>
@@ -90,7 +99,7 @@ export const EducationLounge: React.FC = () => {
         <div className="mt-5 grid grid-cols-1 md:grid-cols-3 gap-3 text-xs">
           <input
             type="text"
-            placeholder="আর্টিকেল, ভিডিও বা হেলথ কোর্স সার্চ করুন..."
+            placeholder={isEn ? "Search articles, videos or courses..." : "আর্টিকেল, ভিডিও বা হেলথ কোর্স সার্চ করুন..."}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             className="bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3.5 py-1.5 text-xs text-gray-800 focus:outline-none"
@@ -101,11 +110,11 @@ export const EducationLounge: React.FC = () => {
             onChange={(e) => setSelectedCategory(e.target.value)}
             className="bg-white border border-[#ffe9e8] rounded-xl px-3 py-1.5 focus:outline-none"
           >
-            <option value="all">সব ক্যাটাগরি (All Topics)</option>
-            <option value="period">মাসিক ও পিরিয়ড কেয়ার (Period Care)</option>
-            <option value="pregnancy">গর্ভধারণ ও মেটারনিটি (Pregnancy/Lactation)</option>
-            <option value="menopause">পেরিমেনোপজ ও হরমোন (Menopause/Bio Hrt)</option>
-            <option value="wellness">শারীরিক ইয়োগা ও ধ্যান (Wellness)</option>
+            <option value="all">{isEn ? 'All Categories' : 'সব ক্যাটাগরি (All Topics)'}</option>
+            <option value="period">{isEn ? 'Period Care' : 'মাসিক ও পিরিয়ড কেয়ার (Period Care)'}</option>
+            <option value="pregnancy">{isEn ? 'Pregnancy & Maternity' : 'গর্ভধারণ ও মেটারনিটি (Pregnancy/Lactation)'}</option>
+            <option value="menopause">{isEn ? 'Perimenopause & Hormones' : 'পেরিমেনোপজ ও হরমোন (Menopause/Bio Hrt)'}</option>
+            <option value="wellness">{isEn ? 'Wellness & Yoga' : 'শারীরিক ইয়োগা ও ধ্যান (Wellness)'}</option>
           </select>
 
           <select
@@ -113,10 +122,10 @@ export const EducationLounge: React.FC = () => {
             onChange={(e) => setSelectedType(e.target.value)}
             className="bg-white border border-[#ffe9e8] rounded-xl px-3 py-1.5 focus:outline-none"
           >
-            <option value="all">সব ফরম্যাট (All resources)</option>
-            <option value="article">গবেষণাধর্মী অনুচ্ছেদ (Articles)</option>
-            <option value="video">ভিডিও লার্নিং (Videos)</option>
-            <option value="course">সবগুলো কোর্স লেকচার (Courses)</option>
+            <option value="all">{isEn ? 'All Formats' : 'সব ফরম্যাট (All resources)'}</option>
+            <option value="article">{isEn ? 'Articles' : 'গবেষণাধর্মী অনুচ্ছেদ (Articles)'}</option>
+            <option value="video">{isEn ? 'Video Tutorials' : 'ভিডিও লার্নিং (Videos)'}</option>
+            <option value="course">{isEn ? 'Courses' : 'সবগুলো কোর্স লেকচার (Courses)'}</option>
           </select>
         </div>
       </div>
@@ -128,16 +137,18 @@ export const EducationLounge: React.FC = () => {
           <div className="flex justify-between items-center pb-3 border-b border-[#ffe9e8]">
             <div>
               <span className="text-[10px] text-[#45645e] uppercase tracking-wider font-bold block bg-[#ebf8f5] px-2.5 py-0.5 rounded-full w-max">
-                {getCategoryBengaliTag(activeItem.category)} • {activeItem.type.toUpperCase()}
+                {getCategoryTag(activeItem.category)} • {activeItem.type.toUpperCase()}
               </span>
-              <h4 className="font-sans font-bold text-base text-[#261818] mt-1">{activeItem.bengaliTitle}</h4>
+              <h4 className="font-sans font-bold text-base text-[#261818] mt-1">
+                {isEn ? activeItem.title : activeItem.bengaliTitle}
+              </h4>
             </div>
             
             <button
               onClick={() => setActiveItem(null)}
               className="text-gray-400 hover:text-gray-800 border border-gray-200 hover:bg-gray-100 rounded-xl px-3 py-1 bg-white cursor-pointer"
             >
-              বন্ধ করুন
+              {isEn ? 'Close' : 'বন্ধ করুন'}
             </button>
           </div>
 
@@ -157,13 +168,15 @@ export const EducationLounge: React.FC = () => {
           {/* Detailed Course Syllabus layout */}
           {activeItem.type === 'course' && activeItem.lessons && (
             <div className="bg-[#fff9f8] p-4 rounded-2xl border border-[#ffe9e8] mb-4">
-              <p className="font-bold text-[#894f42] mb-2.5">কোর্স কারিকুলাম ও অধ্যায়সমূহ:</p>
+              <p className="font-bold text-[#894f42] mb-2.5">
+                {isEn ? 'Course Syllabus & Chapters:' : 'কোর্স কারিকুলাম ও অধ্যায়সমূহ:'}
+              </p>
               <div className="space-y-2">
                 {activeItem.lessons.map((lesson, idx) => (
                   <div key={idx} className="flex items-center justify-between bg-white border border-[#fff0f0] px-4 py-2.5 rounded-xl text-[11px]">
                     <div className="flex items-center gap-2">
                       <span className="bg-[#fff0f0] text-[#894f42] w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px]">
-                        {toBengaliNumber(idx+1)}
+                        {toLocalizedNumber(idx + 1, language)}
                       </span>
                       <span className="font-semibold text-gray-850">{lesson.title}</span>
                     </div>
@@ -220,12 +233,14 @@ export const EducationLounge: React.FC = () => {
                   {isLocked && (
                     <div className="absolute inset-0 bg-[#261818]/60 backdrop-blur-xs flex flex-col items-center justify-center text-white p-3 text-center">
                       <Lock className="w-8 h-8 text-yellow-400 mb-1" />
-                      <span className="text-[11px] font-bold font-sans">কল্প প্রো+ মেম্বারশিপ লক</span>
+                      <span className="text-[11px] font-bold font-sans">
+                        {isEn ? 'Locked (Pro+ Only)' : 'কল্প প্রো+ মেম্বারশিপ লক'}
+                      </span>
                     </div>
                   )}
 
                   <span className="absolute top-3 left-3 bg-[#fff8f7] border border-[#ffe9e8] text-[#894f42] font-sans font-bold text-[9px] px-2 py-0.5 rounded-full shadow-sm">
-                    {getCategoryBengaliTag(item.category)}
+                    {getCategoryTag(item.category)}
                   </span>
                 </div>
 
@@ -236,15 +251,17 @@ export const EducationLounge: React.FC = () => {
                   </div>
 
                   <h4 className="font-sans font-bold text-[#261818] text-xs leading-snug line-clamp-2">
-                    {item.bengaliTitle}
+                    {isEn ? item.title : item.bengaliTitle}
                   </h4>
                 </div>
               </div>
 
               <div className="px-4 pb-4 pt-1.5 flex items-center justify-between border-t border-[#fff0f0] text-[10px]">
-                <span className="text-gray-400 font-mono">আইডি: {item.id}</span>
+                <span className="text-gray-400 font-mono">ID: {item.id}</span>
                 <span className="text-[#894f42] font-bold font-sans flex items-center gap-0.5">
-                  {isLocked ? 'আনলক করুন' : 'বিস্তারিত দেখুন'}
+                  {isLocked 
+                    ? (isEn ? 'Unlock' : 'আনলক করুন') 
+                    : (isEn ? 'Read / View' : 'বিস্তারিত দেখুন')}
                   <ChevronRight className="w-3.5 h-3.5" />
                 </span>
               </div>
@@ -270,35 +287,48 @@ export const EducationLounge: React.FC = () => {
               <div className="bg-[#ffdbcc] text-[#6d382d] p-3.5 rounded-2xl w-max mx-auto mb-3 flex items-center justify-center shadow-inner">
                 <Award className="w-8 h-8 fill-current text-amber-800 animate-spin-slow" />
               </div>
-              <h3 className="font-sans font-bold text-lg text-[#261818]">কল্প প্রো+ সাবস্ক্রিপশন</h3>
-              <p className="text-xs text-[#524340] font-sans mt-1">নারীদের নিরাপদ, সীমাহীন দীর্ঘমেয়াদী পূর্ণাঙ্গ স্বাস্থ্য সুরক্ষা</p>
+              <h3 className="font-sans font-bold text-lg text-[#261818]">
+                {isEn ? 'Kalpa Pro+ Membership' : 'কল্প প্রো+ সাবস্ক্রিপশন'}
+              </h3>
+              <p className="text-xs text-[#524340] font-sans mt-1">
+                {isEn ? 'Safe, confidential & unlimited women\'s health protection.' : 'নারীদের নিরাপদ, সীমাহীন দীর্ঘমেয়াদী পূর্ণাঙ্গ স্বাস্থ্য সুরক্ষা'}
+              </p>
             </div>
 
             <div className="p-6 space-y-4">
-              <p className="text-[11px] text-[#261818] font-sans font-semibold">সীমাহীন বিশেষজ্ঞ সেবা ও ফিচারসমূহ এক ক্লিকে আনলক করুন:</p>
+              <p className="text-[11px] text-[#261818] font-sans font-semibold">
+                {isEn ? 'Unlock premium expert features in one click:' : 'সীমাহীন বিশেষজ্ঞ সেবা ও ফিচারসমূহ এক ক্লিকে আনলক করুন:'}
+              </p>
               
               <div className="space-y-2.5 text-[11px] font-sans">
                 <div className="flex items-start gap-2 text-[#524340]">
                   <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>১০+ গাইনোকোলজিস্ট ও ইয়োগা টিউটরের ফুল এইচডি ভিডিও এবং লাইভ গাইড</span>
+                  <span>{isEn ? 'HD video tutorials and courses by 10+ gynecologists and wellness experts.' : '১০+ গাইনোকোলজিস্ট ও ইয়োগা টিউটরের ফুল এইচডি ভিডিও এবং লাইভ গাইড'}</span>
                 </div>
                 <div className="flex items-start gap-2 text-[#524340]">
                   <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>নিরাপদ ক্লাউড ডাটা ভল্ট (মেডিকেল প্রেসক্রিপশন ও আল্ট্রাসウンド ফাইল সংরক্ষণে সীমাহীন স্টোরেজ)</span>
+                  <span>{isEn ? 'Encrypted cloud storage for prescription & ultrasound medical records.' : 'নিরাপদ ক্লাউড ডাটা ভল্ট (মেডিকেল প্রেসক্রিপশন ও আল্ট্রাসウンド ফাইল সংরক্ষণে সীমাহীন স্টোরেজ)'}</span>
                 </div>
                 <div className="flex items-start gap-2 text-[#524340]">
                   <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>দৈনিক হরমোন পরিবর্তন ও মানসিক সুস্থতাবিষয়ক এআই ইন্টেলিজেন্ট এনালাইসিস</span>
+                  <span>{isEn ? 'Daily AI intelligent hormonal & mental wellness analysis.' : 'দৈনিক হরমোন পরিবর্তন ও মানসিক সুস্থতাবিষয়ক এআই ইন্টেলিজেন্ট এনালাইসিস'}</span>
                 </div>
               </div>
 
               {/* Price card layout */}
               <div className="bg-[#fff9f8] border border-[#ffe9e8] p-4 rounded-2xl text-center flex items-center justify-between">
                 <div className="text-left font-sans">
-                  <span className="text-[9px] text-gray-400 uppercase tracking-widest block font-bold">বার্ষিক বিশেষ ছাড়</span>
-                  <span className="text-xl font-black text-[#894f42] block mt-0.5">৮০০ ৳ <span className="text-xs font-normal text-gray-500">/ বছর</span></span>
+                  <span className="text-[9px] text-gray-400 uppercase tracking-widest block font-bold">
+                    {isEn ? 'Annual Special Offer' : 'বার্ষিক বিশেষ ছাড়'}
+                  </span>
+                  <span className="text-xl font-black text-[#894f42] block mt-0.5">
+                    {isEn ? '৳800 ' : '৮০০ ৳ '} 
+                    <span className="text-xs font-normal text-gray-500">{isEn ? '/ year' : '/ বছর'}</span>
+                  </span>
                 </div>
-                <span className="bg-red-100 text-red-800 text-[10px] font-bold font-sans px-2.5 py-0.5 rounded-full">মেগা ৭০% ডিসকাউন্ট!</span>
+                <span className="bg-red-100 text-red-800 text-[10px] font-bold font-sans px-2.5 py-0.5 rounded-full">
+                  {isEn ? 'Save 70%' : 'মেগা ৭০% ডিসকাউন্ট!'}
+                </span>
               </div>
 
               <div className="flex gap-3 pt-2">
@@ -306,13 +336,13 @@ export const EducationLounge: React.FC = () => {
                   onClick={() => setShowBillingModal(false)}
                   className="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-500 font-bold font-sans py-2.5 rounded-xl text-xs transition-all cursor-pointer"
                 >
-                  পরে ভাববো
+                  {isEn ? 'Later' : 'পরে ভাববো'}
                 </button>
                 <button
                   onClick={handleUpgradeAction}
                   className="flex-1 bg-gradient-to-r from-[#894f42] to-[#7e5541] text-white font-bold font-sans py-2.5 rounded-xl text-xs hover:brightness-115 transition-all shadow-md cursor-pointer"
                 >
-                  হ্যাঁ, প্রো+ যোগ হোন
+                  {isEn ? 'Join Pro+' : 'হ্যাঁ, প্রো+ যোগ হোন'}
                 </button>
               </div>
             </div>
@@ -324,3 +354,4 @@ export const EducationLounge: React.FC = () => {
     </div>
   );
 };
+

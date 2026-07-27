@@ -1,9 +1,21 @@
 import React, { useState, useRef } from 'react';
 import { useAppState } from '../AppContext';
-import { FileText, Upload, Trash2, Calendar, ShieldAlert, Key, Clipboard, CheckCircle, FileUp } from 'lucide-react';
+import { FileText, Upload, Trash2, Calendar, Key, FileUp } from 'lucide-react';
 
 export const DocCenter: React.FC = () => {
-  const { userFiles, clinicReports, uploadHealthFile, deleteHealthFile, generateClinicReport, deleteClinicReport, triggerSimulationNotification } = useAppState();
+  const { 
+    userFiles, 
+    clinicReports, 
+    uploadHealthFile, 
+    deleteHealthFile, 
+    generateClinicReport, 
+    deleteClinicReport, 
+    triggerSimulationNotification, 
+    language, 
+    t 
+  } = useAppState();
+
+  const isEn = language === 'en';
 
   // Generator states
   const [reportTitle, setReportTitle] = useState('');
@@ -33,10 +45,17 @@ export const DocCenter: React.FC = () => {
     const matched = clinicReports.find(r => r.clinicianAccessCode === clinicianCode.trim());
     if (matched) {
       setCertifiedReport(matched);
-      triggerSimulationNotification('ডাক্তার অ্যাক্সেস ভেরিফায়েড', `কোড: ${clinicianCode} সফলভাবে যাচাইকৃত হয়েছে।`);
+      triggerSimulationNotification(
+        isEn ? 'Clinician Access Verified' : 'ডাক্তার অ্যাক্সেস ভেরিফায়েড', 
+        isEn ? `Access Code: ${clinicianCode} verified successfully.` : `কোড: ${clinicianCode} সফলভাবে যাচাইকৃত হয়েছে।`
+      );
     } else {
       setCertifiedReport(null);
-      alert('দুঃখিত, এই শেয়ারিং অ্যাক্সেস কোডটি সঠিক নয়। অনুগ্রহ করে আপনার ৬-ডিজিটের সচল অ্যাক্সেস কোডটি পুনরায় প্রদান করুন।');
+      alert(
+        isEn 
+          ? 'Sorry, this sharing access code is invalid. Please double-check your 6-digit active access code.' 
+          : 'দুঃখিত, এই শেয়ারিং অ্যাক্সেস কোডটি সঠিক নয়। অনুগ্রহ করে আপনার ৬-ডিজিটের সচল অ্যাক্সেস কোডটি পুনরায় প্রদান করুন।'
+      );
     }
   };
 
@@ -80,15 +99,6 @@ export const DocCenter: React.FC = () => {
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
   };
 
-  const toBengaliNumber = (num: number) => {
-    const search = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9'];
-    const replace = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
-    return num.toString().split('').map(char => {
-      const index = search.indexOf(char);
-      return index !== -1 ? replace[index] : char;
-    }).join('');
-  };
-
   return (
     <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
       
@@ -100,18 +110,22 @@ export const DocCenter: React.FC = () => {
           <div className="pb-4 border-b border-[#fff0f0] mb-5">
             <h3 className="font-sans font-bold text-base text-[#261818] flex items-center gap-1.5">
               <Calendar className="w-5 h-5 text-[#894f42]" />
-              হিসাবকাল ও ক্লিনিক্যাল রিপোর্ট জেনারেটর
+              {t('generateReportTitle')}
             </h3>
-            <p className="text-xs text-[#524340] font-sans mt-0.5">গাইনোকোলজিস্ট ও চিকিৎসকদের দেখানোর জন্য সিকিউরড হরমোনের সারাংশ ফাইল</p>
+            <p className="text-xs text-[#524340] font-sans mt-0.5">
+              {isEn ? 'Secured health summary report for gynecologists and physicians' : 'গাইনোকোলজিস্ট ও চিকিৎসকদের দেখানোর জন্য সিকিউরড হরমোনের সারাংশ ফাইল'}
+            </p>
           </div>
 
           <form onSubmit={handleCreateReport} className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs font-sans">
               <div>
-                <label className="block text-gray-700 font-bold mb-1">রিপোর্ট শিরোনাম:</label>
+                <label className="block text-gray-700 font-bold mb-1">
+                  {isEn ? 'Report Title:' : 'রিপোর্ট শিরোনাম:'}
+                </label>
                 <input
                   type="text"
-                  placeholder="যেমন: ডঃ রাবেয়ার ভিজিট রিপোর্ট"
+                  placeholder={isEn ? "e.g., Dr. Rabeya's Visit Summary" : "যেমন: ডঃ রাবেয়ার ভিজিট রিপোর্ট"}
                   value={reportTitle}
                   onChange={(e) => setReportTitle(e.target.value)}
                   className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 focus:outline-none"
@@ -120,7 +134,9 @@ export const DocCenter: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-gray-700 font-bold mb-1">শুরু তারিখ:</label>
+                <label className="block text-gray-700 font-bold mb-1">
+                  {t('reportStartDate')}
+                </label>
                 <input
                   type="date"
                   value={startDate}
@@ -131,7 +147,9 @@ export const DocCenter: React.FC = () => {
               </div>
 
               <div>
-                <label className="block text-gray-700 font-bold mb-1">শেষ তারিখ:</label>
+                <label className="block text-gray-700 font-bold mb-1">
+                  {t('reportEndDate')}
+                </label>
                 <input
                   type="date"
                   value={endDate}
@@ -143,10 +161,12 @@ export const DocCenter: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-xs font-bold font-sans text-gray-700 mb-1">ডাক্তারকে জানানোর অতিরিক্ত বার্তা:</label>
+              <label className="block text-xs font-bold font-sans text-gray-700 mb-1">
+                {t('doctorNotes')}
+              </label>
               <textarea
                 rows={2}
-                placeholder="যেকোনো গুরুতর ব্যথা বা ওষুধের বিবরণ যা ডাক্তারকে আগেই অবহিত করতে চান..."
+                placeholder={isEn ? "Any severe pain, symptoms or medication details you want to inform doctor in advance..." : "যেকোনো গুরুতর ব্যথা বা ওষুধের বিবরণ যা ডাক্তারকে আগেই অবহিত করতে চান..."}
                 value={doctorNotes}
                 onChange={(e) => setDoctorNotes(e.target.value)}
                 className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans focus:outline-none resize-none"
@@ -157,7 +177,7 @@ export const DocCenter: React.FC = () => {
               type="submit"
               className="px-6 py-2 bg-[#894f42] hover:bg-[#753f33] text-white font-sans font-bold text-xs rounded-xl flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-sm"
             >
-              রিপোর্ট কম্পাইল ও ৬-ডিজিট পিন তৈরি করুন
+              {isEn ? 'Compile Report & Generate 6-Digit PIN' : 'রিপোর্ট কম্পাইল ও ৬-ডিজিট পিন তৈরি করুন'}
             </button>
           </form>
         </div>
@@ -165,32 +185,42 @@ export const DocCenter: React.FC = () => {
         {/* Existing reports lists with access code */}
         <div className="bg-white border border-[#ffe9e8] rounded-3xl p-6 shadow-sm">
           <h4 className="font-sans font-bold text-sm text-[#261818] border-b border-[#fff0f0] pb-3 mb-4">
-            আপনার প্রস্তুতকৃত ক্লিনিক্যাল রিপোর্ট এবং সিকিউরিটি পিনসমূহ:
+            {isEn ? 'Your Prepared Clinical Reports & Security PINs:' : 'আপনার প্রস্তুতকৃত ক্লিনিক্যাল রিপোর্ট এবং সিকিউরিটি পিনসমূহ:'}
           </h4>
 
           {clinicReports.length === 0 ? (
-            <p className="text-xs text-gray-400 font-sans py-6 text-center">এখনো কোনো শেয়ারিং রিপোর্ট তৈরি করা হয়নি। প্রয়োজনীয় সময়ে ডাক্তারদের সাথে শেয়ার করতে ওপরে রিপোর্ট জেনারেট করুন।</p>
+            <p className="text-xs text-gray-400 font-sans py-6 text-center">
+              {isEn 
+                ? 'No sharing reports generated yet. Use the report generator above to create summary reports for doctor visits.' 
+                : 'এখনো কোনো শেয়ারিং রিপোর্ট তৈরি করা হয়নি। প্রয়োজনীয় সময়ে ডাক্তারদের সাথে শেয়ার করতে ওপরে রিপোর্ট জেনারেট করুন।'}
+            </p>
           ) : (
             <div className="space-y-4">
               {clinicReports.map((rep) => (
                 <div key={rep.reportId} className="bg-[#fff9f8] border border-[#ffe9e8] rounded-2xl p-4 flex flex-col md:flex-row md:items-center justify-between gap-4 text-xs font-sans">
                   <div className="space-y-1 flex-1">
                     <p className="font-bold text-[#894f42] text-sm">{rep.title}</p>
-                    <p className="text-gray-500 text-[11px]">মেয়াদ: {rep.startDate} থেকে {rep.endDate}</p>
+                    <p className="text-gray-500 text-[11px]">
+                      {isEn ? `Period: ${rep.startDate} to ${rep.endDate}` : `মেয়াদ: ${rep.startDate} থেকে ${rep.endDate}`}
+                    </p>
                     <p className="text-[#524340] leading-relaxed text-[11px] bg-white border border-[#ffe9e8] p-2 rounded-xl mt-1.5">{rep.symptomsSummary}</p>
-                    <p className="text-[#261818] font-semibold text-[10px] italic">বার্তা: "{rep.additionalDoctorNotes}"</p>
+                    <p className="text-[#261818] font-semibold text-[10px] italic">
+                      {isEn ? `Notes: "${rep.additionalDoctorNotes}"` : `বার্তা: "${rep.additionalDoctorNotes}"`}
+                    </p>
                   </div>
 
                   <div className="flex flex-col sm:flex-row items-center gap-3 shrink-0">
                     <div className="bg-[#ebf8f5] border border-teal-200 rounded-xl px-4 py-2 text-center">
-                      <span className="text-[9px] text-[#4b6a63] uppercase tracking-wider block font-bold">সিকিউর ডাক্তার পিন</span>
+                      <span className="text-[9px] text-[#4b6a63] uppercase tracking-wider block font-bold">
+                        {isEn ? 'Doctor PIN' : 'সিকিউর ডাক্তার পিন'}
+                      </span>
                       <span className="text-xl font-black text-[#45645e] font-mono tracking-widest">{rep.clinicianAccessCode}</span>
                     </div>
 
                     <button
                       onClick={() => deleteClinicReport(rep.reportId)}
                       className="text-red-500 hover:text-red-700 hover:bg-red-50 p-2.5 rounded-xl transition-all cursor-pointer"
-                      title="রিপোর্ট ডিলিট করুন"
+                      title={isEn ? 'Delete report' : 'রিপোর্ট ডিলিট করুন'}
                     >
                       <Trash2 className="w-4 h-4" />
                     </button>
@@ -209,17 +239,21 @@ export const DocCenter: React.FC = () => {
         <div className="bg-[#45645e] text-white rounded-3xl p-5 shadow-lg space-y-4">
           <div className="flex items-center gap-2">
             <Key className="w-5 h-5 text-teal-300" />
-            <h4 className="text-xs font-bold font-sans">ক্লিনিশিয়ান/ডাক্তার অ্যাক্সেস পোর্টাল</h4>
+            <h4 className="text-xs font-bold font-sans">
+              {isEn ? 'Clinician / Doctor Access Portal' : 'ক্লিনিশিয়ান/ডাক্তার অ্যাক্সেস পোর্টাল'}
+            </h4>
           </div>
           <p className="text-[11px] text-teal-100 leading-relaxed font-sans">
-            ডাক্তার সাহেব তার চেম্বারে বসে আপনার এই ৬-ডিজিটের পিন কোডটি কল্প ডক্টর পোর্টালে লিখলেই আপনার সমস্ত মেডিকেল হিস্ট্রি সিকিউরলি দেখতে পারবেন। নিচের ডেমো বক্সে কোড লিখে টেস্ট করুন:
+            {isEn 
+              ? 'When your doctor inputs your 6-digit access PIN in the Kalpa Doctor Portal, they can securely view your health history. Test with your code below:' 
+              : 'ডাক্তার সাহেব তার চেম্বারে বসে আপনার এই ৬-ডিজিটের পিন কোডটি কল্প ডক্টর পোর্টালে লিখলেই আপনার সমস্ত মেডিকেল হিস্ট্রি সিকিউরলি দেখতে পারবেন। নিচের ডেমো বক্সে কোড লিখে টেস্ট করুন:'}
           </p>
 
           <form onSubmit={handleVerifyClinicCode} className="space-y-3">
             <div className="flex gap-2">
               <input
                 type="text"
-                placeholder="৬-ডিজিট কোড লিখুন..."
+                placeholder={isEn ? 'Enter 6-digit PIN...' : '৬-ডিজিট কোড লিখুন...'}
                 value={clinicianCode}
                 onChange={(e) => setClinicianCode(e.target.value)}
                 className="flex-1 bg-white/10 border border-teal-400 rounded-xl px-3 py-1.5 text-xs text-white placeholder-teal-200 focus:outline-none"
@@ -228,7 +262,7 @@ export const DocCenter: React.FC = () => {
                 type="submit"
                 className="bg-white text-[#45645e] font-bold text-xs px-4 py-1.5 rounded-xl hover:bg-teal-50 transition-all cursor-pointer shadow-md shrink-0"
               >
-                নিশ্চিত করুন
+                {isEn ? 'Verify' : 'নিশ্চিত করুন'}
               </button>
             </div>
           </form>
@@ -236,8 +270,12 @@ export const DocCenter: React.FC = () => {
           {certifiedReport && (
             <div className="bg-white text-gray-800 rounded-2xl p-3.5 space-y-2 text-[11px] animate-fade-in font-sans">
               <div className="flex items-center justify-between pb-1 border-b border-gray-100">
-                <span className="font-bold text-[#894f42]">যাচাইকৃত ডক্টর রিপোর্ট</span>
-                <span className="text-[10px] text-gray-400 font-mono">ভেরিফাইড ✔️</span>
+                <span className="font-bold text-[#894f42]">
+                  {isEn ? 'Verified Doctor Report' : 'যাচাইকৃত ডক্টর রিপোর্ট'}
+                </span>
+                <span className="text-[10px] text-gray-400 font-mono">
+                  {isEn ? 'Verified ✔️' : 'ভেরিফাইড ✔️'}
+                </span>
               </div>
               <p className="font-bold text-gray-900 leading-none">{certifiedReport.title}</p>
               <p className="text-gray-500 text-[10px] mt-0.5">{certifiedReport.stageSummary}</p>
@@ -251,8 +289,12 @@ export const DocCenter: React.FC = () => {
           <div className="flex items-center gap-2 pb-2.5 border-b border-[#fff0f0]">
             <FileUp className="w-5 h-5 text-[#894f42]" />
             <div>
-              <h4 className="text-xs font-bold text-[#261818] font-sans">মেডিকেল প্রেসক্রিপশন ও স্ক্যান ফাইল ভল্ট</h4>
-              <p className="text-[10px] text-gray-400 font-sans">সম্পূর্ণ অ্যান্ড-টু-অ্যান্ড সিকিউরড ক্লাউড</p>
+              <h4 className="text-xs font-bold text-[#261818] font-sans">
+                {t('docTitle')}
+              </h4>
+              <p className="text-[10px] text-gray-400 font-sans">
+                {isEn ? 'End-to-end encrypted secure cloud' : 'সম্পূর্ণ অ্যান্ড-টু-অ্যান্ড সিকিউরড ক্লাউড'}
+              </p>
             </div>
           </div>
 
@@ -269,8 +311,12 @@ export const DocCenter: React.FC = () => {
             }`}
           >
             <Upload className="w-8 h-8 text-[#894f42] mb-2 animate-bounce-slow" />
-            <span className="text-xs font-semibold text-[#894f42] font-sans"> প্রেসক্রিপশন বা আল্ট্রাসাউন্ড ফাইল ড্রাগ করে বা ক্লিক করে সিলেক্ট করুন</span>
-            <p className="text-[9px] text-gray-400 font-mono mt-1">PDF, PNG, JPG (সর্বোচ্চ ৩ মেগাবাইট)</p>
+            <span className="text-xs font-semibold text-[#894f42] font-sans">
+              {isEn ? 'Drag & drop prescription or ultrasound file or click to select' : 'প্রেসক্রিপশন বা আল্ট্রাসাউন্ড ফাইল ড্রাগ করে বা ক্লিক করে সিলেক্ট করুন'}
+            </span>
+            <p className="text-[9px] text-gray-400 font-mono mt-1">
+              {isEn ? 'PDF, PNG, JPG (Max 3MB)' : 'PDF, PNG, JPG (সর্বোচ্চ ৩ মেগাবাইট)'}
+            </p>
             <input
               type="file"
               ref={fileInputRef}
@@ -283,7 +329,9 @@ export const DocCenter: React.FC = () => {
           {/* Uploaded File list */}
           <div className="space-y-2 font-sans text-xs">
             {userFiles.length === 0 ? (
-              <p className="text-[10px] text-gray-400 text-center py-4">কোনো আপলোডকৃত মেডিকেল ডকুমেন্ট নেই</p>
+              <p className="text-[10px] text-gray-400 text-center py-4">
+                {t('noFilesFound')}
+              </p>
             ) : (
               userFiles.map((file) => (
                 <div key={file.fileId} className="bg-[#fff9f8] border border-[#ffe9e8] p-2.5 rounded-xl flex items-center justify-between gap-3 font-sans">
@@ -302,13 +350,13 @@ export const DocCenter: React.FC = () => {
                       rel="noreferrer"
                       className="text-[#45645e] hover:underline font-bold text-[10px]"
                     >
-                      দেখুন
+                      {isEn ? 'View' : 'দেখুন'}
                     </a>
                     
                     <button
                       onClick={() => deleteHealthFile(file.fileId)}
                       className="text-red-500 hover:text-red-700 p-1 rounded transition-all cursor-pointer"
-                      title="ফাইল মুছে ফেলুন"
+                      title={isEn ? 'Delete file' : 'ফাইল মুছে ফেলুন'}
                     >
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
@@ -324,3 +372,4 @@ export const DocCenter: React.FC = () => {
     </div>
   );
 };
+

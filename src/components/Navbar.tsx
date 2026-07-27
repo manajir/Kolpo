@@ -1,28 +1,29 @@
 import React, { useState } from 'react';
 import { useAppState } from '../AppContext';
 import { HealthStage } from '../types';
-import { Bell, Shield, Heart, LogOut, Award, User, RefreshCw, Calendar, Sparkles } from 'lucide-react';
+import { Bell, Shield, Heart, LogOut, Award, User, RefreshCw, Calendar, Sparkles, Globe } from 'lucide-react';
+import { toLocalizedNumber } from '../i18n';
 
 export const Navbar: React.FC = () => {
-  const { user, profile, updateProfileStage, notifications, signOutUser } = useAppState();
+  const { user, profile, updateProfileStage, notifications, signOutUser, language, setLanguage, t } = useAppState();
   const [showStageMenu, setShowStageMenu] = useState(false);
   const [showNotifMenu, setShowNotifMenu] = useState(false);
 
   // Get active notifications count
   const unreadNotifs = notifications.filter(n => !n.read).length;
 
-  const getStageBengaliName = (stage: HealthStage) => {
+  const getStageLocalizedName = (stage: HealthStage) => {
     switch (stage) {
       case HealthStage.MENSTRUATING:
-        return 'পিরিয়ড ও ওভুলেশন';
+        return t('stageMenstruating');
       case HealthStage.PREGNANCY:
-        return 'গর্ভাবস্থা ট্র্যাকার';
+        return t('stagePregnancy');
       case HealthStage.PERIMENOPAUSE:
-        return 'পেরিমেনোপজ কেয়ার';
+        return t('stagePerimenopause');
       case HealthStage.POSTMENOPAUSE:
-        return 'পোস্টমেনোপজ সুস্বাস্থ্য';
+        return t('stagePostmenopause');
       default:
-        return 'পিরিয়ড ট্র্যাকিং';
+        return t('stageMenstruating');
     }
   };
 
@@ -44,38 +45,65 @@ export const Navbar: React.FC = () => {
           </div>
           <div>
             <span className="font-sans text-2xl font-bold tracking-tight text-[#261818] flex items-center gap-1.5">
-              কল্প
+              {t('appName')}
               <span className="bg-[#c7eae1] text-[#3c5550] text-[10px] px-1.5 py-0.5 rounded-full font-sans font-semibold">
-                Bilingual
+                {t('brandBadge')}
               </span>
             </span>
-            <p className="text-[10px] text-[#524340] font-mono">নারীদের বিশ্বস্ত সুরক্ষাকবচ</p>
+            <p className="text-[10px] text-[#524340] font-mono">{t('tagline')}</p>
           </div>
         </div>
 
         {/* Action centers */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+
+          {/* Language Switcher Toggle */}
+          <div className="flex items-center bg-white border border-[#ffe9e8] rounded-xl p-0.5 shadow-sm">
+            <button
+              onClick={() => setLanguage('bn')}
+              className={`px-2 py-1 text-[11px] font-bold font-sans rounded-lg transition-all cursor-pointer ${
+                language === 'bn'
+                  ? 'bg-[#894f42] text-white shadow-xs'
+                  : 'text-gray-500 hover:text-gray-800'
+              }`}
+            >
+              🇧🇩 বাংলা
+            </button>
+            <button
+              onClick={() => setLanguage('en')}
+              className={`px-2 py-1 text-[11px] font-bold font-sans rounded-lg transition-all cursor-pointer ${
+                language === 'en'
+                  ? 'bg-[#894f42] text-white shadow-xs'
+                  : 'text-gray-500 hover:text-gray-800'
+              }`}
+            >
+              🇬🇧 English
+            </button>
+          </div>
           
           {/* Health Stage Toggle Button */}
           <div className="relative">
             <button
               onClick={() => setShowStageMenu(!showStageMenu)}
-              className="flex items-center gap-2 bg-[#fff0f0] hover:bg-[#ffe9e8] text-[#894f42] border border-[#fde2e1] px-3 py-1.5 rounded-xl text-xs font-semibold font-sans transition-all active:scale-95"
+              className="flex items-center gap-1.5 bg-[#fff0f0] hover:bg-[#ffe9e8] text-[#894f42] border border-[#fde2e1] px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold font-sans transition-all active:scale-95"
             >
-              <RefreshCw className="w-3.5 h-3.5 animate-spin-slow text-[#894f42]" />
-              {profile ? getStageBengaliName(profile.currentStage) : 'ধাপ পরিবর্তন'}
+              <RefreshCw className="w-3.5 h-3.5 text-[#894f42]" />
+              <span className="hidden sm:inline">{profile ? getStageLocalizedName(profile.currentStage) : t('changeStage')}</span>
+              <span className="sm:hidden">{t('changeStage')}</span>
             </button>
 
             {showStageMenu && (
-              <div className="absolute right-0 mt-2 w-56 bg-white border border-[#ffe9e8] rounded-xl shadow-xl py-2 z-50 animate-fade-in">
-                <p className="text-[10px] text-[#524340] px-3 py-1 font-sans border-b border-[#ffe9e8] font-semibold">আপনার বর্তমান ধাপ সিলেক্ট করুন:</p>
+              <div className="absolute right-0 mt-2 w-64 bg-white border border-[#ffe9e8] rounded-xl shadow-xl py-2 z-50 animate-fade-in">
+                <p className="text-[10px] text-[#524340] px-3 py-1 font-sans border-b border-[#ffe9e8] font-semibold">
+                  {t('selectStagePrompt')}
+                </p>
                 
                 <button
                   onClick={() => handleStageChange(HealthStage.MENSTRUATING)}
                   className={`w-full text-left px-4 py-2 text-xs flex items-center gap-2 font-sans ${profile?.currentStage === HealthStage.MENSTRUATING ? 'bg-[#fff0f0] text-[#894f42] font-semibold' : 'hover:bg-[#fff9f8] text-[#261818]'}`}
                 >
                   <Calendar className="w-4 h-4 text-[#894f42]" />
-                  পিরিয়ড ও ওভুলেশন ট্র্যাকিং
+                  {t('stageMenstruating')}
                 </button>
                 
                 <button
@@ -83,7 +111,7 @@ export const Navbar: React.FC = () => {
                   className={`w-full text-left px-4 py-2 text-xs flex items-center gap-2 font-sans ${profile?.currentStage === HealthStage.PREGNANCY ? 'bg-[#fff0f0] text-[#894f42] font-semibold' : 'hover:bg-[#fff9f8] text-[#261818]'}`}
                 >
                   <Sparkles className="w-4 h-4 text-[#45645e]" />
-                  গর্ভকালীন মেটারনিটি গাইড
+                  {t('stagePregnancy')}
                 </button>
                 
                 <button
@@ -91,7 +119,7 @@ export const Navbar: React.FC = () => {
                   className={`w-full text-left px-4 py-2 text-xs flex items-center gap-2 font-sans ${profile?.currentStage === HealthStage.PERIMENOPAUSE ? 'bg-[#fff0f0] text-[#894f42] font-semibold' : 'hover:bg-[#fff9f8] text-[#261818]'}`}
                 >
                   <Award className="w-4 h-4 text-[#7e5541]" />
-                  পেরিমেনোপজ কেয়ার (৪০+)
+                  {t('stagePerimenopause')}
                 </button>
                 
                 <button
@@ -99,7 +127,7 @@ export const Navbar: React.FC = () => {
                   className={`w-full text-left px-4 py-2 text-xs flex items-center gap-2 font-sans ${profile?.currentStage === HealthStage.POSTMENOPAUSE ? 'bg-[#fff0f0] text-[#894f42] font-semibold' : 'hover:bg-[#fff9f8] text-[#261818]'}`}
                 >
                   <Shield className="w-4 h-4 text-emerald-600" />
-                  পোস্টমেনোপজ সুস্বাস্থ্য ও পরামর্শ
+                  {t('stagePostmenopause')}
                 </button>
               </div>
             )}
@@ -107,13 +135,13 @@ export const Navbar: React.FC = () => {
 
           {/* Premium badge */}
           {profile?.subActive ? (
-            <div className="hidden sm:flex items-center gap-1 bg-[#c7eae1] text-[#2d4c46] px-2.5 py-1 rounded-full text-[11px] font-bold">
+            <div className="hidden lg:flex items-center gap-1 bg-[#c7eae1] text-[#2d4c46] px-2.5 py-1 rounded-full text-[11px] font-bold">
               <Award className="w-3.5 h-3.5 fill-[#2d4c46]" />
-              কল্প প্রো+
+              {t('proVersion')}
             </div>
           ) : (
-            <div className="hidden sm:flex items-center gap-1 bg-yellow-100 text-yellow-800 px-2.5 py-1 rounded-full text-[11px] font-bold">
-              ফ্রি ভার্সন
+            <div className="hidden lg:flex items-center gap-1 bg-yellow-100 text-yellow-800 px-2.5 py-1 rounded-full text-[11px] font-bold">
+              {t('freeVersion')}
             </div>
           )}
 
@@ -121,24 +149,26 @@ export const Navbar: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setShowNotifMenu(!showNotifMenu)}
-              className="p-2 text-[#524340] hover:text-[#894f42] hover:bg-[#fff0f0] rounded-xl transition-all relative"
+              className="p-2 text-[#524340] hover:text-[#894f42] hover:bg-[#fff0f0] rounded-xl transition-all relative cursor-pointer"
             >
               <Bell className="w-5 h-5" />
               {unreadNotifs > 0 && (
-                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-[#error] bg-red-600 border-2 border-[#fff8f7] rounded-full animate-ping-slow" />
+                <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-600 border-2 border-[#fff8f7] rounded-full animate-ping-slow" />
               )}
             </button>
 
             {showNotifMenu && (
               <div className="absolute right-0 mt-2 w-72 bg-white border border-[#ffe9e8] rounded-2xl shadow-xl py-3 z-50 animate-fade-in">
                 <div className="flex items-center justify-between px-4 pb-2 border-b border-[#ffe9e8]">
-                  <span className="text-xs font-bold text-[#261818] font-sans">নোটিফিকেশন রিমাইন্ডারস 🛡️</span>
-                  <span className="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full font-mono">{notifications.length}টি</span>
+                  <span className="text-xs font-bold text-[#261818] font-sans">{t('notificationsTitle')}</span>
+                  <span className="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full font-mono">
+                    {toLocalizedNumber(notifications.length, language)}
+                  </span>
                 </div>
                 
                 <div className="max-h-64 overflow-y-auto">
                   {notifications.length === 0 ? (
-                    <p className="text-xs text-[#524340] p-4 text-center font-sans">নতুন কোনো বিজ্ঞপ্তি নেই</p>
+                    <p className="text-xs text-[#524340] p-4 text-center font-sans">{t('noNotifications')}</p>
                   ) : (
                     notifications.map((notif) => (
                       <div key={notif.id} className="p-3 border-b border-[#fff0f0] hover:bg-[#fff9f8] transition-all">
@@ -156,16 +186,16 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Secure privacy indicator */}
-          <div className="flex items-center gap-1.5 text-emerald-700 bg-emerald-50 rounded-xl px-2 py-1 text-[11px] font-sans border border-emerald-100">
+          <div className="hidden md:flex items-center gap-1.5 text-emerald-700 bg-emerald-50 rounded-xl px-2 py-1 text-[11px] font-sans border border-emerald-100">
             <Shield className="w-3.5 h-3.5" />
-            <span className="hidden md:inline font-semibold">এনক্রিপ্টেড ডাটা</span>
+            <span className="font-semibold">{t('encryptedData')}</span>
           </div>
 
           {/* Sign out */}
           <button 
             onClick={signOutUser}
-            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all"
-            title="সাইন আউট করুন"
+            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
+            title={t('signOut')}
           >
             <LogOut className="w-4 h-4" />
           </button>
@@ -175,3 +205,4 @@ export const Navbar: React.FC = () => {
     </nav>
   );
 };
+

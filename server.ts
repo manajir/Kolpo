@@ -30,13 +30,59 @@ function getGemini(): GoogleGenAI | null {
   return aiClient;
 }
 
+// Helper to safely call Gemini with model fallback
+async function generateWithFallback(client: GoogleGenAI, prompt: string) {
+  const modelsToTry = ['gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-flash-latest'];
+  let lastErr: any = null;
+  for (const modelName of modelsToTry) {
+    try {
+      const res = await client.models.generateContent({
+        model: modelName,
+        contents: prompt,
+      });
+      if (res && res.text) {
+        return res;
+      }
+    } catch (err) {
+      lastErr = err;
+      console.warn(`Gemini model ${modelName} call failed, trying next...`);
+    }
+  }
+  throw lastErr;
+}
+
 // 1. Daily Health Insight & Prediction Endpoint
 app.post('/api/gemini/insight', async (req, res) => {
-  const { currentStage, symptoms, moods, energyLevel, logDate, cycleDay } = req.body;
+  const { currentStage, symptoms, moods, energyLevel, logDate, cycleDay, language = 'bn' } = req.body;
 
   const client = getGemini();
 
-  const prompt = `
+  const isEn = language === 'en';
+
+  const prompt = isEn ? `
+    You are 'Kalpa' - a warm, expert women's health AI.
+    Analyze the user's current status and provide a brief daily health insight, prediction, and structured wellness advice in supportive English.
+    
+    Current Stage: ${currentStage || 'menstruating'} (Options: menstruating, pregnancy, perimenopause, postmenopause)
+    Cycle Day: ${cycleDay || 'Unknown'}
+    Logged Date: ${logDate || 'Today'}
+    Symptoms entered today: ${symptoms && symptoms.length > 0 ? symptoms.join(', ') : 'None specified'}
+    Current Moods: ${moods && moods.length > 0 ? moods.join(', ') : 'Normal'}
+    Current Energy Level: ${energyLevel || 'Normal'}
+    
+    Format the response as JSON with three strictly specified fields in English language:
+    {
+      "prediction": "A 1-2 sentence supportive prediction of their cycle flow or physical status in English.",
+      "insight": "A comforting 2-3 sentence insight on what causes these symptoms or how they relate to this phase in English.",
+      "wellnessTips": [
+        "Tip 1: Warm physical comfort advice in English.",
+        "Tip 2: Dietary, sleep, or hydration suggestion in English.",
+        "Tip 3: Caring mental support tip in English."
+      ]
+    }
+    
+    Ensure the JSON format is perfect. Avoid any markdown indicators like \`\`\`json. Return only the JSON string.
+  ` : `
     You are 'কল্প' (Kalpa) - a warm, expert Bengali women's health AI. 
     Analyze the user's current status and provide a brief daily health insight, prediction, and structured wellness advice in supportive Bengali.
     
@@ -63,11 +109,7 @@ app.post('/api/gemini/insight', async (req, res) => {
 
   try {
     if (client) {
-      const response = await client.models.generateContent({
-        model: 'gemini-3.5-flash',
-        contents: prompt,
-      });
-
+      const response = await generateWithFallback(client, prompt);
       const responseText = response.text || '';
       // Clean possible json markdown wraps
       const cleanedText = responseText
@@ -78,22 +120,31 @@ app.post('/api/gemini/insight', async (req, res) => {
       const insightData = JSON.parse(cleanedText);
       return res.json(insightData);
     } else {
-      // Return beautiful fallback Bengali insights if no key is present during preview
-      return res.json(getBengaliFallbackInsights(currentStage, symptoms, moods));
+      return res.json(getFallbackInsights(currentStage, language, symptoms, moods));
     }
   } catch (error) {
-    console.error('Gemini insight request failed:', error);
-    return res.json(getBengaliFallbackInsights(currentStage, symptoms, moods));
+    console.warn('Gemini insight fallback used due to API error:', error);
+    return res.json(getFallbackInsights(currentStage, language, symptoms, moods));
   }
 });
 
 // 2. "কল্প সহকারী" Support Chat Assistant
 app.post('/api/gemini/chat', async (req, res) => {
-  const { message, history, currentStage } = req.body;
+  const { message, history, currentStage, language = 'bn' } = req.body;
 
   const client = getGemini();
+  const isEn = language === 'en';
 
-  const prompt = `
+  const prompt = isEn ? `
+    You are 'Kalpa Assistant' - a highly secure, caring, expert gynecological and prenatal health assistant.
+    The user is standardly seeking supportive health consulting in English. Always preface that this is advisory and not a substitute for clinical visits.
+    Ensure all responses are strictly in English. Use gentle, compassionate terms. Keep answers actionable, explaining lifestyle remedies, food habits, and when to consult a doctor.
+
+    User Stage context: ${currentStage || 'general'}
+    User's message: ${message}
+
+    Ensure your reply is formatted in a warm, clean structure. Keep it under 250 words.
+  ` : `
     You are 'কল্প সহকারী' (Kalpa Assistant) - a highly secure, caring, expert Bengali gynecological and prenatal health assistant.
     The user is standardly seeking supportive health consulting in Bengali. Always preface that this is advisory and not a substitute for clinical visits.
     Ensure all responses are strictly in Bengali. Use gentle, compassionate terms. Keep answers actionable, explaining lifestyle remedies, food habits, and when to consult a doctor.
@@ -106,22 +157,54 @@ app.post('/api/gemini/chat', async (req, res) => {
 
   try {
     if (client) {
-      const response = await client.models.generateContent({
-        model: 'gemini-3.5-flash',
-        contents: prompt,
-      });
+      const response = await generateWithFallback(client, prompt);
       return res.json({ response: response.text });
     } else {
-      return res.json({ response: getBengaliFallbackChatReply(message, currentStage) });
+      return res.json({ response: getFallbackChatReply(message, currentStage, language) });
     }
   } catch (error) {
-    console.error('Gemini chat assistant failed:', error);
-    return res.json({ response: getBengaliFallbackChatReply(message, currentStage) });
+    console.warn('Gemini chat assistant fallback used due to API error:', error);
+    return res.json({ response: getFallbackChatReply(message, currentStage, language) });
   }
 });
 
-// Helper: fallback responses generator in Bengali for preview integrity
-function getBengaliFallbackInsights(stage: string, symptoms: string[] = [], moods: string[] = []): any {
+// Helper: fallback responses generator for preview integrity
+function getFallbackInsights(stage: string, lang: string, symptoms: string[] = [], moods: string[] = []): any {
+  if (lang === 'en') {
+    if (stage === 'pregnancy') {
+      return {
+        prediction: "Your pregnancy journey is currently progressing stably and safely.",
+        insight: "Mild fatigue or mood changes are normal due to hormonal shifts during pregnancy. Your body is nurturing a new life.",
+        wellnessTips: [
+          "Stay well-hydrated and eat fresh fruits daily.",
+          "Avoid heavy lifting and ensure at least 8 hours of sleep at night.",
+          "Listen to calming music or read books to keep your mind refreshed."
+        ]
+      };
+    } else if (stage === 'perimenopause') {
+      return {
+        prediction: "Irregular cycles and occasional hot flashes are expected during perimenopause.",
+        insight: "Declining estrogen levels cause shifts in menstrual flow and sleep patterns. This is a completely natural transition.",
+        wellnessTips: [
+          "Wear loose, breathable cotton clothing.",
+          "Include calcium and vitamin D rich foods (milk, eggs, yogurt) for bone health.",
+          "Practice deep breathing exercises or meditation to manage stress."
+        ]
+      };
+    } else {
+      return {
+        prediction: "Your body is transitioning into the next hormonal phase of your menstrual cycle.",
+        insight: "Progesterone level shifts before periods can cause mild cramps or irritability, typical of Pre-Menstrual Syndrome (PMS).",
+        wellnessTips: [
+          "Apply a warm heating pad to your lower abdomen to ease cramps.",
+          "Limit excess caffeine and salt intake to reduce bloating.",
+          "Drink warm water and nutritious soups to stay energized."
+        ]
+      };
+    }
+  }
+
+  // Default Bengali fallback
   if (stage === 'pregnancy') {
     return {
       prediction: "আপনার গর্ভকালীন সময় এখন স্থিতিশীল এবং সুন্দরভাবে এগোচ্ছে।",
@@ -143,7 +226,6 @@ function getBengaliFallbackInsights(stage: string, symptoms: string[] = [], mood
       ]
     };
   } else {
-    // Menstruating stage or standard
     return {
       prediction: "আসন্ন পিরিয়ড চক্রে আপনার শরীর হরমোন নিঃসরণের পরবর্তী ধাপে প্রবেশ করছে।",
       insight: "পিরিয়ডের আগে প্রোজেস্টেরন হরমোনের পরিবর্তনের জন্য মেজাজ খিটখিটে হওয়া বা পেটে হালকা মোচড় লাগা প্রি-মেনস্ট্রুয়াল সিন্ড্রোম (PMS) নির্দেশ করে।",
@@ -156,10 +238,24 @@ function getBengaliFallbackInsights(stage: string, symptoms: string[] = [], mood
   }
 }
 
-function getBengaliFallbackChatReply(msg: string, stage: string): string {
+function getFallbackChatReply(msg: string, stage: string, lang: string): string {
   const query = msg.toLowerCase();
-  let defaultReply = "আপনার প্রশ্নটির জন্য ধন্যবাদ। কল্প আপনাকে সবসময় নিরাপদ এবং বিজ্ঞানভিত্তিক তথ্য দিয়ে সাহায্য করতে প্রস্তুত। আপনার উপসর্গগুলো সাধারণত শরীরের হরমোনগত হ্রাসের বা পরিবর্তনের কারণে হয়ে থাকে। অনুগ্রহ করে পুষ্টিকর খাবার গ্রহণ করুন, পর্যাপ্ত বিশ্রাম নিন এবং কোনো গুরুতর অস্বস্তিতে অবশ্যই চিকিৎসকের শরণাপন্ন হোন।";
   
+  if (lang === 'en') {
+    let defaultReply = "Thank you for asking. Kalpa is here to provide safe, evidence-based guidance. Your symptoms are generally related to natural hormonal shifts. Please maintain a nutritious diet, get ample rest, and consult a doctor if you feel severe discomfort.";
+    if (query.includes('pain') || query.includes('cramp')) {
+      return "Abdominal or lower back pain is common during menstruation and pregnancy. Applying a warm heating pad often relieves mild discomfort. However, if you experience severe pain, heavy bleeding, or fever, please consult a specialized gynecologist right away.";
+    }
+    if (query.includes('diet') || query.includes('food') || query.includes('nutrition')) {
+      return "Nutritional support is key during this time. Include leafy greens, calcium-rich foods (yogurt, milk), eggs, and lean proteins in your daily meals. Stay well-hydrated and talk to a physician before taking new supplements.";
+    }
+    if (query.includes('pregnancy') || query.includes('pregnant')) {
+      return "Pregnancy requires gentle care. Folic acid and regular prenatal checkups are essential in the first trimester. Nutritious food and a relaxed environment support both mother and baby. Avoid lifting heavy objects.";
+    }
+    return defaultReply;
+  }
+
+  let defaultReply = "আপনার প্রশ্নটির জন্য ধন্যবাদ। কল্প আপনাকে সবসময় নিরাপদ এবং বিজ্ঞানভিত্তিক তথ্য দিয়ে সাহায্য করতে প্রস্তুত। আপনার উপসর্গগুলো সাধারণত শরীরের হরমোনগত হ্রাসের বা পরিবর্তনের কারণে হয়ে থাকে। অনুগ্রহ করে পুষ্টিকর খাবার গ্রহণ করুন, পর্যাপ্ত বিশ্রাম নিন এবং কোনো গুরুতর অস্বস্তিতে অবশ্যই চিকিৎসকের শরণাপন্ন হোন।";
   if (query.includes('ব্যথা') || query.includes('pain')) {
     return "পিরিয়ড বা গর্ভাবস্থায় তলপেটে ব্যথা বা পিঠে ব্যথা একটি অতি প্রচলিত সমস্যা। হালকা ব্যথার জন্য আপনি কুসুম গরম পানির ছোঁয়া নিতে পারেন। তবে যদি তীব্র ব্যথা, অতিরিক্ত রক্তক্ষরণ কিংবা জ্বর আসে, তা ব্যাকটেরিয়াল কোনো সংক্রমণ বা জটিলতা নির্দেশ করতে পারে। এমন পরিস্থিতিতে ঘরোয়া চিকিৎসা এড়িয়ে অবিলম্বেই একজন বিশেষজ্ঞ গাইনী চিকিৎসকের সাথে পরামর্শ করুন।";
   }

@@ -1,14 +1,15 @@
 import React, { useState } from 'react';
 import { useAppState } from '../AppContext';
 import { ForumPost } from '../types';
-import { MessageSquare, Heart, Send, Search, Users, Sparkles, Filter, AlertTriangle } from 'lucide-react';
+import { MessageSquare, Heart, Send, Search, Users, Sparkles, AlertTriangle } from 'lucide-react';
 
 interface ForumCommentState {
   [postId: string]: { authorName: string; content: string; createdAt: string }[];
 }
 
 export const ForumView: React.FC = () => {
-  const { user, profile, forumPosts, createForumPost, toggleLikePost, triggerSimulationNotification } = useAppState();
+  const { user, profile, forumPosts, createForumPost, toggleLikePost, triggerSimulationNotification, language } = useAppState();
+  const isEn = language === 'en';
 
   const [search, setSearch] = useState('');
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
@@ -24,11 +25,11 @@ export const ForumView: React.FC = () => {
   // Simulated thread comments indexed by postId
   const [threadComments, setThreadComments] = useState<ForumCommentState>({
     'post-1': [
-      { authorName: 'সুলতানা পারভীন', content: 'আমি গর্ভকালে সকালে হালকা শুকনো টোস্ট বা মুড়ি চিবাতাম। এতে তাৎক্ষণিক বমি ভাব লাগা অনেকটা কমে যেত। ট্রাই করে দেখতে পারেন আপু।', createdAt: new Date(Date.now() - 32 * 3600000).toISOString() },
-      { authorName: 'ডাঃ তানিয়া রহমান', content: 'প্রথম তিন মাস বমি হওয়া স্বাভাবিক। তবে যদি সারাদিন কিছুই না পচে এবং শরীর অবসন্ন হয়ে যায়, দ্রুত প্রস্রাব পরীক্ষা করাতে হবে এবং ওরাল ডিহাইড্রেশন বা ডক্টরের পরামর্শে ওষুধ নিতে হবে।', createdAt: new Date(Date.now() - 20 * 3600000).toISOString() }
+      { authorName: isEn ? 'Sultana Parveen' : 'সুলতানা পারভীন', content: isEn ? 'I chewed light dry toast or puffed rice in the morning during my pregnancy. It immediately reduced nausea!' : 'আমি গর্ভকালে সকালে হালকা শুকনো টোস্ট বা মুড়ি চিবাতাম। এতে তাৎক্ষণিক বমি ভাব লাগা অনেকটা কমে যেত। ট্রাই করে দেখতে পারেন আপু।', createdAt: new Date(Date.now() - 32 * 3600000).toISOString() },
+      { authorName: isEn ? 'Dr. Tania Rahman' : 'ডাঃ তানিয়া রহমান', content: isEn ? 'Nausea in the first trimester is normal. However, if you cannot retain any food, consult your physician promptly.' : 'প্রথম তিন মাস বমি হওয়া স্বাভাবিক। তবে যদি সারাদিন কিছুই না পচে এবং শরীর অবসন্ন হয়ে যায়, দ্রুত প্রস্রাব পরীক্ষা করাতে হবে এবং ওরাল ডিহাইড্রেশন বা ডক্টরের পরামর্শে ওষুধ নিতে হবে।', createdAt: new Date(Date.now() - 20 * 3600000).toISOString() }
     ],
     'post-2': [
-      { authorName: 'ফরিদা আক্তার', content: 'আমিও আগের রাতে ঘুমাতে পারতাম না। পরে নিশ্বাসের ৪-৭-৮ ব্যায়ামটি নিয়মিত করা শুরু করি। এটি সত্যিই মস্তিস্ক শিথিল করে দেয়, চেষ্টা করুন আপু!', createdAt: new Date(Date.now() - 6 * 3600000).toISOString() }
+      { authorName: isEn ? 'Farida Akter' : 'ফরিদা আক্তার', content: isEn ? 'I used the 4-7-8 breathing technique regularly before sleep. It really relaxes the brain!' : 'আমিও আগের রাতে ঘুমাতে পারতাম না। পরে নিশ্বাসের ৪-৭-৮ ব্যায়ামটি নিয়মিত করা শুরু করি। এটি সত্যিই মস্তিস্ক শিথিল করে দেয়, চেষ্টা করুন আপু!', createdAt: new Date(Date.now() - 6 * 3600000).toISOString() }
     ]
   });
 
@@ -41,8 +42,10 @@ export const ForumView: React.FC = () => {
     setNewPostContent('');
     setShowCreator(false);
     triggerSimulationNotification(
-      'ফোরাম পোস্ট সফল', 
-      'আপনার গোপনীয়তা সুরক্ষিত রেখে প্রশ্নটি সফলভাবে কল্প ফোরামে পোস্ট করা হয়েছে।'
+      isEn ? 'Forum Post Created' : 'ফোরাম পোস্ট সফল', 
+      isEn 
+        ? 'Your question has been anonymously posted to Kalpa Forum.' 
+        : 'আপনার গোপনীয়তা সুরক্ষিত রেখে প্রশ্নটি সফলভাবে কল্প ফোরামে পোস্ট করা হয়েছে।'
     );
   };
 
@@ -50,7 +53,7 @@ export const ForumView: React.FC = () => {
     if (!commentInputStr.trim() || !profile) return;
 
     const freshComment = {
-      authorName: profile.displayName || 'কল্প সদস্য',
+      authorName: profile.displayName || (isEn ? 'Kalpa Member' : 'কল্প সদস্য'),
       content: commentInputStr,
       createdAt: new Date().toISOString()
     };
@@ -61,7 +64,10 @@ export const ForumView: React.FC = () => {
     }));
 
     setCommentInputStr('');
-    triggerSimulationNotification('টিপ্পনী যোগ হয়েছে', 'আপনার মন্তব্যটি সফলভাবে ফোরামে যোগ করা হয়েছে।');
+    triggerSimulationNotification(
+      isEn ? 'Comment Added' : 'টিপ্পনী যোগ হয়েছে', 
+      isEn ? 'Your comment has been posted successfully.' : 'আপনার মন্তব্যটি সফলভাবে ফোরামে যোগ করা হয়েছে।'
+    );
   };
 
   // Filter posts based on tags & search
@@ -72,7 +78,16 @@ export const ForumView: React.FC = () => {
     return matchesSearch && matchesCat;
   });
 
-  const getCategoryBengaliLabel = (cat: string) => {
+  const getCategoryLabel = (cat: string) => {
+    if (isEn) {
+      switch (cat) {
+        case 'fertility': return 'Fertility & Conception';
+        case 'pregnancy': return 'Pregnancy';
+        case 'menopause': return 'Menopause & Aging';
+        case 'mental-health': return 'Mental Wellness';
+        default: return 'General Health';
+      }
+    }
     switch (cat) {
       case 'fertility': return 'উর্বরতা ও গর্ভধারণ';
       case 'pregnancy': return 'গর্ভাবস্থা';
@@ -94,9 +109,11 @@ export const ForumView: React.FC = () => {
             </div>
             <div>
               <h3 className="font-sans font-bold text-lg text-[#261818] flex items-center gap-2">
-                কল্প সহমর্মী ফোরাম
+                {isEn ? 'Kalpa Peer Support Forum' : 'কল্প সহমর্মী ফোরাম'}
               </h3>
-              <p className="text-xs text-[#524340] font-sans">গোপনীয়তা বজায় রেখে নারীদের পরস্পর সহযোগী মিলনস্থল</p>
+              <p className="text-xs text-[#524340] font-sans">
+                {isEn ? 'A confidential, supportive space for women\'s health discussions.' : 'গোপনীয়তা বজায় রেখে নারীদের পরস্পর সহযোগী মিলনস্থল'}
+              </p>
             </div>
           </div>
 
@@ -105,14 +122,18 @@ export const ForumView: React.FC = () => {
             className="bg-[#894f42] hover:bg-[#753f33] text-white font-sans font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-sm"
           >
             <Sparkles className="w-4 h-4" />
-            নতুন প্রশ্ন বা পোস্ট যোগ করুন
+            {isEn ? 'New Question / Post' : 'নতুন প্রশ্ন বা পোস্ট যোগ করুন'}
           </button>
         </div>
 
         {/* Security / Confidentiality Notice */}
         <div className="mt-4 bg-[#fffcfc] border border-[#ffe9e8] p-3 rounded-xl flex items-center gap-2 text-[10px] text-[#524340] font-sans">
           <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
-          <span>আপনার আসল পরিচয় সম্পূর্ণ গোপন রাখতে চাইলে আপনি ড্যাশবোর্ড থেকে যেকোন সময় আপনার ছদ্মনাম (Nickname) সিলেক্ট করতে পারেন।</span>
+          <span>
+            {isEn 
+              ? 'To protect your identity, you can set an anonymous nickname from your Profile settings at any time.' 
+              : 'আপনার আসল পরিচয় সম্পূর্ণ গোপন রাখতে চাইলে আপনি ড্যাশবোর্ড থেকে যেকোন সময় আপনার ছদ্মনাম (Nickname) সিলেক্ট করতে পারেন।'}
+          </span>
         </div>
 
         {/* Search Input Box */}
@@ -121,7 +142,7 @@ export const ForumView: React.FC = () => {
             <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" />
             <input
               type="text"
-              placeholder="ফোরামে টপিক বা সমস্যার সমাধান খুঁজুন..."
+              placeholder={isEn ? "Search forum topics or health solutions..." : "ফোরামে টপিক বা সমস্যার সমাধান খুঁজুন..."}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
               className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl pl-10 pr-4 py-2 text-xs font-sans text-gray-800 focus:outline-none"
@@ -134,12 +155,12 @@ export const ForumView: React.FC = () => {
               onChange={(e) => setSelectedCategory(e.target.value)}
               className="w-full bg-white border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-gray-700 focus:outline-none"
             >
-              <option value="all">সব ক্যাটাগরি (All discussions)</option>
-              <option value="fertility">উর্বরতা ও গর্ভধারণ (Fertility)</option>
-              <option value="pregnancy">গর্ভাবস্থা (Pregnancy)</option>
-              <option value="menopause">মেনোপজ (Menopause/Forty+)</option>
-              <option value="mental-health">মানসিক সুস্থতা (Mental Health)</option>
-              <option value="general">সাধারণ আলোচনা (General)</option>
+              <option value="all">{isEn ? 'All Categories' : 'সব ক্যাটাগরি (All discussions)'}</option>
+              <option value="fertility">{isEn ? 'Fertility' : 'উর্বরতা ও গর্ভধারণ (Fertility)'}</option>
+              <option value="pregnancy">{isEn ? 'Pregnancy' : 'গর্ভাবস্থা (Pregnancy)'}</option>
+              <option value="menopause">{isEn ? 'Menopause (40+)' : 'মেনোপজ (Menopause/Forty+)'}</option>
+              <option value="mental-health">{isEn ? 'Mental Health' : 'মানসিক সুস্থতা (Mental Health)'}</option>
+              <option value="general">{isEn ? 'General Discussion' : 'সাধারণ আলোচনা (General)'}</option>
             </select>
           </div>
         </div>
@@ -148,29 +169,35 @@ export const ForumView: React.FC = () => {
       {/* CREATE POST FORM COMPONENT */}
       {showCreator && (
         <form onSubmit={handleCreatePost} className="bg-white border border-[#ffe9e8] rounded-3xl p-5 space-y-4 animate-fade-in">
-          <h4 className="text-xs font-sans font-bold text-[#894f42]">নতুন ফোরাম প্রশ্ন বা সমস্যা ড্রাফট করুন:</h4>
+          <h4 className="text-xs font-sans font-bold text-[#894f42]">
+            {isEn ? 'Draft a new forum topic or question:' : 'নতুন ফোরাম প্রশ্ন বা সমস্যা ড্রাফট করুন:'}
+          </h4>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] font-sans font-bold text-gray-700 mb-1">ক্যাটাগরি নির্ধারণ করুন:</label>
+              <label className="block text-[11px] font-sans font-bold text-gray-700 mb-1">
+                {isEn ? 'Category:' : 'ক্যাটাগরি নির্ধারণ করুন:'}
+              </label>
               <select
                 value={newPostCategory}
                 onChange={(e) => setNewPostCategory(e.target.value as any)}
                 className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none"
               >
-                <option value="general">সাধারণ স্বাস্থ্য (General)</option>
-                <option value="fertility">উর্বরতা ও গর্ভধারণ (Fertility)</option>
-                <option value="pregnancy">গর্ভধারণ ও মেটারনিটি (Pregnancy)</option>
-                <option value="menopause">মেনোপজ রিলেটেড কেয়ার (Menopause)</option>
-                <option value="mental-health">মানসিক প্রশান্তি ও স্ট্রেস (Mental Health)</option>
+                <option value="general">{isEn ? 'General Health' : 'সাধারণ স্বাস্থ্য (General)'}</option>
+                <option value="fertility">{isEn ? 'Fertility & Conception' : 'উর্বরতা ও গর্ভধারণ (Fertility)'}</option>
+                <option value="pregnancy">{isEn ? 'Pregnancy & Maternity' : 'গর্ভধারণ ও মেটারনিটি (Pregnancy)'}</option>
+                <option value="menopause">{isEn ? 'Menopause Care' : 'মেনোপজ রিলেটেড কেয়ার (Menopause)'}</option>
+                <option value="mental-health">{isEn ? 'Mental Health & Stress' : 'মানসিক প্রশান্তি ও স্ট্রেস (Mental Health)'}</option>
               </select>
             </div>
 
             <div>
-              <label className="block text-[11px] font-sans font-bold text-gray-700 mb-1">টপিক শিরোনাম (সংক্ষিপ্ত):</label>
+              <label className="block text-[11px] font-sans font-bold text-gray-700 mb-1">
+                {isEn ? 'Topic Title:' : 'টপিক শিরোনাম (সংক্ষিপ্ত):'}
+              </label>
               <input
                 type="text"
-                placeholder="যেমন: গর্ভাবস্থার প্রথম দিকে তীব্র বমি প্রতিকার কী?"
+                placeholder={isEn ? "e.g., Remedies for early morning nausea?" : "যেমন: গর্ভাবস্থার প্রথম দিকে তীব্র বমি প্রতিকার কী?"}
                 value={newPostTitle}
                 onChange={(e) => setNewPostTitle(e.target.value)}
                 className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none"
@@ -180,10 +207,12 @@ export const ForumView: React.FC = () => {
           </div>
 
           <div>
-            <label className="block text-[11px] font-sans font-bold text-gray-700 mb-1">বিস্তারিত বিবরণ লিখুন:</label>
+            <label className="block text-[11px] font-sans font-bold text-gray-700 mb-1">
+              {isEn ? 'Details & Description:' : 'বিস্তারিত বিবরণ লিখুন:'}
+            </label>
             <textarea
               rows={3}
-              placeholder="আপনার অনুভূতি ও সমস্যা বিস্তারিত উল্লেখ করুন যাতে ফোরামের আপুরা সাহায্য করতে পারেন..."
+              placeholder={isEn ? "Describe your question or experience so members can help..." : "আপনার অনুভূতি ও সমস্যা বিস্তারিত উল্লেখ করুন যাতে ফোরামের আপুরা সাহায্য করতে পারেন..."}
               value={newPostContent}
               onChange={(e) => setNewPostContent(e.target.value)}
               className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none resize-none"
@@ -197,13 +226,13 @@ export const ForumView: React.FC = () => {
               onClick={() => setShowCreator(false)}
               className="px-4 py-1.5 border border-gray-200 text-gray-500 rounded-xl text-xs font-sans"
             >
-              বাতিল
+              {isEn ? 'Cancel' : 'বাতিল'}
             </button>
             <button
               type="submit"
               className="px-5 py-1.5 bg-[#45645e] hover:bg-[#38504b] text-white rounded-xl text-xs font-sans font-bold cursor-pointer"
             >
-              অজ্ঞাতনামা ফোরামে পাবলিশ করুন
+              {isEn ? 'Post Anonymously' : 'অজ্ঞাতনামা ফোরামে পাবলিশ করুন'}
             </button>
           </div>
         </form>
@@ -213,13 +242,16 @@ export const ForumView: React.FC = () => {
       <div className="space-y-4">
         {filteredPosts.length === 0 ? (
           <div className="bg-white border border-[#ffe9e8] rounded-3xl p-12 text-center">
-            <p className="text-xs text-[#524340] font-sans">অনুসন্ধানের সাথে মিলছে কোনো প্রশ্নের সন্ধান পাওয়া যায়নি। নতুন একটি পোস্ট তৈরি করতে পারেন!</p>
+            <p className="text-xs text-[#524340] font-sans">
+              {isEn ? 'No discussions found matching your search. Feel free to create a new post!' : 'অনুসন্ধানের সাথে মিলছে কোনো প্রশ্নের সন্ধান পাওয়া যায়নি। নতুন একটি পোস্ট তৈরি করতে পারেন!'}
+            </p>
           </div>
         ) : (
           filteredPosts.map((post) => {
             const isLiked = user && post.likes.includes(user.uid);
             const isExpanded = expandedPostId === post.postId;
             const comments = threadComments[post.postId] || [];
+            const dateLocale = isEn ? 'en-US' : 'bn-BD';
 
             return (
               <div
@@ -229,9 +261,12 @@ export const ForumView: React.FC = () => {
                 {/* Meta details */}
                 <div className="flex justify-between items-center text-[10px] text-gray-400 font-mono">
                   <span className="bg-[#fff0f0] text-[#894f42] font-sans font-bold px-2 py-0.5 rounded-md">
-                    {getCategoryBengaliLabel(post.category)}
+                    {getCategoryLabel(post.category)}
                   </span>
-                  <span>পোস্ট করেছেন: <span className="font-sans font-bold text-[#2d4c46]">{post.authorName}</span> • {new Date(post.createdAt).toLocaleDateString('bn-BD')}</span>
+                  <span>
+                    {isEn ? 'Posted by: ' : 'পোস্ট করেছেন: '}
+                    <span className="font-sans font-bold text-[#2d4c46]">{post.authorName}</span> • {new Date(post.createdAt).toLocaleDateString(dateLocale)}
+                  </span>
                 </div>
 
                 {/* Content */}
@@ -253,7 +288,9 @@ export const ForumView: React.FC = () => {
                     }`}
                   >
                     <Heart className={`w-4.5 h-4.5 ${isLiked ? 'fill-current' : ''}`} />
-                    <span>উপকারী ({post.likes.length + (post.postId === 'post-1' && post.likes.length === 1 ? 7 : 0)})</span>
+                    <span>
+                      {isEn ? 'Helpful' : 'উপকারী'} ({post.likes.length + (post.postId === 'post-1' && post.likes.length === 1 ? 7 : 0)})
+                    </span>
                   </button>
 
                   <button
@@ -261,23 +298,29 @@ export const ForumView: React.FC = () => {
                     className="flex items-center gap-1.5 text-[#45645e] hover:text-[#2d4c46] cursor-pointer font-medium"
                   >
                     <MessageSquare className="w-4.5 h-4.5" />
-                    <span>মন্তব্য ({comments.length ? comments.length : post.commentsCount})</span>
+                    <span>
+                      {isEn ? 'Comments' : 'মন্তব্য'} ({comments.length ? comments.length : post.commentsCount})
+                    </span>
                   </button>
                 </div>
 
                 {/* EXPANDED COMMENTS ACCORDION */}
                 {isExpanded && (
                   <div className="bg-[#fffbfb] border border-[#ffe9e8] p-4 rounded-2xl mt-3 space-y-3 animate-fade-in text-xs font-sans">
-                    <p className="font-bold text-[#894f42] mb-1 pb-1 border-b border-[#ffe9e8]">মন্তব্যসমূহ (Comments):</p>
+                    <p className="font-bold text-[#894f42] mb-1 pb-1 border-b border-[#ffe9e8]">
+                      {isEn ? 'Comments:' : 'মন্তব্যসমূহ (Comments):'}
+                    </p>
                     
                     {comments.length === 0 ? (
-                      <p className="text-gray-400 text-center py-2 text-[11px]">এখনো কেউ মন্তব্য লেখেননি, সহযোগিতার হাত বাড়িয়ে প্রথম মন্তব্যটি লিখুন!</p>
+                      <p className="text-gray-400 text-center py-2 text-[11px]">
+                        {isEn ? 'No comments yet. Be the first to share your thoughts!' : 'এখনো কেউ মন্তব্য লেখেননি, সহযোগিতার হাত বাড়িয়ে প্রথম মন্তব্যটি লিখুন!'}
+                      </p>
                     ) : (
                       comments.map((comment, index) => (
                         <div key={index} className="bg-white border border-[#fff0f0] p-2.5 rounded-xl space-y-1">
                           <div className="flex items-center justify-between text-[10px] text-gray-500">
                             <span className="font-bold text-[#45645e]">{comment.authorName}</span>
-                            <span className="font-mono">{new Date(comment.createdAt).toLocaleDateString('bn-BD')}</span>
+                            <span className="font-mono">{new Date(comment.createdAt).toLocaleDateString(dateLocale)}</span>
                           </div>
                           <p className="text-[#261818] leading-relaxed text-[11px]">{comment.content}</p>
                         </div>
@@ -288,7 +331,7 @@ export const ForumView: React.FC = () => {
                     <div className="flex gap-2 pt-2">
                       <input
                         type="text"
-                        placeholder="আপনার মূল্যবান গঠনমূলক পরামর্শ বা মন্তব্য লিখুন..."
+                        placeholder={isEn ? "Write a helpful comment or advice..." : "আপনার মূল্যবান গঠনমূলক পরামর্শ বা মন্তব্য লিখুন..."}
                         value={commentInputStr}
                         onChange={(e) => setCommentInputStr(e.target.value)}
                         className="flex-1 bg-white border border-[#ffe9e8] rounded-xl px-3 py-1.5 text-xs text-gray-800 focus:outline-none"
@@ -298,7 +341,7 @@ export const ForumView: React.FC = () => {
                         className="bg-[#45645e] hover:bg-[#38504b] text-white font-sans px-4 py-1.5 rounded-xl text-xs flex items-center gap-1 font-bold cursor-pointer transition-all"
                       >
                         <Send className="w-3.5 h-3.5" />
-                        মন্তব্য করুন
+                        {isEn ? 'Post' : 'মন্তব্য করুন'}
                       </button>
                     </div>
                   </div>
@@ -312,3 +355,4 @@ export const ForumView: React.FC = () => {
     </div>
   );
 };
+

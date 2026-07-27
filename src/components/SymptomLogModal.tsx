@@ -1,26 +1,26 @@
 import React, { useState, useEffect } from 'react';
 import { useAppState } from '../AppContext';
 import { TrackingLog } from '../types';
-import { Save, Calendar, HelpCircle, Thermometer, Weight, FileText, CheckCircle } from 'lucide-react';
+import { Save, Calendar, Thermometer, Weight, FileText, CheckCircle } from 'lucide-react';
 
 const SYMPTOM_OPTIONS = [
-  { value: 'তলপেটে ব্যথা', label: 'তলপেটে ব্যথা (Cramps)' },
-  { value: 'কোমর ব্যথা', label: 'কোমর ব্যথা (Backache)' },
-  { value: 'হট ফ্ল্যাশ', label: 'হট ফ্ল্যাশ (Hot Flashes)' },
-  { value: 'ব্রেইন ফগ', label: 'ব্রেইন ফগ (Brain Fog)' },
-  { value: 'স্তনে সংবেদনশীলতা', label: 'স্তনে সংবেদনশীলতা' },
-  { value: 'মাথাব্যথা', label: 'মাথাব্যথা (Headache)' },
-  { value: 'ব্রণ ও ত্বকের সমস্যা', label: 'ব্রণ (Acne)' },
-  { value: 'হাত-পা ফোলা', label: 'হাত-পা ফোলা (Bloating)' }
+  { value: 'তলপেটে ব্যথা', labelBn: 'তলপেটে ব্যথা (Cramps)', labelEn: 'Abdominal Cramps' },
+  { value: 'কোমর ব্যথা', labelBn: 'কোমর ব্যথা (Backache)', labelEn: 'Backache' },
+  { value: 'হট ফ্ল্যাশ', labelBn: 'হট ফ্ল্যাশ (Hot Flashes)', labelEn: 'Hot Flashes' },
+  { value: 'ব্রেইন ফগ', labelBn: 'ব্রেইন ফগ (Brain Fog)', labelEn: 'Brain Fog' },
+  { value: 'স্তনে সংবেদনশীলতা', labelBn: 'স্তনে সংবেদনশীলতা', labelEn: 'Breast Tenderness' },
+  { value: 'মাথাব্যথা', labelBn: 'মাথাব্যথা (Headache)', labelEn: 'Headache' },
+  { value: 'ব্রণ ও ত্বকের সমস্যা', labelBn: 'ব্রণ (Acne)', labelEn: 'Acne / Skin Breakouts' },
+  { value: 'হাত-পা ফোলা', labelBn: 'হাত-পা ফোলা (Bloating)', labelEn: 'Bloating & Swelling' }
 ];
 
 const MOOD_OPTIONS = [
-  { value: 'খুশি', label: 'খুশি 😊' },
-  { value: 'শান্ত', label: 'শান্ত 🧘' },
-  { value: 'খিটখিটে', label: 'খিটখিটে মেজাজ 😠' },
-  { value: 'উদ্বেগ', label: 'উদ্বেগ 😰' },
-  { value: 'ক্লান্ত', label: 'ক্লান্ত 😴' },
-  { value: 'বিষন্ন', label: 'বিষন্ন 😢' }
+  { value: 'খুশি', labelBn: 'খুশি 😊', labelEn: 'Happy 😊' },
+  { value: 'শান্ত', labelBn: 'শান্ত 🧘', labelEn: 'Calm 🧘' },
+  { value: 'খিটখিটে', labelBn: 'খিটখিটে মেজাজ 😠', labelEn: 'Irritable 😠' },
+  { value: 'উদ্বেগ', labelBn: 'উদ্বেগ 😰', labelEn: 'Anxious 😰' },
+  { value: 'ক্লান্ত', labelBn: 'ক্লান্ত 😴', labelEn: 'Fatigued 😴' },
+  { value: 'বিষন্ন', labelBn: 'বিষন্ন 😢', labelEn: 'Sad 😢' }
 ];
 
 interface SymptomLogProps {
@@ -29,7 +29,7 @@ interface SymptomLogProps {
 }
 
 export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose }) => {
-  const { trackingLogs, addTrackingLog, triggerSimulationNotification } = useAppState();
+  const { trackingLogs, addTrackingLog, triggerSimulationNotification, language, t } = useAppState();
   
   const [bleeding, setBleeding] = useState<'none' | 'light' | 'medium' | 'heavy'>('none');
   const [mucus, setMucus] = useState<string>('dry');
@@ -55,7 +55,6 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
       setTemp(existing.temperature ? existing.temperature.toString() : '');
       setNotes(existing.notes || '');
     } else {
-      // Clear to defaults
       setBleeding('none');
       setMucus('dry');
       setSelectedSymptoms([]);
@@ -97,8 +96,10 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
     });
 
     triggerSimulationNotification(
-      'উপসর্গ সংরক্ষণ সম্পন্ন 🌸',
-      `${selectedDate} তারিখের পিরিয়ড ও স্বাস্থ্য লগ সফলভাবে সংরক্ষিত হয়েছে।`
+      language === 'en' ? 'Symptom Log Saved 🌸' : 'উপসর্গ সংরক্ষণ সম্পন্ন 🌸',
+      language === 'en' 
+        ? `Health log for ${selectedDate} has been successfully recorded.` 
+        : `${selectedDate} তারিখের পিরিয়ড ও স্বাস্থ্য লগ সফলভাবে সংরক্ষিত হয়েছে।`
     );
 
     setTimeout(() => {
@@ -107,20 +108,22 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
     }, 1200);
   };
 
+  const isEn = language === 'en';
+
   return (
     <div className="bg-white rounded-3xl p-6 border border-[#ffe9e8] shadow-[0_12px_44px_rgba(137,79,66,0.06)] animate-fade-in">
       <div className="flex items-center justify-between pb-4 border-b border-[#fff0f0] mb-5">
         <div>
           <h3 className="font-sans font-bold text-lg text-[#261818] flex items-center gap-2">
             <Calendar className="w-5 h-5 text-[#894f42]" />
-            দৈনিক স্বাস্থ্য লগ
+            {isEn ? 'Daily Health & Symptom Log' : 'দৈনিক স্বাস্থ্য লগ'}
           </h3>
-          <p className="text-xs text-[#524340] font-mono mt-0.5">তারিখ: {selectedDate}</p>
+          <p className="text-xs text-[#524340] font-mono mt-0.5">{isEn ? `Date: ${selectedDate}` : `তারিখ: ${selectedDate}`}</p>
         </div>
         {isSaved && (
           <span className="flex items-center gap-1 text-emerald-600 font-sans text-xs font-semibold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
             <CheckCircle className="w-4 h-4 animate-bounce" />
-            সেভ হয়েছে!
+            {isEn ? 'Saved!' : 'সেভ হয়েছে!'}
           </span>
         )}
       </div>
@@ -130,14 +133,14 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
         {/* Period bleeding controller */}
         <div>
           <label className="block text-xs font-sans font-bold text-[#261818] mb-2.5">
-            পিরিয়ডের রক্তস্রাব পরিমাণ
+            {t('bleedingFlow')}
           </label>
           <div className="grid grid-cols-4 gap-2">
             {[
-              { value: 'none', label: 'হবে না', bangla: 'নেই' },
-              { value: 'light', label: 'Light', bangla: 'হালকা' },
-              { value: 'medium', label: 'Medium', bangla: 'স্বাভাবিক' },
-              { value: 'heavy', label: 'Heavy', bangla: 'অতিরিক্ত' }
+              { value: 'none', label: isEn ? 'None' : 'নেই', sub: isEn ? 'None' : 'হবে না' },
+              { value: 'light', label: isEn ? 'Light' : 'হালকা', sub: 'Light' },
+              { value: 'medium', label: isEn ? 'Medium' : 'মাঝারি', sub: 'Medium' },
+              { value: 'heavy', label: isEn ? 'Heavy' : 'অতিরিক্ত', sub: 'Heavy' }
             ].map((opt) => (
               <button
                 key={opt.value}
@@ -149,8 +152,8 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
                     : 'border-[#ffe9e8] hover:bg-[#fff9f8] text-[#524340]'
                 }`}
               >
-                <span className="text-xs font-bold font-sans">{opt.bangla}</span>
-                <span className="text-[9px] text-[#85736f] mt-0.5 uppercase tracking-wider font-mono">{opt.label}</span>
+                <span className="text-xs font-bold font-sans">{opt.label}</span>
+                <span className="text-[9px] text-[#85736f] mt-0.5 uppercase tracking-wider font-mono">{opt.sub}</span>
               </button>
             ))}
           </div>
@@ -159,27 +162,37 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
         {/* Cervical mucus indicator */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-sans font-bold text-[#261818]" title="গর্ভধারণ উইন্ডো চেনার প্রধান ভেষজ লক্ষণ">
-              সার্ভিকাল মিউকাস তরলতা (নির্ণয় গাইড)
+            <label className="text-xs font-sans font-bold text-[#261818]">
+              {t('cervicalMucusTitle')}
             </label>
-            <span className="text-[10px] text-[#524340] font-sans">ওভুলেশন চেনার সূচক</span>
+            <span className="text-[10px] text-[#524340] font-sans">
+              {isEn ? 'Fertility Indicator' : 'ওভুলেশন চেনার সূচক'}
+            </span>
           </div>
           <select
             value={mucus}
             onChange={(e) => setMucus(e.target.value)}
             className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none focus:ring-1 focus:ring-[#894f42]"
           >
-            <option value="dry">শুকনো ও আঠালো (Dry/Sticky) - অনুর্বর উইন্ডো</option>
-            <option value="creamy">ক্রিমি হোয়াইট (Creamy) - কম উর্বর</option>
-            <option value="watery">স্বচ্ছ তরল পানি (Watery) - উর্বর উইন্ডো কাছে</option>
-            <option value="raw-egg-white">ডিমের সাদা অংশের মতো পিছলা (Egg-white) - সর্বাধিক উর্বর দিন!</option>
+            <option value="dry">
+              {isEn ? 'Dry / Sticky - Infertile Phase' : 'শুকনো ও আঠালো (Dry/Sticky) - অনুর্বর উইন্ডো'}
+            </option>
+            <option value="creamy">
+              {isEn ? 'Creamy White - Low Fertility' : 'ক্রিমি হোয়াইট (Creamy) - কম উর্বর'}
+            </option>
+            <option value="watery">
+              {isEn ? 'Watery Clear - Approaching Ovulation' : 'স্বচ্ছ তরল পানি (Watery) - উর্বর উইন্ডো কাছে'}
+            </option>
+            <option value="raw-egg-white">
+              {isEn ? 'Egg-White Slippery - Peak Fertile Ovulation Day!' : 'ডিমের সাদা অংশের মতো পিছলা (Egg-white) - সর্বাধিক উর্বর দিন!'}
+            </option>
           </select>
         </div>
 
         {/* Symptoms selection Chips */}
         <div>
           <label className="block text-xs font-sans font-bold text-[#261818] mb-2.5">
-            শারীরিক উপসর্গসমূহ (Symptom Chips)
+            {t('symptomsListTitle')}
           </label>
           <div className="flex flex-wrap gap-2">
             {SYMPTOM_OPTIONS.map((opt) => {
@@ -195,7 +208,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
                       : 'bg-[#fff0f0] text-[#894f42] hover:bg-[#ffe9e8] border-[#fde2e1]'
                   }`}
                 >
-                  {opt.label}
+                  {isEn ? opt.labelEn : opt.labelBn}
                 </button>
               );
             })}
@@ -205,7 +218,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
         {/* Mood selection Chips */}
         <div>
           <label className="block text-xs font-sans font-bold text-[#261818] mb-2.5">
-            মানসিক মেজাজ ও স্ট্রেস লেভেল (Moods)
+            {t('moodsListTitle')}
           </label>
           <div className="flex flex-wrap gap-2">
             {MOOD_OPTIONS.map((opt) => {
@@ -221,7 +234,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
                       : 'bg-[#fafefd] hover:bg-[#ebf8f5] text-[#45645e] border-[#c7eae1]'
                   }`}
                 >
-                  {opt.label}
+                  {isEn ? opt.labelEn : opt.labelBn}
                 </button>
               );
             })}
@@ -231,13 +244,13 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
         {/* Energy levels selector */}
         <div>
           <label className="block text-xs font-sans font-bold text-[#261818] mb-2.5">
-            শরীরের শক্তি ও এনার্জি লেভেল
+            {t('energyLevelTitle')}
           </label>
           <div className="grid grid-cols-3 gap-2">
             {[
-              { value: 'high', label: 'উচ্চ (High)' },
-              { value: 'medium', label: 'স্বাভাবিক (Normal)' },
-              { value: 'low', label: 'ক্লান্ত (Low Energy)' }
+              { value: 'high', label: t('energyHigh') },
+              { value: 'medium', label: t('energyMedium') },
+              { value: 'low', label: t('energyLow') }
             ].map((opt) => (
               <button
                 key={opt.value}
@@ -260,7 +273,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
           <div>
             <label className="flex items-center gap-1.5 text-xs font-sans font-bold text-[#261818] mb-1.5">
               <Thermometer className="w-4 h-4 text-orange-500" />
-              বডি টেম্পারেচার
+              {t('tempF')}
             </label>
             <div className="relative">
               <input
@@ -278,7 +291,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
           <div>
             <label className="flex items-center gap-1.5 text-xs font-sans font-bold text-[#261818] mb-1.5">
               <Weight className="w-4 h-4 text-blue-500" />
-              শরীর ওজন
+              {t('weightKg')}
             </label>
             <div className="relative">
               <input
@@ -298,11 +311,11 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
         <div>
           <label className="flex items-center gap-1.5 text-xs font-sans font-bold text-[#261818] mb-1.5">
             <FileText className="w-4 h-4 text-purple-500" />
-            দৈনিক নোট/পিপি চিন্তা
+            {isEn ? 'Daily Notes & Journal' : 'দৈনিক নোট/বিশেষ চিন্তা'}
           </label>
           <textarea
             rows={2}
-            placeholder="আজ কেমন বোধ করেছেন? ওষুধ গ্রহণ নাকি বিশেষ কোনো অভিজ্ঞতা..."
+            placeholder={t('notesPlaceholder')}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none focus:ring-1 focus:ring-[#894f42] resize-none"
@@ -315,10 +328,11 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
           className="w-full bg-gradient-to-r from-[#894f42] to-[#7e5541] hover:brightness-110 text-white font-sans font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 shadow-md"
         >
           <Save className="w-4 h-4" />
-          আজকের লক্ষণ ও ডাটা সংরক্ষণ করুন
+          {t('saveLogButton')}
         </button>
 
       </form>
     </div>
   );
 };
+

@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { HealthStage, UserProfile, TrackingLog, ForumPost, ClinicReport, UserFile, CourseMaterial } from './types';
+import { Language, translations, toLocalizedNumber } from './i18n';
 import { db, auth, isMockConfig } from './firebase';
 import { 
   doc, 
@@ -54,6 +55,9 @@ function handleFirestoreError(error: unknown, operationType: OperationType, path
 }
 
 interface AppContextProps {
+  language: Language;
+  setLanguage: (lang: Language) => void;
+  t: (key: keyof typeof translations.bn) => string;
   user: any | null;
   profile: UserProfile | null;
   isLoading: boolean;
@@ -205,6 +209,20 @@ const LIBRARY_ARTICLES: CourseMaterial[] = [
 ];
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguageState] = useState<Language>(() => {
+    const saved = localStorage.getItem('kalpa_lang');
+    return (saved === 'en' || saved === 'bn') ? saved : 'bn';
+  });
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    localStorage.setItem('kalpa_lang', lang);
+  };
+
+  const t = (key: keyof typeof translations.bn): string => {
+    return translations[language][key] || translations.bn[key] || key;
+  };
+
   const [user, setUser] = useState<any | null>(null);
   const [profile, setProfileState] = useState<UserProfile | null>(null);
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -525,8 +543,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       }
     }
     triggerSimulationNotification(
-      'ডকুমেন্ট আপলোড সম্পন্ন',
-      `আপনার মেডিকেল ডস্ক ফাইল "${name}" সফলভাবে এনক্রিপ্ট হয়ে কল্প ক্লাউড আর্কাইভে জমা হয়েছে।`
+      language === 'en' ? 'Document Uploaded' : 'ডকুমেন্ট আপলোড সম্পন্ন',
+      language === 'en' 
+        ? `Your medical file "${name}" has been encrypted and stored in your Kalpa cloud vault.` 
+        : `আপনার মেডিকেল ডস্ক ফাইল "${name}" সফলভাবে এনক্রিপ্ট হয়ে কল্প ক্লাউড আর্কাইভে জমা হয়েছে।`
     );
   };
 
@@ -549,6 +569,7 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
   const generateClinicReport = async (title: string, startDate: string, endDate: string, docNotes: string) => {
     if (!user || !profile) return;
     const reportId = 'rep-' + Date.now();
+    const isEn = language === 'en';
     
     // Auto compile some summaries based on historical tracks
     const loggedRange = (Object.values(trackingLogs) as TrackingLog[]).filter(log => log.logDate >= startDate && log.logDate <= endDate);
@@ -556,23 +577,33 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const moodsLogged = Array.from(new Set(loggedRange.flatMap(item => item.moods)));
     
     const symSummary = uniqueSymptoms.length > 0 
-      ? `রিপোর্ট সময়কালে লক্ষণসমূহ: ${uniqueSymptoms.join(', ')}। মেজাজ: ${moodsLogged.join(', ')}।` 
-      : 'চক্রের হিসাবকালে কোনো জটিল শারীরিক উপসর্গ নথিভুক্ত করা হয়নি।';
+      ? (isEn 
+          ? `Report Period Symptoms: ${uniqueSymptoms.join(', ')}. Moods: ${moodsLogged.join(', ')}.` 
+          : `রিপোর্ট সময়কালে লক্ষণসমূহ: ${uniqueSymptoms.join(', ')}। মেজাজ: ${moodsLogged.join(', ')}।`)
+      : (isEn 
+          ? 'No complex physical symptoms logged during this report period.' 
+          : 'চক্রের হিসাবকালে কোনো জটিল শারীরিক উপসর্গ নথিভুক্ত করা হয়নি।');
 
-    const stageSum = `ধাপ: ${profile.currentStage === HealthStage.PREGNANCY ? 'গর্ভকালীন' : profile.currentStage === HealthStage.PERIMENOPAUSE ? 'পেরিমেনোপজ' : 'মেনস্ট্রুয়েটিং পিরিয়ড'}। চক্রের দৈর্ঘ্য: ${profile.cycleLength} দিন, রক্তস্রাবকাল: ${profile.periodLength} দিন।`;
+    const stageSum = isEn
+      ? `Stage: ${profile.currentStage === HealthStage.PREGNANCY ? 'Pregnancy' : profile.currentStage === HealthStage.PERIMENOPAUSE ? 'Perimenopause' : 'Menstruating Period'}. Cycle Length: ${profile.cycleLength} days, Period Flow: ${profile.periodLength} days.`
+      : `ধাপ: ${profile.currentStage === HealthStage.PREGNANCY ? 'গর্ভকালীন' : profile.currentStage === HealthStage.PERIMENOPAUSE ? 'পেরিমেনোপজ' : 'মেনস্ট্রুয়েটিং পিরিয়ড'}। চক্রের দৈর্ঘ্য: ${profile.cycleLength} দিন, রক্তস্রাবকাল: ${profile.periodLength} দিন।`;
 
     const code = Math.floor(100000 + Math.random() * 900000).toString(); // Secure 6 digit Clinician verification code
+
+    const defaultTitle = isEn 
+      ? `Health Report - ${startDate} to ${endDate}` 
+      : 'স্বাস্থ্য প্রতিবেদন - ' + startDate + ' থেকে ' + endDate;
 
     const newReport: ClinicReport = {
       reportId,
       userId: user.uid,
-      title: title || 'স্বাস্থ্য প্রতিবেদন - ' + startDate + ' থেকে ' + endDate,
+      title: title || defaultTitle,
       createdAt: new Date().toISOString(),
       startDate,
       endDate,
       symptomsSummary: symSummary,
       stageSummary: stageSum,
-      additionalDoctorNotes: docNotes || 'কোনো বাড়তি বার্তা নেই।',
+      additionalDoctorNotes: docNotes || (isEn ? 'No additional message.' : 'কোনো বাড়তি বার্তা নেই।'),
       clinicianAccessCode: code
     };
 
@@ -590,8 +621,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     }
 
     triggerSimulationNotification(
-      'ক্লিনিশিয়ান রিপোর্ট জেনারেট হয়েছে',
-      `ডাক্তারদের সাথে শেয়ার করার উপযোগী পিরিয়ড ও স্বাস্থ্য রিপোর্ট জেনারেট হয়েছে। সিকিউর কোড: ${code}`
+      isEn ? 'Clinical Report Generated' : 'ক্লিনিশিয়ান রিপোর্ট জেনারেট হয়েছে',
+      isEn 
+        ? `Health report generated for sharing with doctors. Secure Code: ${code}` 
+        : `ডাক্তারদের সাথে শেয়ার করার উপযোগী পিরিয়ড ও স্বাস্থ্য রিপোর্ট জেনারেট হয়েছে। সিকিউর কোড: ${code}`
     );
   };
 
@@ -690,6 +723,9 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
 
   return (
     <AppContext.Provider value={{
+      language,
+      setLanguage,
+      t,
       user,
       profile,
       isLoading,
