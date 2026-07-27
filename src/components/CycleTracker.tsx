@@ -98,9 +98,9 @@ export const CycleTracker: React.FC<CycleTrackerProps> = ({ onSelectDate, select
         
         {/* SVG Cycle Wheel (Day 1-28 visualization) */}
         <div className="col-span-1 md:col-span-5 flex flex-col items-center justify-center">
-          <div className="relative w-56 h-56 flex items-center justify-center">
+          <div className="relative w-48 h-48 sm:w-56 sm:h-56 flex items-center justify-center">
             {/* Custom Interactive SVG Ring */}
-            <svg className="w-full h-full transform -rotate-90">
+            <svg className="w-full h-full transform -rotate-90" viewBox="0 0 224 224">
               <circle
                 cx="112"
                 cy="112"
@@ -133,12 +133,12 @@ export const CycleTracker: React.FC<CycleTrackerProps> = ({ onSelectDate, select
             </svg>
 
             {/* Inner dynamic content box */}
-            <div className="absolute w-40 h-40 bg-white rounded-full flex flex-col items-center justify-center border border-[#ffe9e8] text-center shadow-md p-4">
-              <span className="text-[10px] uppercase font-mono font-bold tracking-wider text-gray-400">{t('cycleDay')}</span>
-              <span className="text-4xl font-black text-[#894f42] font-sans my-1">
+            <div className="absolute w-36 h-36 sm:w-40 sm:h-40 bg-white rounded-full flex flex-col items-center justify-center border border-[#ffe9e8] text-center shadow-md p-2.5 sm:p-4">
+              <span className="text-[9px] sm:text-[10px] uppercase font-mono font-bold tracking-wider text-gray-400">{t('cycleDay')}</span>
+              <span className="text-3xl sm:text-4xl font-black text-[#894f42] font-sans my-0.5 sm:my-1">
                 {toLocalizedNumber(currentCycleDay, language)}
               </span>
-              <span className="text-[11px] font-sans font-semibold text-[#261818] leading-tight px-2">
+              <span className="text-[10px] sm:text-[11px] font-sans font-semibold text-[#261818] leading-tight px-1">
                 {t('nextPeriod')}: <span className="text-[#894f42] block font-bold">{nextPeriodStr.split(',')[0]}</span>
               </span>
             </div>
@@ -172,11 +172,11 @@ export const CycleTracker: React.FC<CycleTrackerProps> = ({ onSelectDate, select
           <div className="grid grid-cols-2 gap-3 text-xs font-sans">
             <div className="bg-white rounded-2xl p-3 border border-[#ffe9e8] text-center">
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">{t('cycleLengthLabel')}</span>
-              <span className="text-lg font-black text-[#524340] block mt-1">{toLocalizedNumber(cycleLength, language)} {t('days')}</span>
+              <span className="text-base sm:text-lg font-black text-[#524340] block mt-1">{toLocalizedNumber(cycleLength, language)} {t('days')}</span>
             </div>
             <div className="bg-white rounded-2xl p-3 border border-[#ffe9e8] text-center">
               <span className="text-[10px] text-gray-400 font-bold uppercase tracking-wider block">{t('ovulationDay')}</span>
-              <span className="text-lg font-black text-[#45645e] block mt-1">{t('day')} {toLocalizedNumber(ovulationDay, language)}</span>
+              <span className="text-base sm:text-lg font-black text-[#45645e] block mt-1">{t('day')} {toLocalizedNumber(ovulationDay, language)}</span>
             </div>
           </div>
 
@@ -186,7 +186,7 @@ export const CycleTracker: React.FC<CycleTrackerProps> = ({ onSelectDate, select
               {t('selectDatePrompt')}
             </label>
             
-            <div className="grid grid-cols-7 gap-2">
+            <div className="grid grid-cols-7 gap-1 sm:gap-2">
               {weekDays.map((date) => {
                 const dateStr = date.toISOString().split('T')[0];
                 const active = dateStr === selectedDate;
@@ -198,14 +198,14 @@ export const CycleTracker: React.FC<CycleTrackerProps> = ({ onSelectDate, select
                   <button
                     key={dateStr}
                     onClick={() => onSelectDate(dateStr)}
-                    className={`flex flex-col items-center p-2 rounded-xl transition-all cursor-pointer ${
+                    className={`flex flex-col items-center p-1 sm:p-2 rounded-xl transition-all cursor-pointer ${
                       active
                         ? 'bg-[#894f42] text-white shadow-md ring-2 ring-[#ffdad3]'
                         : 'bg-white text-[#261818] hover:bg-[#fff0f0] border border-[#ffe9e8]'
                     }`}
                   >
-                    <span className="text-[9px] block uppercase font-sans font-bold opacity-80">{dayName}</span>
-                    <span className="text-sm font-sans font-black mt-1">{toLocalizedNumber(dayNum, language)}</span>
+                    <span className="text-[8px] sm:text-[9px] block uppercase font-sans font-bold opacity-80 truncate max-w-full">{dayName}</span>
+                    <span className="text-xs sm:text-sm font-sans font-black mt-0.5 sm:mt-1">{toLocalizedNumber(dayNum, language)}</span>
                     {hasLogs && (
                       <span className={`w-1.5 h-1.5 rounded-full mt-1 ${active ? 'bg-white' : 'bg-red-500'}`} />
                     )}

@@ -35,49 +35,49 @@ export const Navbar: React.FC = () => {
   if (!user) return null;
 
   return (
-    <nav className="sticky top-0 z-40 w-full bg-[#fff8f7] border-b border-[#ffe9e8] px-4 py-3 shadow-[0_4px_20px_rgba(137,79,66,0.03)]">
-      <div className="max-w-6xl mx-auto flex items-center justify-between">
+    <nav className="sticky top-0 z-40 w-full bg-[#fff8f7]/95 backdrop-blur-md border-b border-[#ffe9e8] px-3 sm:px-6 py-2.5 sm:py-3 shadow-[0_4px_20px_rgba(137,79,66,0.03)]">
+      <div className="max-w-6xl mx-auto flex items-center justify-between gap-2">
         
         {/* Brand identity */}
-        <div className="flex items-center gap-2">
-          <div className="bg-[#894f42] text-white p-2 rounded-xl shadow-md flex items-center justify-center">
-            <Heart className="w-6 h-6 fill-white" />
+        <div className="flex items-center gap-2 shrink-0">
+          <div className="bg-[#894f42] text-white p-1.5 sm:p-2 rounded-xl shadow-md flex items-center justify-center">
+            <Heart className="w-5 h-5 sm:w-6 sm:h-6 fill-white" />
           </div>
           <div>
-            <span className="font-sans text-2xl font-bold tracking-tight text-[#261818] flex items-center gap-1.5">
+            <span className="font-sans text-lg sm:text-2xl font-bold tracking-tight text-[#261818] flex items-center gap-1 sm:gap-1.5">
               {t('appName')}
-              <span className="bg-[#c7eae1] text-[#3c5550] text-[10px] px-1.5 py-0.5 rounded-full font-sans font-semibold">
+              <span className="bg-[#c7eae1] text-[#3c5550] text-[9px] sm:text-[10px] px-1.5 py-0.5 rounded-full font-sans font-semibold">
                 {t('brandBadge')}
               </span>
             </span>
-            <p className="text-[10px] text-[#524340] font-mono">{t('tagline')}</p>
+            <p className="text-[9px] sm:text-[10px] text-[#524340] font-mono hidden sm:block">{t('tagline')}</p>
           </div>
         </div>
 
         {/* Action centers */}
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center gap-1.5 sm:gap-2 md:gap-3">
 
           {/* Language Switcher Toggle */}
           <div className="flex items-center bg-white border border-[#ffe9e8] rounded-xl p-0.5 shadow-sm">
             <button
               onClick={() => setLanguage('bn')}
-              className={`px-2 py-1 text-[11px] font-bold font-sans rounded-lg transition-all cursor-pointer ${
+              className={`px-1.5 sm:px-2 py-1 text-[10px] sm:text-[11px] font-bold font-sans rounded-lg transition-all cursor-pointer ${
                 language === 'bn'
                   ? 'bg-[#894f42] text-white shadow-xs'
                   : 'text-gray-500 hover:text-gray-800'
               }`}
             >
-              🇧🇩 বাংলা
+              🇧🇩 <span className="hidden xs:inline">বাংলা</span>
             </button>
             <button
               onClick={() => setLanguage('en')}
-              className={`px-2 py-1 text-[11px] font-bold font-sans rounded-lg transition-all cursor-pointer ${
+              className={`px-1.5 sm:px-2 py-1 text-[10px] sm:text-[11px] font-bold font-sans rounded-lg transition-all cursor-pointer ${
                 language === 'en'
                   ? 'bg-[#894f42] text-white shadow-xs'
                   : 'text-gray-500 hover:text-gray-800'
               }`}
             >
-              🇬🇧 English
+              🇬🇧 <span className="hidden xs:inline">EN</span>
             </button>
           </div>
           
@@ -85,15 +85,15 @@ export const Navbar: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setShowStageMenu(!showStageMenu)}
-              className="flex items-center gap-1.5 bg-[#fff0f0] hover:bg-[#ffe9e8] text-[#894f42] border border-[#fde2e1] px-2.5 sm:px-3 py-1.5 rounded-xl text-xs font-semibold font-sans transition-all active:scale-95"
+              className="flex items-center gap-1 bg-[#fff0f0] hover:bg-[#ffe9e8] text-[#894f42] border border-[#fde2e1] px-2 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-semibold font-sans transition-all active:scale-95"
             >
-              <RefreshCw className="w-3.5 h-3.5 text-[#894f42]" />
-              <span className="hidden sm:inline">{profile ? getStageLocalizedName(profile.currentStage) : t('changeStage')}</span>
-              <span className="sm:hidden">{t('changeStage')}</span>
+              <RefreshCw className="w-3.5 h-3.5 text-[#894f42] shrink-0" />
+              <span className="hidden md:inline">{profile ? getStageLocalizedName(profile.currentStage) : t('changeStage')}</span>
+              <span className="md:hidden">{t('changeStage')}</span>
             </button>
 
             {showStageMenu && (
-              <div className="absolute right-0 mt-2 w-64 bg-white border border-[#ffe9e8] rounded-xl shadow-xl py-2 z-50 animate-fade-in">
+              <div className="absolute right-0 mt-2 w-60 sm:w-64 max-w-[calc(100vw-2rem)] bg-white border border-[#ffe9e8] rounded-xl shadow-xl py-2 z-50 animate-fade-in">
                 <p className="text-[10px] text-[#524340] px-3 py-1 font-sans border-b border-[#ffe9e8] font-semibold">
                   {t('selectStagePrompt')}
                 </p>
@@ -135,12 +135,12 @@ export const Navbar: React.FC = () => {
 
           {/* Premium badge */}
           {profile?.subActive ? (
-            <div className="hidden lg:flex items-center gap-1 bg-[#c7eae1] text-[#2d4c46] px-2.5 py-1 rounded-full text-[11px] font-bold">
+            <div className="hidden xl:flex items-center gap-1 bg-[#c7eae1] text-[#2d4c46] px-2.5 py-1 rounded-full text-[11px] font-bold">
               <Award className="w-3.5 h-3.5 fill-[#2d4c46]" />
               {t('proVersion')}
             </div>
           ) : (
-            <div className="hidden lg:flex items-center gap-1 bg-yellow-100 text-yellow-800 px-2.5 py-1 rounded-full text-[11px] font-bold">
+            <div className="hidden xl:flex items-center gap-1 bg-yellow-100 text-yellow-800 px-2.5 py-1 rounded-full text-[11px] font-bold">
               {t('freeVersion')}
             </div>
           )}
@@ -149,16 +149,16 @@ export const Navbar: React.FC = () => {
           <div className="relative">
             <button
               onClick={() => setShowNotifMenu(!showNotifMenu)}
-              className="p-2 text-[#524340] hover:text-[#894f42] hover:bg-[#fff0f0] rounded-xl transition-all relative cursor-pointer"
+              className="p-1.5 sm:p-2 text-[#524340] hover:text-[#894f42] hover:bg-[#fff0f0] rounded-xl transition-all relative cursor-pointer"
             >
-              <Bell className="w-5 h-5" />
+              <Bell className="w-4.5 h-4.5 sm:w-5 sm:h-5" />
               {unreadNotifs > 0 && (
                 <span className="absolute top-1 right-1 w-2.5 h-2.5 bg-red-600 border-2 border-[#fff8f7] rounded-full animate-ping-slow" />
               )}
             </button>
 
             {showNotifMenu && (
-              <div className="absolute right-0 mt-2 w-72 bg-white border border-[#ffe9e8] rounded-2xl shadow-xl py-3 z-50 animate-fade-in">
+              <div className="absolute right-0 mt-2 w-64 sm:w-72 max-w-[calc(100vw-2rem)] bg-white border border-[#ffe9e8] rounded-2xl shadow-xl py-3 z-50 animate-fade-in">
                 <div className="flex items-center justify-between px-4 pb-2 border-b border-[#ffe9e8]">
                   <span className="text-xs font-bold text-[#261818] font-sans">{t('notificationsTitle')}</span>
                   <span className="text-[10px] text-gray-500 bg-gray-100 px-2 py-0.5 rounded-full font-mono">
@@ -186,7 +186,7 @@ export const Navbar: React.FC = () => {
           </div>
 
           {/* Secure privacy indicator */}
-          <div className="hidden md:flex items-center gap-1.5 text-emerald-700 bg-emerald-50 rounded-xl px-2 py-1 text-[11px] font-sans border border-emerald-100">
+          <div className="hidden lg:flex items-center gap-1.5 text-emerald-700 bg-emerald-50 rounded-xl px-2 py-1 text-[11px] font-sans border border-emerald-100">
             <Shield className="w-3.5 h-3.5" />
             <span className="font-semibold">{t('encryptedData')}</span>
           </div>
@@ -194,7 +194,7 @@ export const Navbar: React.FC = () => {
           {/* Sign out */}
           <button 
             onClick={signOutUser}
-            className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
+            className="p-1.5 sm:p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-xl transition-all cursor-pointer"
             title={t('signOut')}
           >
             <LogOut className="w-4 h-4" />

@@ -398,7 +398,7 @@ export const Calculators: React.FC = () => {
                 <p className="font-semibold text-[#261818] mb-2">
                   {toLocalizedNumber(q.id, language)}. {q.text}
                 </p>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {[
                     { value: 0, label: isEn ? 'None' : 'কখনোই না (None)' },
                     { value: 1, label: isEn ? 'Mild' : 'মাঝে মাঝে (Mild)' },

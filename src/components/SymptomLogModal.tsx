@@ -135,7 +135,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
           <label className="block text-xs font-sans font-bold text-[#261818] mb-2.5">
             {t('bleedingFlow')}
           </label>
-          <div className="grid grid-cols-4 gap-2">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {[
               { value: 'none', label: isEn ? 'None' : 'নেই', sub: isEn ? 'None' : 'হবে না' },
               { value: 'light', label: isEn ? 'Light' : 'হালকা', sub: 'Light' },
