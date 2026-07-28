@@ -32,7 +32,7 @@ function getGemini(): GoogleGenAI | null {
 
 // Helper to safely call Gemini with model fallback
 async function generateWithFallback(client: GoogleGenAI, prompt: string) {
-  const modelsToTry = ['gemini-3.6-flash', 'gemini-2.5-flash', 'gemini-flash-latest'];
+  const modelsToTry = ['gemini-2.5-flash', 'gemini-2.5-pro'];
   let lastErr: any = null;
   for (const modelName of modelsToTry) {
     try {
