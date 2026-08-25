@@ -148,16 +148,16 @@ export const Calculators: React.FC = () => {
   };
 
   return (
-    <div className="bg-white border border-[#ffe9e8] rounded-3xl p-6 shadow-sm">
+    <div className="bg-white border border-[#fce7f3] rounded-3xl p-6 shadow-sm">
       
       {/* Selector pills */}
-      <div className="flex border-b border-[#fff0f0] pb-4 mb-6 overflow-x-auto gap-1">
+      <div className="flex border-b border-[#fce7f3] pb-4 mb-6 overflow-x-auto gap-2">
         <button
           onClick={() => setActiveCalc('duedate')}
-          className={`px-4 py-2 text-xs font-bold font-sans rounded-xl transition-all flex items-center gap-1.5 shrink-0 ${
+          className={`px-4 py-2 text-xs font-bold font-sans rounded-2xl transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
             activeCalc === 'duedate' 
-              ? 'bg-[#894f42] text-white' 
-              : 'text-[#894f42] hover:bg-[#fff0f0]'
+              ? 'bg-gradient-to-r from-[#e11d48] to-[#db2777] text-white shadow-md shadow-rose-200/80' 
+              : 'text-[#be185d] hover:bg-[#fff0f5]'
           }`}
         >
           <Baby className="w-4 h-4" />
@@ -165,10 +165,10 @@ export const Calculators: React.FC = () => {
         </button>
         <button
           onClick={() => setActiveCalc('ovulation')}
-          className={`px-4 py-2 text-xs font-bold font-sans rounded-xl transition-all flex items-center gap-1.5 shrink-0 ${
+          className={`px-4 py-2 text-xs font-bold font-sans rounded-2xl transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
             activeCalc === 'ovulation' 
-              ? 'bg-[#894f42] text-white' 
-              : 'text-[#894f42] hover:bg-[#fff0f0]'
+              ? 'bg-gradient-to-r from-[#e11d48] to-[#db2777] text-white shadow-md shadow-rose-200/80' 
+              : 'text-[#be185d] hover:bg-[#fff0f5]'
           }`}
         >
           <Activity className="w-4 h-4" />
@@ -176,10 +176,10 @@ export const Calculators: React.FC = () => {
         </button>
         <button
           onClick={() => setActiveCalc('perimenopause')}
-          className={`px-4 py-2 text-xs font-bold font-sans rounded-xl transition-all flex items-center gap-1.5 shrink-0 ${
+          className={`px-4 py-2 text-xs font-bold font-sans rounded-2xl transition-all flex items-center gap-1.5 shrink-0 cursor-pointer ${
             activeCalc === 'perimenopause' 
-              ? 'bg-[#894f42] text-white' 
-              : 'text-[#894f42] hover:bg-[#fff0f0]'
+              ? 'bg-gradient-to-r from-[#e11d48] to-[#db2777] text-white shadow-md shadow-rose-200/80' 
+              : 'text-[#be185d] hover:bg-[#fff0f5]'
           }`}
         >
           <HelpCircle className="w-4 h-4" />
@@ -191,10 +191,10 @@ export const Calculators: React.FC = () => {
       {activeCalc === 'duedate' && (
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 animation-fade-in">
           <div className="col-span-1 md:col-span-5 space-y-4">
-            <h3 className="font-sans font-bold text-base text-[#261818] flex items-center gap-1">
+            <h3 className="font-sans font-bold text-base text-[#2d1527] flex items-center gap-1">
               {isEn ? 'Due Date Predictor' : 'ডিউ ডেট প্রেডিকেটর'}
             </h3>
-            <p className="text-xs text-[#524340] leading-relaxed font-sans">
+            <p className="text-xs text-[#703848] leading-relaxed font-sans">
               {isEn 
                 ? 'Enter the first day of your last menstrual period (LMP) to calculate your expected due date and gestational milestones.' 
                 : 'আপনার শেষ পিরিয়ডের শুরুর দিন বসিয়ে ডেলিভারির গর্ভকালীন সাপ্তাহিক হিসাব ও শিশুর সঠিক তুলনামূলক আকৃতির গ্রাফ এখনই দেখে নিন।'}
@@ -202,25 +202,25 @@ export const Calculators: React.FC = () => {
 
             <form onSubmit={calculateDueDate} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#261818] font-sans mb-1.5">
+                <label className="block text-xs font-bold text-[#2d1527] font-sans mb-1.5">
                   {isEn ? 'First Day of Last Period (LMP):' : 'শেষ পিরিয়ডের প্রথম দিন (LMP Date):'}
                 </label>
                 <input
                   type="date"
                   value={lastPeriod}
                   onChange={(e) => setLastPeriod(e.target.value)}
-                  className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none"
+                  className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl px-3 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#261818] font-sans mb-1.5">
+                <label className="block text-xs font-bold text-[#2d1527] font-sans mb-1.5">
                   {isEn ? 'Average Cycle Length:' : 'স্বাভাবিক পিরিয়ড সাইকেল দৈর্ঘ্য:'}
                 </label>
                 <select
                   value={calcCycle}
                   onChange={(e) => setCalcCycle(parseInt(e.target.value))}
-                  className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none"
+                  className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl px-3 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
                 >
                   {[24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35].map(v => (
                     <option key={v} value={v}>
@@ -232,29 +232,29 @@ export const Calculators: React.FC = () => {
 
               <button
                 type="submit"
-                className="w-full bg-[#894f42] hover:bg-[#753f33] text-white font-sans font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1 cursor-pointer transition-all active:scale-95 shadow-sm"
+                className="w-full bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] text-white font-sans font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1 cursor-pointer transition-all active:scale-95 shadow-md shadow-rose-200/80"
               >
                 {isEn ? 'Calculate Due Date' : 'ডিউ ডেট নির্ণয় করুন'}
               </button>
             </form>
           </div>
 
-          <div className="col-span-1 md:col-span-7 bg-[#fffbfb] rounded-2xl p-5 border border-[#ffe9e8] flex flex-col justify-center min-h-[300px]">
+          <div className="col-span-1 md:col-span-7 bg-[#fff9fa] rounded-2xl p-5 border border-[#fce7f3] flex flex-col justify-center min-h-[300px]">
             {deliveryResult ? (
               <div className="space-y-5 animate-fade-in text-xs font-sans">
-                <div className="border-b border-[#ffe9e8] pb-4">
-                  <h4 className="text-xs font-bold text-[#524340] uppercase tracking-wider block">
+                <div className="border-b border-[#fce7f3] pb-4">
+                  <h4 className="text-xs font-bold text-[#703848] uppercase tracking-wider block">
                     {isEn ? 'Estimated Delivery Date:' : 'ডেলিভারির সম্ভাব্য তারিখ:'}
                   </h4>
-                  <p className="text-2xl font-black text-[#894f42] mt-1.5">{deliveryResult.dueDateString}</p>
+                  <p className="text-2xl font-black text-[#e11d48] mt-1.5">{deliveryResult.dueDateString}</p>
                 </div>
 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <h5 className="font-bold text-[#524340] mb-0.5">
+                    <h5 className="font-bold text-[#703848] mb-0.5">
                       {isEn ? 'Gestational Age:' : 'গর্ভকাল সময়কাল:'}
                     </h5>
-                    <p className="text-sm font-semibold text-[#261818]">
+                    <p className="text-sm font-semibold text-[#2d1527]">
                       {isEn 
                         ? `${deliveryResult.gestationWeeks} weeks ${deliveryResult.gestationDays > 0 ? `${deliveryResult.gestationDays} days` : ''}`
                         : `${toLocalizedNumber(deliveryResult.gestationWeeks, language)} সপ্তাহ ${deliveryResult.gestationDays > 0 ? `${toLocalizedNumber(deliveryResult.gestationDays, language)} দিন` : ''}`}
@@ -262,27 +262,27 @@ export const Calculators: React.FC = () => {
                   </div>
 
                   <div>
-                    <h5 className="font-bold text-[#524340] mb-0.5">
+                    <h5 className="font-bold text-[#703848] mb-0.5">
                       {isEn ? 'Baby Size Reference:' : 'শিশুর ফলজ আকৃতি:'}
                     </h5>
-                    <p className="text-sm font-semibold text-[#45645e]">{deliveryResult.babySize}</p>
+                    <p className="text-sm font-semibold text-[#be185d]">{deliveryResult.babySize}</p>
                   </div>
                 </div>
 
-                <div className="bg-[#fff0f0] border border-[#fde2e1] rounded-2xl p-4 flex items-start gap-3">
-                  <span className="text-xl shrink-0 mt-0.5">🍎</span>
+                <div className="bg-[#fff0f5] border border-[#fce7f3] rounded-2xl p-4 flex items-start gap-3">
+                  <span className="text-xl shrink-0 mt-0.5">🌸</span>
                   <div>
-                    <h5 className="font-semibold text-[#894f42] text-xs">
+                    <h5 className="font-semibold text-[#be185d] text-xs">
                       {isEn ? 'Current Developmental Stage:' : 'বিকাশের বর্তমান পর্যায়:'}
                     </h5>
-                    <p className="text-[#524340] mt-1 leading-relaxed text-[11px]">{deliveryResult.babySizeDesc}</p>
+                    <p className="text-[#703848] mt-1 leading-relaxed text-[11px]">{deliveryResult.babySizeDesc}</p>
                   </div>
                 </div>
               </div>
             ) : (
               <div className="text-center py-12">
-                <Baby className="w-12 h-12 text-[#ffe9e8] mx-auto mb-2" />
-                <p className="text-xs text-[#524340] font-sans font-medium">
+                <Baby className="w-12 h-12 text-[#fce7f3] mx-auto mb-2" />
+                <p className="text-xs text-[#703848] font-sans font-medium">
                   {isEn 
                     ? 'Enter your LMP date on the left to estimate your due date and baby size.' 
                     : 'ডেলিভারির তারিখ ও গর্ভ সপ্তাহের ফলাফল দেখতে বামে ডাটা দিয়ে সেভ করুন'}
@@ -297,10 +297,10 @@ export const Calculators: React.FC = () => {
       {activeCalc === 'ovulation' && (
         <div className="grid grid-cols-1 md:grid-cols-12 gap-8 animation-fade-in">
           <div className="col-span-1 md:col-span-5 space-y-4">
-            <h3 className="font-sans font-bold text-base text-[#261818] flex items-center gap-1">
+            <h3 className="font-sans font-bold text-base text-[#2d1527] flex items-center gap-1">
               {isEn ? 'Ovulation & Fertility Tracker' : 'ওভুলেশন ফার্টিলিটি ট্র্যাকার'}
             </h3>
-            <p className="text-xs text-[#524340] leading-relaxed font-sans">
+            <p className="text-xs text-[#703848] leading-relaxed font-sans">
               {isEn 
                 ? 'Accurately estimate your ovulation date and fertile window for conception planning or natural rhythm tracking.' 
                 : 'গর্ভধারণ করতে বা প্রাকৃতিক সুরক্ষায় ওভুলেশন পিরিয়ড ও সর্বোচ্চ ডিম্বস্ফোটনের দিন নির্ধারণ করা অত্যন্ত প্রয়োজনীয়।'}
@@ -308,19 +308,19 @@ export const Calculators: React.FC = () => {
 
             <form onSubmit={calculateOvuWindow} className="space-y-4">
               <div>
-                <label className="block text-xs font-bold text-[#261818] font-sans mb-1.5">
+                <label className="block text-xs font-bold text-[#2d1527] font-sans mb-1.5">
                   {isEn ? 'First Day of Last Period:' : 'শেষ পিরিয়ডের শুরুর দিন:'}
                 </label>
                 <input
                   type="date"
                   value={ovuLastPeriod}
                   onChange={(e) => setOvuLastPeriod(e.target.value)}
-                  className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none"
+                  className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl px-3 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
                 />
               </div>
 
               <div>
-                <label className="block text-xs font-bold text-[#261818] font-sans mb-1.5">
+                <label className="block text-xs font-bold text-[#2d1527] font-sans mb-1.5">
                   {isEn ? 'Average Cycle Length (Days):' : 'সাইকেলের গড় দিন:'}
                 </label>
                 <input
@@ -329,37 +329,37 @@ export const Calculators: React.FC = () => {
                   max={45}
                   value={ovuCycle}
                   onChange={(e) => setOvuCycle(parseInt(e.target.value) || 28)}
-                  className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none"
+                  className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl px-3 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full bg-[#45645e] hover:bg-[#38504b] text-white font-sans font-bold py-2 rounded-xl text-xs flex items-center justify-center gap-1 cursor-pointer transition-all active:scale-95"
+                className="w-full bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] text-white font-sans font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-1 cursor-pointer transition-all active:scale-95 shadow-md shadow-rose-200/80"
               >
                 {isEn ? 'Calculate Fertile Window' : 'ওভুলেশন সূচক গণনা করুন'}
               </button>
             </form>
           </div>
 
-          <div className="col-span-1 md:col-span-7 bg-[#fffbfb] rounded-2xl p-5 border border-[#ffe9e8] flex flex-col justify-center min-h-[300px]">
+          <div className="col-span-1 md:col-span-7 bg-[#fff9fa] rounded-2xl p-5 border border-[#fce7f3] flex flex-col justify-center min-h-[300px]">
             {ovuResult ? (
               <div className="space-y-4 animate-fade-in text-xs font-sans">
-                <div className="bg-[#ebf8f5] border border-[#c7eae1] rounded-2xl p-4">
-                  <h4 className="text-xs font-bold text-[#4b6a63] uppercase tracking-wider block">
+                <div className="bg-[#fff0f5] border border-[#fbcfe8] rounded-2xl p-4">
+                  <h4 className="text-xs font-bold text-[#be185d] uppercase tracking-wider block">
                     {isEn ? 'Estimated Ovulation Day:' : 'ডিম্বস্ফোটনের অনুমিত দিন (Ovulation Day):'}
                   </h4>
-                  <p className="text-2xl font-black text-[#45645e] mt-1.5">{ovuResult.ovulationDate}</p>
+                  <p className="text-2xl font-black text-[#e11d48] mt-1.5">{ovuResult.ovulationDate}</p>
                 </div>
 
-                <div className="bg-[#fff9f8] border border-[#ffe9e8] rounded-2xl p-4">
-                  <h4 className="text-xs font-bold text-[#894f42] uppercase tracking-wider block">
+                <div className="bg-white border border-[#fce7f3] rounded-2xl p-4">
+                  <h4 className="text-xs font-bold text-[#be185d] uppercase tracking-wider block">
                     {isEn ? 'High Fertility Window:' : 'গর্ভধারণের উর্বর উইন্ডো (High Fertile days):'}
                   </h4>
-                  <p className="text-base font-black text-[#894f42] mt-1.5">
+                  <p className="text-base font-black text-[#e11d48] mt-1.5">
                     {isEn ? `${ovuResult.fertileStart} to ${ovuResult.fertileEnd}` : `${ovuResult.fertileStart} থেকে ${ovuResult.fertileEnd}`}
                   </p>
-                  <p className="text-[11px] text-[#524340] mt-1.5 leading-relaxed">
+                  <p className="text-[11px] text-[#703848] mt-1.5 leading-relaxed">
                     {isEn 
                       ? 'Conception probability is highest during this 5-day window.' 
                       : 'এই ৫ দিনের উর্বর সময়কালে চেষ্টা করলে সুস্থ উপায়ে গর্ভধারণের সম্ভাবনা বহুগুণ ত্বরান্বিত হয়।'}
@@ -368,8 +368,8 @@ export const Calculators: React.FC = () => {
               </div>
             ) : (
               <div className="text-center py-12">
-                <Activity className="w-12 h-12 text-[#ffe9e8] mx-auto mb-2" />
-                <p className="text-xs text-[#524340] font-sans font-medium">
+                <Activity className="w-12 h-12 text-[#fce7f3] mx-auto mb-2" />
+                <p className="text-xs text-[#703848] font-sans font-medium">
                   {isEn ? 'Fill in your cycle length to calculate your fertile days.' : 'ডিম্বস্ফোটন ও সবচেয়ে উর্বর উইন্ডোর তালিকা দেখতে বামে ডাটা দিন'}
                 </p>
               </div>
@@ -381,11 +381,11 @@ export const Calculators: React.FC = () => {
       {/* CALCULATOR 3: Perimenopause diagnostic quiz */}
       {activeCalc === 'perimenopause' && (
         <div className="space-y-4 animation-fade-in text-xs font-sans">
-          <div className="bg-[#ffdbcc]/50 border border-[#ffdbcc] rounded-2xl p-4 mb-4">
-            <h4 className="text-xs font-bold text-[#301405] font-sans">
+          <div className="bg-[#fff0f5] border border-[#fce7f3] rounded-2xl p-4 mb-4">
+            <h4 className="text-xs font-bold text-[#2d1527] font-sans">
               {isEn ? 'Perimenopause Health Assessment (40+)' : 'পেরিমেনোপজ সূচক অ্যাসেসমেন্ট (Forty+ Health Panel)'}
             </h4>
-            <p className="text-[#524340] mt-1 text-[11px] leading-relaxed">
+            <p className="text-[#703848] mt-1 text-[11px] leading-relaxed">
               {isEn 
                 ? 'This self-assessment evaluates common signs of hormonal transition in women aged 40 and above.' 
                 : '৪০ ঊর্ধ্ব নারীদের হরমোন মাত্রা কমে যাওয়া এবং রিপ্রোডাক্টিভ হ্রাসের স্বাভাবিক সংকেত পরিমাপ করতে এই কুইজ সহায়তা দেবে।'}
@@ -394,8 +394,8 @@ export const Calculators: React.FC = () => {
 
           <div className="space-y-5">
             {QUESTIONS.map((q) => (
-              <div key={q.id} className="border-b border-[#fff0f0] pb-4">
-                <p className="font-semibold text-[#261818] mb-2">
+              <div key={q.id} className="border-b border-[#fce7f3] pb-4">
+                <p className="font-semibold text-[#2d1527] mb-2">
                   {toLocalizedNumber(q.id, language)}. {q.text}
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -409,8 +409,8 @@ export const Calculators: React.FC = () => {
                       onClick={() => handleAnswerSelect(q.id, btn.value)}
                       className={`px-3 py-1.5 rounded-xl border transition-all cursor-pointer ${
                         answers[q.id] === btn.value
-                          ? 'bg-[#894f42] text-white border-[#894f42] font-semibold'
-                          : 'bg-white text-gray-600 hover:bg-[#fff9f8] border-gray-200'
+                          ? 'bg-[#e11d48] text-white border-[#e11d48] font-semibold shadow-xs'
+                          : 'bg-white text-gray-600 hover:bg-[#fff0f5] border-gray-200'
                       }`}
                     >
                       {btn.label}
@@ -425,17 +425,17 @@ export const Calculators: React.FC = () => {
             <button
               onClick={calculateMenopauseScore}
               disabled={Object.keys(answers).length < QUESTIONS.length}
-              className="px-6 py-2.5 bg-[#894f42] hover:bg-[#753f33] disabled:bg-gray-200 text-white font-bold font-sans rounded-xl text-xs transition-all cursor-pointer shadow-sm"
+              className="px-6 py-2.5 bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] disabled:bg-gray-200 disabled:opacity-50 text-white font-bold font-sans rounded-xl text-xs transition-all cursor-pointer shadow-md shadow-rose-200/80"
             >
               {isEn ? 'Calculate Assessment Score' : 'পেরিমেনোপজ স্বাস্থ্য ঝুঁকি হিসাব করুন'}
             </button>
             
             {menopauseResult && (
-              <div className="flex-1 bg-yellow-50 border border-yellow-200 rounded-2xl p-4">
-                <span className="font-bold text-yellow-800 uppercase tracking-wide text-[10px] block mb-1">
+              <div className="flex-1 bg-[#fff0f5] border border-[#fce7f3] rounded-2xl p-4">
+                <span className="font-bold text-[#be185d] uppercase tracking-wide text-[10px] block mb-1">
                   {isEn ? 'Clinical Assessment Result:' : 'ক্লিনিক্যাল অ্যাসেসমেন্ট ফলাফল:'}
                 </span>
-                <p className="text-[#261818] font-sans leading-relaxed text-[11px]">{menopauseResult}</p>
+                <p className="text-[#2d1527] font-sans leading-relaxed text-[11px]">{menopauseResult}</p>
               </div>
             )}
           </div>

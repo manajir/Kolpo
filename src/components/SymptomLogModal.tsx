@@ -111,14 +111,14 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
   const isEn = language === 'en';
 
   return (
-    <div className="bg-white rounded-3xl p-6 border border-[#ffe9e8] shadow-[0_12px_44px_rgba(137,79,66,0.06)] animate-fade-in">
-      <div className="flex items-center justify-between pb-4 border-b border-[#fff0f0] mb-5">
+    <div className="bg-white rounded-3xl p-6 border border-[#fce7f3] shadow-[0_12px_44px_rgba(225,29,72,0.06)] animate-fade-in">
+      <div className="flex items-center justify-between pb-4 border-b border-[#fce7f3] mb-5">
         <div>
-          <h3 className="font-sans font-bold text-lg text-[#261818] flex items-center gap-2">
-            <Calendar className="w-5 h-5 text-[#894f42]" />
+          <h3 className="font-sans font-bold text-lg text-[#2d1527] flex items-center gap-2">
+            <Calendar className="w-5 h-5 text-[#e11d48]" />
             {isEn ? 'Daily Health & Symptom Log' : 'দৈনিক স্বাস্থ্য লগ'}
           </h3>
-          <p className="text-xs text-[#524340] font-mono mt-0.5">{isEn ? `Date: ${selectedDate}` : `তারিখ: ${selectedDate}`}</p>
+          <p className="text-xs text-[#703848] font-mono mt-0.5">{isEn ? `Date: ${selectedDate}` : `তারিখ: ${selectedDate}`}</p>
         </div>
         {isSaved && (
           <span className="flex items-center gap-1 text-emerald-600 font-sans text-xs font-semibold bg-emerald-50 px-2.5 py-1 rounded-full border border-emerald-100">
@@ -132,7 +132,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
         
         {/* Period bleeding controller */}
         <div>
-          <label className="block text-xs font-sans font-bold text-[#261818] mb-2.5">
+          <label className="block text-xs font-sans font-bold text-[#2d1527] mb-2.5">
             {t('bleedingFlow')}
           </label>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
@@ -146,14 +146,14 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
                 key={opt.value}
                 type="button"
                 onClick={() => setBleeding(opt.value as any)}
-                className={`flex flex-col items-center justify-center py-2.5 rounded-2xl border transition-all ${
+                className={`flex flex-col items-center justify-center py-2.5 rounded-2xl border transition-all cursor-pointer ${
                   bleeding === opt.value
-                    ? 'border-[#894f42] bg-[#fff0f0] text-[#894f42] font-semibold ring-1 ring-[#894f42]'
-                    : 'border-[#ffe9e8] hover:bg-[#fff9f8] text-[#524340]'
+                    ? 'border-[#e11d48] bg-[#fff0f5] text-[#be185d] font-semibold ring-1 ring-[#e11d48]'
+                    : 'border-[#fce7f3] hover:bg-[#fff9fa] text-[#703848]'
                 }`}
               >
                 <span className="text-xs font-bold font-sans">{opt.label}</span>
-                <span className="text-[9px] text-[#85736f] mt-0.5 uppercase tracking-wider font-mono">{opt.sub}</span>
+                <span className="text-[9px] text-[#8b5e72] mt-0.5 uppercase tracking-wider font-mono">{opt.sub}</span>
               </button>
             ))}
           </div>
@@ -162,17 +162,17 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
         {/* Cervical mucus indicator */}
         <div>
           <div className="flex items-center justify-between mb-2">
-            <label className="text-xs font-sans font-bold text-[#261818]">
+            <label className="text-xs font-sans font-bold text-[#2d1527]">
               {t('cervicalMucusTitle')}
             </label>
-            <span className="text-[10px] text-[#524340] font-sans">
+            <span className="text-[10px] text-[#703848] font-sans">
               {isEn ? 'Fertility Indicator' : 'ওভুলেশন চেনার সূচক'}
             </span>
           </div>
           <select
             value={mucus}
             onChange={(e) => setMucus(e.target.value)}
-            className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none focus:ring-1 focus:ring-[#894f42]"
+            className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl px-3 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
           >
             <option value="dry">
               {isEn ? 'Dry / Sticky - Infertile Phase' : 'শুকনো ও আঠালো (Dry/Sticky) - অনুর্বর উইন্ডো'}
@@ -191,7 +191,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
 
         {/* Symptoms selection Chips */}
         <div>
-          <label className="block text-xs font-sans font-bold text-[#261818] mb-2.5">
+          <label className="block text-xs font-sans font-bold text-[#2d1527] mb-2.5">
             {t('symptomsListTitle')}
           </label>
           <div className="flex flex-wrap gap-2">
@@ -204,8 +204,8 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
                   onClick={() => toggleSymptom(opt.value)}
                   className={`text-xs px-3 py-2 rounded-xl border font-sans transition-all active:scale-95 cursor-pointer ${
                     active
-                      ? 'bg-[#894f42] text-white border-[#894f42] font-medium shadow-[0_3px_10px_rgba(137,79,66,0.15)]'
-                      : 'bg-[#fff0f0] text-[#894f42] hover:bg-[#ffe9e8] border-[#fde2e1]'
+                      ? 'bg-gradient-to-r from-[#e11d48] to-[#db2777] text-white border-[#e11d48] font-medium shadow-[0_3px_10px_rgba(225,29,72,0.2)]'
+                      : 'bg-[#fff0f5] text-[#be185d] hover:bg-[#ffe4e9] border-[#fce7f3]'
                   }`}
                 >
                   {isEn ? opt.labelEn : opt.labelBn}
@@ -217,7 +217,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
 
         {/* Mood selection Chips */}
         <div>
-          <label className="block text-xs font-sans font-bold text-[#261818] mb-2.5">
+          <label className="block text-xs font-sans font-bold text-[#2d1527] mb-2.5">
             {t('moodsListTitle')}
           </label>
           <div className="flex flex-wrap gap-2">
@@ -230,8 +230,8 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
                   onClick={() => toggleMood(opt.value)}
                   className={`text-xs px-3 py-2 rounded-xl border font-sans transition-all active:scale-95 cursor-pointer ${
                     active
-                      ? 'bg-[#45645e] text-white border-[#45645e] font-medium shadow-[0_3px_10px_rgba(69,100,94,0.15)]'
-                      : 'bg-[#fafefd] hover:bg-[#ebf8f5] text-[#45645e] border-[#c7eae1]'
+                      ? 'bg-gradient-to-r from-[#9333ea] to-[#c026d3] text-white border-[#9333ea] font-medium shadow-[0_3px_10px_rgba(147,51,234,0.2)]'
+                      : 'bg-[#faf5ff] hover:bg-[#f3e8ff] text-[#7e22ce] border-[#e9d5ff]'
                   }`}
                 >
                   {isEn ? opt.labelEn : opt.labelBn}
@@ -243,7 +243,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
 
         {/* Energy levels selector */}
         <div>
-          <label className="block text-xs font-sans font-bold text-[#261818] mb-2.5">
+          <label className="block text-xs font-sans font-bold text-[#2d1527] mb-2.5">
             {t('energyLevelTitle')}
           </label>
           <div className="grid grid-cols-3 gap-2">
@@ -256,10 +256,10 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
                 key={opt.value}
                 type="button"
                 onClick={() => setEnergy(opt.value as any)}
-                className={`py-2 rounded-xl text-xs border font-sans font-medium transition-all ${
+                className={`py-2 rounded-xl text-xs border font-sans font-medium transition-all cursor-pointer ${
                   energy === opt.value
-                    ? 'border-[#7e5541] bg-[#ffdbcc] text-[#301405] font-semibold'
-                    : 'border-[#ffe9e8] hover:bg-[#fff9f8] text-[#524340]'
+                    ? 'border-[#e11d48] bg-[#fff0f5] text-[#be185d] font-semibold ring-1 ring-[#e11d48]'
+                    : 'border-[#fce7f3] hover:bg-[#fff9fa] text-[#703848]'
                 }`}
               >
                 {opt.label}
@@ -271,8 +271,8 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
         {/* Vital stats: weight, temperature */}
         <div className="grid grid-cols-2 gap-4">
           <div>
-            <label className="flex items-center gap-1.5 text-xs font-sans font-bold text-[#261818] mb-1.5">
-              <Thermometer className="w-4 h-4 text-orange-500" />
+            <label className="flex items-center gap-1.5 text-xs font-sans font-bold text-[#2d1527] mb-1.5">
+              <Thermometer className="w-4 h-4 text-rose-500" />
               {t('tempF')}
             </label>
             <div className="relative">
@@ -282,15 +282,15 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
                 placeholder="98.6"
                 value={temp}
                 onChange={(e) => setTemp(e.target.value)}
-                className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl pl-3 pr-8 py-2 text-xs font-sans text-[#261818] focus:outline-none focus:ring-1 focus:ring-[#894f42]"
+                className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl pl-3 pr-8 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
               />
               <span className="absolute right-2.5 top-2.5 text-[10px] text-gray-400 font-mono">°F</span>
             </div>
           </div>
 
           <div>
-            <label className="flex items-center gap-1.5 text-xs font-sans font-bold text-[#261818] mb-1.5">
-              <Weight className="w-4 h-4 text-blue-500" />
+            <label className="flex items-center gap-1.5 text-xs font-sans font-bold text-[#2d1527] mb-1.5">
+              <Weight className="w-4 h-4 text-pink-500" />
               {t('weightKg')}
             </label>
             <div className="relative">
@@ -300,7 +300,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
                 placeholder="55.0"
                 value={weight}
                 onChange={(e) => setWeight(e.target.value)}
-                className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl pl-3 pr-8 py-2 text-xs font-sans text-[#261818] focus:outline-none focus:ring-1 focus:ring-[#894f42]"
+                className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl pl-3 pr-8 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
               />
               <span className="absolute right-2.5 top-2.5 text-[10px] text-gray-400 font-mono">Kg</span>
             </div>
@@ -309,7 +309,7 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
 
         {/* Daily diary notepad */}
         <div>
-          <label className="flex items-center gap-1.5 text-xs font-sans font-bold text-[#261818] mb-1.5">
+          <label className="flex items-center gap-1.5 text-xs font-sans font-bold text-[#2d1527] mb-1.5">
             <FileText className="w-4 h-4 text-purple-500" />
             {isEn ? 'Daily Notes & Journal' : 'দৈনিক নোট/বিশেষ চিন্তা'}
           </label>
@@ -318,14 +318,14 @@ export const SymptomLog: React.FC<SymptomLogProps> = ({ selectedDate, onClose })
             placeholder={t('notesPlaceholder')}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
-            className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none focus:ring-1 focus:ring-[#894f42] resize-none"
+            className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl px-3 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48] resize-none"
           />
         </div>
 
         {/* Buttons submission */}
         <button
           type="submit"
-          className="w-full bg-gradient-to-r from-[#894f42] to-[#7e5541] hover:brightness-110 text-white font-sans font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 shadow-md"
+          className="w-full bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] text-white font-sans font-bold py-2.5 rounded-xl text-xs flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 shadow-md shadow-rose-200/80"
         >
           <Save className="w-4 h-4" />
           {t('saveLogButton')}

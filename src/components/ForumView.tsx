@@ -101,17 +101,17 @@ export const ForumView: React.FC = () => {
     <div className="space-y-6">
       
       {/* Search Header and navigation tabs */}
-      <div className="bg-gradient-to-r from-[#45645e]/10 to-[#894f42]/10 border border-[#ffe9e8] rounded-3xl p-6">
+      <div className="bg-gradient-to-r from-[#fff0f5] via-[#fff5f8] to-[#fdf2f8] border border-[#fce7f3] rounded-3xl p-6 shadow-sm">
         <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="bg-[#45645e] text-white p-3 rounded-2xl">
+            <div className="bg-gradient-to-br from-[#e11d48] to-[#db2777] text-white p-3 rounded-2xl shadow-sm">
               <Users className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-sans font-bold text-lg text-[#261818] flex items-center gap-2">
+              <h3 className="font-sans font-bold text-lg text-[#2d1527] flex items-center gap-2">
                 {isEn ? 'Kalpa Peer Support Forum' : 'কল্প সহমর্মী ফোরাম'}
               </h3>
-              <p className="text-xs text-[#524340] font-sans">
+              <p className="text-xs text-[#703848] font-sans">
                 {isEn ? 'A confidential, supportive space for women\'s health discussions.' : 'গোপনীয়তা বজায় রেখে নারীদের পরস্পর সহযোগী মিলনস্থল'}
               </p>
             </div>
@@ -119,7 +119,7 @@ export const ForumView: React.FC = () => {
 
           <button
             onClick={() => setShowCreator(!showCreator)}
-            className="bg-[#894f42] hover:bg-[#753f33] text-white font-sans font-bold px-4 py-2 rounded-xl text-xs flex items-center gap-1 cursor-pointer transition-all active:scale-95 shadow-sm"
+            className="bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] text-white font-sans font-bold px-4 py-2.5 rounded-2xl text-xs flex items-center gap-1.5 cursor-pointer transition-all active:scale-95 shadow-md shadow-rose-200/80"
           >
             <Sparkles className="w-4 h-4" />
             {isEn ? 'New Question / Post' : 'নতুন প্রশ্ন বা পোস্ট যোগ করুন'}
@@ -127,8 +127,8 @@ export const ForumView: React.FC = () => {
         </div>
 
         {/* Security / Confidentiality Notice */}
-        <div className="mt-4 bg-[#fffcfc] border border-[#ffe9e8] p-3 rounded-xl flex items-center gap-2 text-[10px] text-[#524340] font-sans">
-          <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+        <div className="mt-4 bg-white/90 border border-[#fce7f3] p-3 rounded-2xl flex items-center gap-2 text-[10px] text-[#703848] font-sans">
+          <AlertTriangle className="w-4 h-4 text-amber-500 shrink-0" />
           <span>
             {isEn 
               ? 'To protect your identity, you can set an anonymous nickname from your Profile settings at any time.' 
@@ -139,13 +139,13 @@ export const ForumView: React.FC = () => {
         {/* Search Input Box */}
         <div className="mt-5 grid grid-cols-1 md:grid-cols-12 gap-3">
           <div className="md:col-span-8 relative">
-            <Search className="w-4 h-4 text-gray-400 absolute left-3.5 top-3.5" />
+            <Search className="w-4 h-4 text-[#703848] absolute left-3.5 top-3.5" />
             <input
               type="text"
               placeholder={isEn ? "Search forum topics or health solutions..." : "ফোরামে টপিক বা সমস্যার সমাধান খুঁজুন..."}
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl pl-10 pr-4 py-2 text-xs font-sans text-gray-800 focus:outline-none"
+              className="w-full bg-white border border-[#fce7f3] rounded-2xl pl-10 pr-4 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
             />
           </div>
 
@@ -153,7 +153,7 @@ export const ForumView: React.FC = () => {
             <select
               value={selectedCategory}
               onChange={(e) => setSelectedCategory(e.target.value)}
-              className="w-full bg-white border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-gray-700 focus:outline-none"
+              className="w-full bg-white border border-[#fce7f3] rounded-2xl px-3 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
             >
               <option value="all">{isEn ? 'All Categories' : 'সব ক্যাটাগরি (All discussions)'}</option>
               <option value="fertility">{isEn ? 'Fertility' : 'উর্বরতা ও গর্ভধারণ (Fertility)'}</option>
@@ -168,20 +168,20 @@ export const ForumView: React.FC = () => {
 
       {/* CREATE POST FORM COMPONENT */}
       {showCreator && (
-        <form onSubmit={handleCreatePost} className="bg-white border border-[#ffe9e8] rounded-3xl p-5 space-y-4 animate-fade-in">
-          <h4 className="text-xs font-sans font-bold text-[#894f42]">
+        <form onSubmit={handleCreatePost} className="bg-white border border-[#fce7f3] rounded-3xl p-5 space-y-4 animate-fade-in shadow-sm">
+          <h4 className="text-xs font-sans font-bold text-[#be185d]">
             {isEn ? 'Draft a new forum topic or question:' : 'নতুন ফোরাম প্রশ্ন বা সমস্যা ড্রাফট করুন:'}
           </h4>
           
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
-              <label className="block text-[11px] font-sans font-bold text-gray-700 mb-1">
+              <label className="block text-[11px] font-sans font-bold text-[#2d1527] mb-1">
                 {isEn ? 'Category:' : 'ক্যাটাগরি নির্ধারণ করুন:'}
               </label>
               <select
                 value={newPostCategory}
                 onChange={(e) => setNewPostCategory(e.target.value as any)}
-                className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none"
+                className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl px-3 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
               >
                 <option value="general">{isEn ? 'General Health' : 'সাধারণ স্বাস্থ্য (General)'}</option>
                 <option value="fertility">{isEn ? 'Fertility & Conception' : 'উর্বরতা ও গর্ভধারণ (Fertility)'}</option>
@@ -192,7 +192,7 @@ export const ForumView: React.FC = () => {
             </div>
 
             <div>
-              <label className="block text-[11px] font-sans font-bold text-gray-700 mb-1">
+              <label className="block text-[11px] font-sans font-bold text-[#2d1527] mb-1">
                 {isEn ? 'Topic Title:' : 'টপিক শিরোনাম (সংক্ষিপ্ত):'}
               </label>
               <input
@@ -200,14 +200,14 @@ export const ForumView: React.FC = () => {
                 placeholder={isEn ? "e.g., Remedies for early morning nausea?" : "যেমন: গর্ভাবস্থার প্রথম দিকে তীব্র বমি প্রতিকার কী?"}
                 value={newPostTitle}
                 onChange={(e) => setNewPostTitle(e.target.value)}
-                className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none"
+                className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl px-3 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
                 required
               />
             </div>
           </div>
 
           <div>
-            <label className="block text-[11px] font-sans font-bold text-gray-700 mb-1">
+            <label className="block text-[11px] font-sans font-bold text-[#2d1527] mb-1">
               {isEn ? 'Details & Description:' : 'বিস্তারিত বিবরণ লিখুন:'}
             </label>
             <textarea
@@ -215,7 +215,7 @@ export const ForumView: React.FC = () => {
               placeholder={isEn ? "Describe your question or experience so members can help..." : "আপনার অনুভূতি ও সমস্যা বিস্তারিত উল্লেখ করুন যাতে ফোরামের আপুরা সাহায্য করতে পারেন..."}
               value={newPostContent}
               onChange={(e) => setNewPostContent(e.target.value)}
-              className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3 py-2 text-xs font-sans text-[#261818] focus:outline-none resize-none"
+              className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl px-3 py-2 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48] resize-none"
               required
             />
           </div>
@@ -224,13 +224,13 @@ export const ForumView: React.FC = () => {
             <button
               type="button"
               onClick={() => setShowCreator(false)}
-              className="px-4 py-1.5 border border-gray-200 text-gray-500 rounded-xl text-xs font-sans"
+              className="px-4 py-1.5 border border-[#fce7f3] text-[#703848] rounded-xl text-xs font-sans hover:bg-[#fff0f5]"
             >
               {isEn ? 'Cancel' : 'বাতিল'}
             </button>
             <button
               type="submit"
-              className="px-5 py-1.5 bg-[#45645e] hover:bg-[#38504b] text-white rounded-xl text-xs font-sans font-bold cursor-pointer"
+              className="px-5 py-1.5 bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] text-white rounded-xl text-xs font-sans font-bold cursor-pointer shadow-xs"
             >
               {isEn ? 'Post Anonymously' : 'অজ্ঞাতনামা ফোরামে পাবলিশ করুন'}
             </button>
@@ -241,8 +241,8 @@ export const ForumView: React.FC = () => {
       {/* POSTS SCROLL AREA */}
       <div className="space-y-4">
         {filteredPosts.length === 0 ? (
-          <div className="bg-white border border-[#ffe9e8] rounded-3xl p-12 text-center">
-            <p className="text-xs text-[#524340] font-sans">
+          <div className="bg-white border border-[#fce7f3] rounded-3xl p-12 text-center">
+            <p className="text-xs text-[#703848] font-sans">
               {isEn ? 'No discussions found matching your search. Feel free to create a new post!' : 'অনুসন্ধানের সাথে মিলছে কোনো প্রশ্নের সন্ধান পাওয়া যায়নি। নতুন একটি পোস্ট তৈরি করতে পারেন!'}
             </p>
           </div>
@@ -256,35 +256,35 @@ export const ForumView: React.FC = () => {
             return (
               <div
                 key={post.postId}
-                className="bg-white border border-[#ffe9e8] rounded-3xl p-5 shadow-sm space-y-4 transition-all"
+                className="bg-white border border-[#fce7f3] rounded-3xl p-5 shadow-sm space-y-4 transition-all"
               >
                 {/* Meta details */}
                 <div className="flex justify-between items-center text-[10px] text-gray-400 font-mono">
-                  <span className="bg-[#fff0f0] text-[#894f42] font-sans font-bold px-2 py-0.5 rounded-md">
+                  <span className="bg-[#fff0f5] text-[#be185d] font-sans font-bold px-2 py-0.5 rounded-md border border-[#fce7f3]">
                     {getCategoryLabel(post.category)}
                   </span>
                   <span>
                     {isEn ? 'Posted by: ' : 'পোস্ট করেছেন: '}
-                    <span className="font-sans font-bold text-[#2d4c46]">{post.authorName}</span> • {new Date(post.createdAt).toLocaleDateString(dateLocale)}
+                    <span className="font-sans font-bold text-[#be185d]">{post.authorName}</span> • {new Date(post.createdAt).toLocaleDateString(dateLocale)}
                   </span>
                 </div>
 
                 {/* Content */}
                 <div>
-                  <h4 className="font-sans font-bold text-[#261818] text-sm hover:text-[#894f42] transition-colors">
+                  <h4 className="font-sans font-bold text-[#2d1527] text-sm hover:text-[#e11d48] transition-colors">
                     {post.title}
                   </h4>
-                  <p className="text-xs text-[#524340] mt-1.5 leading-relaxed font-sans">
+                  <p className="text-xs text-[#703848] mt-1.5 leading-relaxed font-sans">
                     {post.content}
                   </p>
                 </div>
 
                 {/* Buttons controls */}
-                <div className="flex items-center gap-5 pt-2 border-t border-[#fff0f0] text-xs">
+                <div className="flex items-center gap-5 pt-2 border-t border-[#fce7f3] text-xs">
                   <button
                     onClick={() => toggleLikePost(post.postId)}
                     className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
-                      isLiked ? 'text-red-500 font-bold' : 'text-gray-400 hover:text-red-500'
+                      isLiked ? 'text-rose-600 font-bold' : 'text-gray-400 hover:text-rose-500'
                     }`}
                   >
                     <Heart className={`w-4.5 h-4.5 ${isLiked ? 'fill-current' : ''}`} />
@@ -295,7 +295,7 @@ export const ForumView: React.FC = () => {
 
                   <button
                     onClick={() => setExpandedPostId(isExpanded ? null : post.postId)}
-                    className="flex items-center gap-1.5 text-[#45645e] hover:text-[#2d4c46] cursor-pointer font-medium"
+                    className="flex items-center gap-1.5 text-[#be185d] hover:text-[#9d174d] cursor-pointer font-medium"
                   >
                     <MessageSquare className="w-4.5 h-4.5" />
                     <span>
@@ -306,8 +306,8 @@ export const ForumView: React.FC = () => {
 
                 {/* EXPANDED COMMENTS ACCORDION */}
                 {isExpanded && (
-                  <div className="bg-[#fffbfb] border border-[#ffe9e8] p-4 rounded-2xl mt-3 space-y-3 animate-fade-in text-xs font-sans">
-                    <p className="font-bold text-[#894f42] mb-1 pb-1 border-b border-[#ffe9e8]">
+                  <div className="bg-[#fff9fa] border border-[#fce7f3] p-4 rounded-2xl mt-3 space-y-3 animate-fade-in text-xs font-sans">
+                    <p className="font-bold text-[#be185d] mb-1 pb-1 border-b border-[#fce7f3]">
                       {isEn ? 'Comments:' : 'মন্তব্যসমূহ (Comments):'}
                     </p>
                     
@@ -317,12 +317,12 @@ export const ForumView: React.FC = () => {
                       </p>
                     ) : (
                       comments.map((comment, index) => (
-                        <div key={index} className="bg-white border border-[#fff0f0] p-2.5 rounded-xl space-y-1">
+                        <div key={index} className="bg-white border border-[#fce7f3] p-2.5 rounded-xl space-y-1">
                           <div className="flex items-center justify-between text-[10px] text-gray-500">
-                            <span className="font-bold text-[#45645e]">{comment.authorName}</span>
+                            <span className="font-bold text-[#be185d]">{comment.authorName}</span>
                             <span className="font-mono">{new Date(comment.createdAt).toLocaleDateString(dateLocale)}</span>
                           </div>
-                          <p className="text-[#261818] leading-relaxed text-[11px]">{comment.content}</p>
+                          <p className="text-[#2d1527] leading-relaxed text-[11px]">{comment.content}</p>
                         </div>
                       ))
                     )}
@@ -334,11 +334,11 @@ export const ForumView: React.FC = () => {
                         placeholder={isEn ? "Write a helpful comment or advice..." : "আপনার মূল্যবান গঠনমূলক পরামর্শ বা মন্তব্য লিখুন..."}
                         value={commentInputStr}
                         onChange={(e) => setCommentInputStr(e.target.value)}
-                        className="flex-1 bg-white border border-[#ffe9e8] rounded-xl px-3 py-1.5 text-xs text-gray-800 focus:outline-none"
+                        className="flex-1 bg-white border border-[#fce7f3] rounded-xl px-3 py-1.5 text-xs text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
                       />
                       <button
                         onClick={() => handlePostComment(post.postId)}
-                        className="bg-[#45645e] hover:bg-[#38504b] text-white font-sans px-4 py-1.5 rounded-xl text-xs flex items-center gap-1 font-bold cursor-pointer transition-all"
+                        className="bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] text-white font-sans px-4 py-1.5 rounded-xl text-xs flex items-center gap-1 font-bold cursor-pointer transition-all shadow-xs"
                       >
                         <Send className="w-3.5 h-3.5" />
                         {isEn ? 'Post' : 'মন্তব্য করুন'}

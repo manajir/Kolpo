@@ -19,11 +19,11 @@ function DashboardContent() {
 
   if (isLoading) {
     return (
-      <div className="min-h-screen bg-[#fff8f7] flex flex-col items-center justify-center p-4">
+      <div className="min-h-screen bg-[#fff5f8] flex flex-col items-center justify-center p-4">
         <div className="text-center space-y-4">
-          <RefreshCw className="w-12 h-12 text-[#894f42] animate-spin mx-auto" />
-          <h2 className="text-lg font-sans font-extrabold text-[#261818]">{t('loadingDb')}</h2>
-          <p className="text-xs text-gray-400 font-sans">{t('privacyFirst')}</p>
+          <RefreshCw className="w-12 h-12 text-[#e11d48] animate-spin mx-auto" />
+          <h2 className="text-lg font-sans font-extrabold text-[#2d1527]">{t('loadingDb')}</h2>
+          <p className="text-xs text-[#8b5e72] font-sans">{t('privacyFirst')}</p>
         </div>
       </div>
     );
@@ -47,28 +47,28 @@ function DashboardContent() {
   };
 
   return (
-    <div className="min-h-screen bg-[#fff8f7] pb-12 text-[#261818]">
+    <div className="min-h-screen bg-[#fff5f8] pb-12 text-[#2d1527]">
       <Navbar />
 
       <main className="max-w-6xl mx-auto px-3 sm:px-6 mt-4 sm:mt-6 space-y-5 sm:space-y-6 pb-20 sm:pb-12">
         
         {/* Supportive Stage header welcome message */}
-        <div className="bg-white rounded-3xl p-4 sm:p-5 border border-[#ffe9e8] shadow-[0_4px_30px_rgba(137,79,66,0.02)] flex flex-row items-center gap-3 sm:gap-4 select-none">
-          <div className="bg-[#fff0f0] p-2.5 sm:p-3 text-[#894f42] rounded-2xl shrink-0">
-            <Heart className="w-6 h-6 sm:w-8 sm:h-8 animate-pulse text-[#894f42]" />
+        <div className="bg-white/90 backdrop-blur-sm rounded-3xl p-4 sm:p-5 border border-[#fce7f3] shadow-[0_4px_30px_rgba(225,29,72,0.03)] flex flex-row items-center gap-3 sm:gap-4 select-none">
+          <div className="bg-gradient-to-br from-[#ffe4e9] to-[#fce7f3] p-2.5 sm:p-3 text-[#e11d48] rounded-2xl shrink-0 shadow-inner">
+            <Heart className="w-6 h-6 sm:w-8 sm:h-8 animate-pulse text-[#e11d48] fill-[#e11d48]/20" />
           </div>
           <div className="text-left">
-            <h2 className="font-sans font-bold text-base sm:text-lg text-gray-850">
-              {t('greeting')}, {profile?.displayName || t('defaultMember')}! 🌸
+            <h2 className="font-sans font-bold text-base sm:text-lg text-[#2d1527]">
+              {t('greeting')}, {profile?.displayName || t('defaultMember')}! 🌸✨
             </h2>
-            <p className="text-[11px] sm:text-xs text-[#524340] font-sans mt-0.5 leading-relaxed">
+            <p className="text-[11px] sm:text-xs text-[#703848] font-sans mt-0.5 leading-relaxed">
               {profile ? getStageLocalizedDescription(profile.currentStage) : getStageLocalizedDescription(HealthStage.MENSTRUATING)}
             </p>
           </div>
         </div>
 
         {/* Navigation Tabs Pill selector (Top row) */}
-        <div className="flex border-b border-[#ffe9e8] overflow-x-auto gap-2 pb-2 pt-1 no-scrollbar scroll-smooth">
+        <div className="flex border-b border-[#fce7f3] overflow-x-auto gap-2 pb-2 pt-1 no-scrollbar scroll-smooth">
           {[
             { id: 'tracker', label: t('tabTracker'), icon: Calendar },
             { id: 'library', label: t('tabLibrary'), icon: BookOpen },
@@ -82,10 +82,10 @@ function DashboardContent() {
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id as any)}
-                className={`flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-sans font-bold transition-all shrink-0 cursor-pointer ${
+                className={`flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4 py-2 sm:py-2.5 rounded-xl text-xs font-sans font-bold transition-all shrink-0 cursor-pointer ${
                   active
-                    ? 'bg-[#894f42] text-white shadow-md'
-                    : 'bg-white hover:bg-[#fff0f0] text-gray-600 border border-[#ffe9e8]'
+                    ? 'bg-gradient-to-r from-[#e11d48] to-[#db2777] text-white shadow-md shadow-rose-200/60'
+                    : 'bg-white hover:bg-[#fff0f5] text-[#703848] border border-[#fce7f3]'
                 }`}
               >
                 <Icon className="w-4 h-4 shrink-0" />
@@ -148,7 +148,7 @@ function DashboardContent() {
       </main>
 
       {/* Mobile Sticky Bottom Navigation Bar for effortless single-hand thumb tapping on phones */}
-      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#ffe9e8] px-2 py-1.5 flex items-center justify-around shadow-[0_-4px_20px_rgba(0,0,0,0.05)]">
+      <div className="sm:hidden fixed bottom-0 left-0 right-0 z-40 bg-white/95 backdrop-blur-md border-t border-[#fce7f3] px-2 py-1.5 flex items-center justify-around shadow-[0_-4px_20px_rgba(225,29,72,0.06)]">
         {[
           { id: 'tracker', label: t('tabTracker'), icon: Calendar },
           { id: 'library', label: t('tabLibrary'), icon: BookOpen },
@@ -163,10 +163,10 @@ function DashboardContent() {
               key={tab.id}
               onClick={() => setActiveTab(tab.id as any)}
               className={`flex flex-col items-center justify-center p-1 rounded-xl text-[10px] font-sans font-semibold transition-all cursor-pointer ${
-                active ? 'text-[#894f42] font-bold' : 'text-gray-400 hover:text-gray-600'
+                active ? 'text-[#e11d48] font-bold' : 'text-gray-400 hover:text-[#703848]'
               }`}
             >
-              <Icon className={`w-4 h-4 ${active ? 'text-[#894f42]' : 'text-gray-400'}`} />
+              <Icon className={`w-4 h-4 ${active ? 'text-[#e11d48]' : 'text-gray-400'}`} />
               <span className="truncate max-w-[62px] text-[9px] mt-0.5">{tab.label}</span>
             </button>
           );

@@ -37,16 +37,16 @@ export const AuthScreen: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[#fff8f7] flex flex-col items-center justify-center p-4 relative overflow-hidden">
+    <div className="min-h-screen bg-[#fff5f8] flex flex-col items-center justify-center p-4 relative overflow-hidden">
       
       {/* Language Switcher Top Header */}
-      <div className="absolute top-4 right-4 z-20 flex items-center bg-white border border-[#ffe9e8] rounded-xl p-1 shadow-sm">
+      <div className="absolute top-4 right-4 z-20 flex items-center bg-white border border-[#fce7f3] rounded-xl p-1 shadow-sm">
         <button
           type="button"
           onClick={() => setLanguage('bn')}
           className={`px-3 py-1 text-xs font-bold font-sans rounded-lg transition-all cursor-pointer ${
             language === 'bn'
-              ? 'bg-[#894f42] text-white shadow-xs'
+              ? 'bg-[#e11d48] text-white shadow-xs'
               : 'text-gray-500 hover:text-gray-800'
           }`}
         >
@@ -57,7 +57,7 @@ export const AuthScreen: React.FC = () => {
           onClick={() => setLanguage('en')}
           className={`px-3 py-1 text-xs font-bold font-sans rounded-lg transition-all cursor-pointer ${
             language === 'en'
-              ? 'bg-[#894f42] text-white shadow-xs'
+              ? 'bg-[#e11d48] text-white shadow-xs'
               : 'text-gray-500 hover:text-gray-800'
           }`}
         >
@@ -66,47 +66,47 @@ export const AuthScreen: React.FC = () => {
       </div>
 
       {/* Decorative ambient blobs */}
-      <div className="absolute top-0 right-0 w-80 h-80 bg-[#ffdad3]/40 blur-3xl opacity-60 rounded-full -mr-20 -mt-20" />
-      <div className="absolute bottom-0 left-0 w-80 h-80 bg-[#c7eae1]/30 blur-3xl opacity-50 rounded-full -ml-20 -mb-20" />
+      <div className="absolute top-0 right-0 w-80 h-80 bg-rose-200/40 blur-3xl opacity-60 rounded-full -mr-20 -mt-20" />
+      <div className="absolute bottom-0 left-0 w-80 h-80 bg-fuchsia-200/30 blur-3xl opacity-50 rounded-full -ml-20 -mb-20" />
 
-      <div className="w-full max-w-4xl bg-white rounded-3xl border border-[#ffe9e8] shadow-[0_12px_60px_rgba(137,79,66,0.06)] overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[550px] relative z-10 animate-fade-in mt-10 md:mt-0">
+      <div className="w-full max-w-4xl bg-white rounded-3xl border border-[#fce7f3] shadow-[0_12px_60px_rgba(225,29,72,0.08)] overflow-hidden grid grid-cols-1 md:grid-cols-12 min-h-[550px] relative z-10 animate-fade-in mt-10 md:mt-0">
         
         {/* LEFT COLUMN: BRAND PROMOTION / ONBOARDING INFO */}
-        <div className="md:col-span-5 bg-gradient-to-br from-[#894f42] to-[#7e5541] p-8 text-white flex flex-col justify-between relative overflow-hidden">
+        <div className="md:col-span-5 bg-gradient-to-br from-[#e11d48] via-[#db2777] to-[#be185d] p-8 text-white flex flex-col justify-between relative overflow-hidden">
           
           {/* Subtle logo pattern */}
-          <div className="absolute top-0 right-0 w-44 h-44 bg-white/5 rounded-full -mr-10 -mt-10" />
+          <div className="absolute top-0 right-0 w-44 h-44 bg-white/10 rounded-full -mr-10 -mt-10" />
 
           <div className="space-y-4">
-            <div className="bg-white/10 p-2 rounded-2xl w-max flex items-center justify-center">
+            <div className="bg-white/15 backdrop-blur-xs p-2 rounded-2xl w-max flex items-center justify-center border border-white/20 shadow-sm">
               <Heart className="w-8 h-8 fill-white text-white" />
             </div>
             <div>
               <h1 className="text-3xl font-black tracking-tight font-sans">{t('authWelcomeTitle')}</h1>
-              <p className="text-xs text-coral-100 font-sans mt-0.5 opacity-90">{t('authTagline')}</p>
+              <p className="text-xs text-pink-100 font-sans mt-0.5 opacity-90">{t('authTagline')}</p>
             </div>
           </div>
 
           <div className="space-y-4 my-8 md:my-0 text-xs font-sans">
             <div className="flex items-start gap-2 text-[11px]">
-              <div className="bg-white/10 p-1 rounded-lg shrink-0 mt-0.5">✔</div>
+              <div className="bg-white/15 p-1 rounded-lg shrink-0 mt-0.5">🌸</div>
               <p className="leading-relaxed">{t('authFeature1')}</p>
             </div>
 
             <div className="flex items-start gap-2 text-[11px]">
-              <div className="bg-white/10 p-1 rounded-lg shrink-0 mt-0.5">✔</div>
+              <div className="bg-white/15 p-1 rounded-lg shrink-0 mt-0.5">✨</div>
               <p className="leading-relaxed">{t('authFeature2')}</p>
             </div>
 
             <div className="flex items-start gap-2 text-[11px]">
-              <div className="bg-white/10 p-1 rounded-lg shrink-0 mt-0.5">✔</div>
+              <div className="bg-white/15 p-1 rounded-lg shrink-0 mt-0.5">🔒</div>
               <p className="leading-relaxed">{t('authFeature3')}</p>
             </div>
           </div>
 
           {/* Secure lock footer */}
-          <div className="flex items-center gap-1.5 text-[10px] text-white/70 font-mono bg-white/5 px-3 py-1.5 rounded-xl border border-white/10 w-max pr-4">
-            <ShieldCheck className="w-4 h-4 text-emerald-400" />
+          <div className="flex items-center gap-1.5 text-[10px] text-white/90 font-mono bg-white/10 px-3 py-1.5 rounded-xl border border-white/15 w-max pr-4">
+            <ShieldCheck className="w-4 h-4 text-emerald-300" />
             <span>{t('authGdpr')}</span>
           </div>
         </div>
@@ -114,13 +114,13 @@ export const AuthScreen: React.FC = () => {
         {/* RIGHT COLUMN: INTERACTIVE FORM SWITCHERS */}
         <div className="md:col-span-7 p-8 flex flex-col justify-center min-h-[460px]">
           
-          <div className="flex items-center gap-2 mb-6 border-b border-[#fff0f0] pb-3 justify-center md:justify-start">
+          <div className="flex items-center gap-2 mb-6 border-b border-[#fff0f5] pb-3 justify-center md:justify-start">
             <button
               type="button"
               onClick={() => setIsLogin(true)}
               className={`pb-2.5 px-4 text-xs font-bold font-sans border-b-2 transition-all cursor-pointer ${
                 isLogin 
-                  ? 'border-[#894f42] text-[#894f42] font-black' 
+                  ? 'border-[#e11d48] text-[#e11d48] font-black' 
                   : 'border-transparent text-gray-400 hover:text-gray-600'
               }`}
             >
@@ -131,7 +131,7 @@ export const AuthScreen: React.FC = () => {
               onClick={() => setIsLogin(false)}
               className={`pb-2.5 px-4 text-xs font-bold font-sans border-b-2 transition-all cursor-pointer ${
                 !isLogin 
-                  ? 'border-[#894f42] text-[#894f42] font-black' 
+                  ? 'border-[#e11d48] text-[#e11d48] font-black' 
                   : 'border-transparent text-gray-400 hover:text-gray-600'
               }`}
             >
@@ -152,7 +152,7 @@ export const AuthScreen: React.FC = () => {
                       placeholder="e.g. apu@gmail.com"
                       value={loginEmail}
                       onChange={(e) => setLoginEmail(e.target.value)}
-                      className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl pl-10 pr-4 py-2.5 text-xs font-sans text-gray-800"
+                      className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl pl-10 pr-4 py-2.5 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
                       required
                     />
                   </div>
@@ -167,7 +167,7 @@ export const AuthScreen: React.FC = () => {
                       placeholder="e.g. Faria Rahman"
                       value={loginName}
                       onChange={(e) => setLoginName(e.target.value)}
-                      className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl pl-10 pr-4 py-2.5 text-xs font-sans text-gray-800"
+                      className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl pl-10 pr-4 py-2.5 text-xs font-sans text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
                     />
                   </div>
                 </div>
@@ -175,7 +175,7 @@ export const AuthScreen: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#894f42] hover:bg-[#753f33] disabled:bg-gray-300 text-white font-bold py-2.5 rounded-xl cursor-pointer shadow-md transition-all active:scale-95 text-xs flex items-center justify-center gap-1.5"
+                  className="w-full bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] disabled:bg-gray-300 text-white font-bold py-2.5 rounded-xl cursor-pointer shadow-md shadow-rose-200/80 transition-all active:scale-95 text-xs flex items-center justify-center gap-1.5"
                 >
                   {loading ? t('loggingIn') : t('loginButton')}
                   <ArrowRight className="w-4 h-4" />
@@ -193,7 +193,7 @@ export const AuthScreen: React.FC = () => {
                       placeholder="e.g. Rohima Begum"
                       value={name}
                       onChange={(e) => setName(e.target.value)}
-                      className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl pl-10 pr-4 py-2 text-xs text-gray-800"
+                      className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl pl-10 pr-4 py-2 text-xs text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
                       required
                     />
                   </div>
@@ -208,7 +208,7 @@ export const AuthScreen: React.FC = () => {
                       placeholder="e.g. email@domain.com"
                       value={email}
                       onChange={(e) => setEmail(e.target.value)}
-                      className="w-full bg-[#fffcfc] border border-[#ffe9e8] rounded-xl pl-10 pr-4 py-2 text-xs text-gray-800"
+                      className="w-full bg-[#fffbfc] border border-[#fce7f3] rounded-xl pl-10 pr-4 py-2 text-xs text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
                       required
                     />
                   </div>
@@ -229,8 +229,8 @@ export const AuthScreen: React.FC = () => {
                         onClick={() => setStage(item.value)}
                         className={`flex flex-col items-center justify-center p-2.5 border rounded-2xl cursor-pointer transition-all ${
                           stage === item.value 
-                            ? 'border-[#894f42] bg-[#fff0f0] text-[#894f42] font-semibold ring-1 ring-[#894f42]' 
-                            : 'border-gray-200 hover:bg-gray-50 text-gray-600 bg-[#fffcfc]'
+                            ? 'border-[#e11d48] bg-[#fff0f5] text-[#be185d] font-semibold ring-1 ring-[#e11d48]' 
+                            : 'border-gray-200 hover:bg-[#fff9fa] text-gray-600 bg-[#fffbfc]'
                         }`}
                       >
                         <span className="font-bold text-[11px] font-sans block leading-tight">{item.title}</span>
@@ -242,7 +242,7 @@ export const AuthScreen: React.FC = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="w-full bg-[#45645e] hover:bg-[#3c5550] disabled:bg-gray-300 text-white font-bold py-2.5 rounded-xl cursor-pointer shadow-md transition-all active:scale-95 text-xs flex items-center justify-center gap-1.5 mt-3"
+                  className="w-full bg-gradient-to-r from-[#db2777] to-[#e11d48] hover:from-[#be185d] hover:to-[#9f1239] disabled:bg-gray-300 text-white font-bold py-2.5 rounded-xl cursor-pointer shadow-md shadow-rose-200/80 transition-all active:scale-95 text-xs flex items-center justify-center gap-1.5 mt-3"
                 >
                   {loading ? t('registering') : t('registerButton')}
                   <ArrowRight className="w-4 h-4" />
@@ -252,7 +252,7 @@ export const AuthScreen: React.FC = () => {
           </form>
 
           {/* Secure disclaimer */}
-          <div className="mt-5 text-center text-[10px] text-gray-450 font-sans leading-relaxed">
+          <div className="mt-5 text-center text-[10px] text-[#703848] font-sans leading-relaxed">
             {t('authDisclaimer')}
           </div>
 

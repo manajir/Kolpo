@@ -64,17 +64,17 @@ export const EducationLounge: React.FC = () => {
     <div className="space-y-6">
       
       {/* Search Header Banner */}
-      <div className="bg-gradient-to-br from-[#7e5541]/10 to-[#894f42]/10 rounded-3xl p-6 border border-[#ffe9e8]">
+      <div className="bg-gradient-to-br from-[#fff0f5] via-[#fff5f8] to-[#fdf2f8] rounded-3xl p-6 border border-[#fce7f3] shadow-sm">
         <div className="flex flex-col md:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
-            <div className="bg-[#7e5541] text-white p-3 rounded-2xl">
+            <div className="bg-gradient-to-br from-[#e11d48] to-[#db2777] text-white p-3 rounded-2xl shadow-sm">
               <Compass className="w-6 h-6" />
             </div>
             <div>
-              <h3 className="font-sans font-bold text-lg text-[#261818]">
+              <h3 className="font-sans font-bold text-lg text-[#2d1527]">
                 {isEn ? 'Kalpa Health Education & Learning' : 'কল্প লার্নিং অ্যান্ড এডুকেশন কর্নার'}
               </h3>
-              <p className="text-xs text-[#524340] font-sans">
+              <p className="text-xs text-[#703848] font-sans">
                 {isEn 
                   ? 'Comprehensive gynecological health articles, video lectures, and wellness courses.' 
                   : 'সীমাহীন তথ্যসমৃদ্ধ গাইনোকোলজিক্যাল অনুচ্ছেদ, শিক্ষণীয় ভিডিও লেকচার ও বিশেষ হেলথ কোর্সসমূহ'}
@@ -86,7 +86,7 @@ export const EducationLounge: React.FC = () => {
             {!profile?.subActive && (
               <button
                 onClick={() => setShowBillingModal(true)}
-                className="bg-gradient-to-r from-[#894f42] to-[#7e5541] text-white font-sans font-bold text-xs px-4 py-2 rounded-xl flex items-center gap-1.5 transition-all shadow-md cursor-pointer hover:brightness-105 active:scale-95"
+                className="bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] text-white font-sans font-bold text-xs px-4 py-2.5 rounded-2xl flex items-center gap-1.5 transition-all shadow-md shadow-rose-200/80 cursor-pointer active:scale-95"
               >
                 <Award className="w-4 h-4 fill-white" />
                 {isEn ? 'Get Kalpa Pro+' : 'কল্প প্রো+ এ মেম্বারশিপ নিন'}
@@ -102,13 +102,13 @@ export const EducationLounge: React.FC = () => {
             placeholder={isEn ? "Search articles, videos or courses..." : "আর্টিকেল, ভিডিও বা হেলথ কোর্স সার্চ করুন..."}
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="bg-[#fffcfc] border border-[#ffe9e8] rounded-xl px-3.5 py-1.5 text-xs text-gray-800 focus:outline-none"
+            className="bg-white border border-[#fce7f3] rounded-2xl px-3.5 py-2 text-xs text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
           />
 
           <select
             value={selectedCategory}
             onChange={(e) => setSelectedCategory(e.target.value)}
-            className="bg-white border border-[#ffe9e8] rounded-xl px-3 py-1.5 focus:outline-none"
+            className="bg-white border border-[#fce7f3] rounded-2xl px-3 py-2 text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
           >
             <option value="all">{isEn ? 'All Categories' : 'সব ক্যাটাগরি (All Topics)'}</option>
             <option value="period">{isEn ? 'Period Care' : 'মাসিক ও পিরিয়ড কেয়ার (Period Care)'}</option>
@@ -120,7 +120,7 @@ export const EducationLounge: React.FC = () => {
           <select
             value={selectedType}
             onChange={(e) => setSelectedType(e.target.value)}
-            className="bg-white border border-[#ffe9e8] rounded-xl px-3 py-1.5 focus:outline-none"
+            className="bg-white border border-[#fce7f3] rounded-2xl px-3 py-2 text-[#2d1527] focus:outline-none focus:ring-1 focus:ring-[#e11d48]"
           >
             <option value="all">{isEn ? 'All Formats' : 'সব ফরম্যাট (All resources)'}</option>
             <option value="article">{isEn ? 'Articles' : 'গবেষণাধর্মী অনুচ্ছেদ (Articles)'}</option>
@@ -132,21 +132,21 @@ export const EducationLounge: React.FC = () => {
 
       {/* RENDER DETAILED ACTIVE READING OR PLAYING COMPONENT */}
       {activeItem && (
-        <div className="bg-white border-2 border-[#ffe9e8] rounded-3xl p-6 shadow-md space-y-4 animate-fade-in text-xs font-sans">
+        <div className="bg-white border-2 border-[#fce7f3] rounded-3xl p-6 shadow-md space-y-4 animate-fade-in text-xs font-sans">
           
-          <div className="flex justify-between items-center pb-3 border-b border-[#ffe9e8]">
+          <div className="flex justify-between items-center pb-3 border-b border-[#fce7f3]">
             <div>
-              <span className="text-[10px] text-[#45645e] uppercase tracking-wider font-bold block bg-[#ebf8f5] px-2.5 py-0.5 rounded-full w-max">
+              <span className="text-[10px] text-[#be185d] uppercase tracking-wider font-bold block bg-[#fff0f5] border border-[#fce7f3] px-2.5 py-0.5 rounded-full w-max">
                 {getCategoryTag(activeItem.category)} • {activeItem.type.toUpperCase()}
               </span>
-              <h4 className="font-sans font-bold text-base text-[#261818] mt-1">
+              <h4 className="font-sans font-bold text-base text-[#2d1527] mt-1">
                 {isEn ? activeItem.title : activeItem.bengaliTitle}
               </h4>
             </div>
             
             <button
               onClick={() => setActiveItem(null)}
-              className="text-gray-400 hover:text-gray-800 border border-gray-200 hover:bg-gray-100 rounded-xl px-3 py-1 bg-white cursor-pointer"
+              className="text-[#703848] hover:text-[#2d1527] border border-[#fce7f3] hover:bg-[#fff0f5] rounded-xl px-3 py-1 bg-white cursor-pointer"
             >
               {isEn ? 'Close' : 'বন্ধ করুন'}
             </button>
@@ -154,7 +154,7 @@ export const EducationLounge: React.FC = () => {
 
           {/* If video tutorial format */}
           {activeItem.type === 'video' && activeItem.videoUrl && (
-            <div className="relative aspect-video rounded-2xl overflow-hidden border border-[#ffe9e8] bg-black">
+            <div className="relative aspect-video rounded-2xl overflow-hidden border border-[#fce7f3] bg-black">
               <iframe
                 title={activeItem.title}
                 src={activeItem.videoUrl}
@@ -167,20 +167,20 @@ export const EducationLounge: React.FC = () => {
 
           {/* Detailed Course Syllabus layout */}
           {activeItem.type === 'course' && activeItem.lessons && (
-            <div className="bg-[#fff9f8] p-4 rounded-2xl border border-[#ffe9e8] mb-4">
-              <p className="font-bold text-[#894f42] mb-2.5">
+            <div className="bg-[#fff9fa] p-4 rounded-2xl border border-[#fce7f3] mb-4">
+              <p className="font-bold text-[#be185d] mb-2.5">
                 {isEn ? 'Course Syllabus & Chapters:' : 'কোর্স কারিকুলাম ও অধ্যায়সমূহ:'}
               </p>
               <div className="space-y-2">
                 {activeItem.lessons.map((lesson, idx) => (
-                  <div key={idx} className="flex items-center justify-between bg-white border border-[#fff0f0] px-4 py-2.5 rounded-xl text-[11px]">
+                  <div key={idx} className="flex items-center justify-between bg-white border border-[#fce7f3] px-4 py-2.5 rounded-xl text-[11px]">
                     <div className="flex items-center gap-2">
-                      <span className="bg-[#fff0f0] text-[#894f42] w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px]">
+                      <span className="bg-[#fff0f5] text-[#be185d] w-5 h-5 rounded-full flex items-center justify-center font-bold text-[10px]">
                         {toLocalizedNumber(idx + 1, language)}
                       </span>
-                      <span className="font-semibold text-gray-850">{lesson.title}</span>
+                      <span className="font-semibold text-[#2d1527]">{lesson.title}</span>
                     </div>
-                    <span className="text-gray-400 font-mono">{lesson.duration}</span>
+                    <span className="text-[#703848] font-mono">{lesson.duration}</span>
                   </div>
                 ))}
               </div>
@@ -189,10 +189,10 @@ export const EducationLounge: React.FC = () => {
 
           {/* Renders dynamic health library documents markup */}
           {activeItem.contentMarkup && (
-            <div className="prose prose-sm max-w-none text-[#261818] font-sans leading-relaxed space-y-3 pt-2 text-[11px]">
+            <div className="prose prose-sm max-w-none text-[#2d1527] font-sans leading-relaxed space-y-3 pt-2 text-[11px]">
               {activeItem.contentMarkup.split('\n\n').map((paragraph, i) => {
                 if (paragraph.trim().startsWith('##')) {
-                  return <h5 key={i} className="font-bold text-[#894f42] text-xs pt-2">{paragraph.replace(/##/g, '').trim()}</h5>;
+                  return <h5 key={i} className="font-bold text-[#be185d] text-xs pt-2">{paragraph.replace(/##/g, '').trim()}</h5>;
                 }
                 if (paragraph.trim().startsWith('-')) {
                   return (
@@ -219,11 +219,11 @@ export const EducationLounge: React.FC = () => {
             <div
               key={item.id}
               onClick={() => handleOpenItem(item)}
-              className="bg-white border border-[#ffe9e8] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between"
+              className="bg-white border border-[#fce7f3] rounded-3xl overflow-hidden shadow-sm hover:shadow-md transition-all cursor-pointer flex flex-col justify-between hover:border-[#fbcfe8]"
             >
               <div>
                 {/* Cover Image Header */}
-                <div className="relative h-44 bg-gray-100 overflow-hidden select-none">
+                <div className="relative h-44 bg-[#fff0f5] overflow-hidden select-none">
                   <img
                     src={item.coverImage}
                     alt={item.title}
@@ -231,34 +231,34 @@ export const EducationLounge: React.FC = () => {
                     className="w-full h-full object-cover transition-all hover:scale-105 duration-500"
                   />
                   {isLocked && (
-                    <div className="absolute inset-0 bg-[#261818]/60 backdrop-blur-xs flex flex-col items-center justify-center text-white p-3 text-center">
-                      <Lock className="w-8 h-8 text-yellow-400 mb-1" />
+                    <div className="absolute inset-0 bg-[#2d1527]/70 backdrop-blur-xs flex flex-col items-center justify-center text-white p-3 text-center">
+                      <Lock className="w-8 h-8 text-rose-300 mb-1" />
                       <span className="text-[11px] font-bold font-sans">
                         {isEn ? 'Locked (Pro+ Only)' : 'কল্প প্রো+ মেম্বারশিপ লক'}
                       </span>
                     </div>
                   )}
 
-                  <span className="absolute top-3 left-3 bg-[#fff8f7] border border-[#ffe9e8] text-[#894f42] font-sans font-bold text-[9px] px-2 py-0.5 rounded-full shadow-sm">
+                  <span className="absolute top-3 left-3 bg-white/90 backdrop-blur-xs border border-[#fce7f3] text-[#be185d] font-sans font-bold text-[9px] px-2.5 py-0.5 rounded-full shadow-sm">
                     {getCategoryTag(item.category)}
                   </span>
                 </div>
 
                 <div className="p-4 space-y-1.5">
-                  <div className="flex items-center gap-1.5 text-gray-400 font-mono text-[9px] uppercase tracking-wider font-bold">
-                    {item.type === 'video' ? <Video className="w-3.5 h-3.5 text-red-500" /> : item.type === 'course' ? <GraduationCap className="w-3.5 h-3.5 text-purple-500" /> : <BookOpen className="w-3.5 h-3.5 text-amber-500" />}
+                  <div className="flex items-center gap-1.5 text-[#703848] font-mono text-[9px] uppercase tracking-wider font-bold">
+                    {item.type === 'video' ? <Video className="w-3.5 h-3.5 text-rose-500" /> : item.type === 'course' ? <GraduationCap className="w-3.5 h-3.5 text-pink-500" /> : <BookOpen className="w-3.5 h-3.5 text-rose-400" />}
                     <span>{item.type} • {item.duration}</span>
                   </div>
 
-                  <h4 className="font-sans font-bold text-[#261818] text-xs leading-snug line-clamp-2">
+                  <h4 className="font-sans font-bold text-[#2d1527] text-xs leading-snug line-clamp-2">
                     {isEn ? item.title : item.bengaliTitle}
                   </h4>
                 </div>
               </div>
 
-              <div className="px-4 pb-4 pt-1.5 flex items-center justify-between border-t border-[#fff0f0] text-[10px]">
-                <span className="text-gray-400 font-mono">ID: {item.id}</span>
-                <span className="text-[#894f42] font-bold font-sans flex items-center gap-0.5">
+              <div className="px-4 pb-4 pt-1.5 flex items-center justify-between border-t border-[#fce7f3] text-[10px]">
+                <span className="text-[#703848] font-mono">ID: {item.id}</span>
+                <span className="text-[#be185d] font-bold font-sans flex items-center gap-0.5">
                   {isLocked 
                     ? (isEn ? 'Unlock' : 'আনলক করুন') 
                     : (isEn ? 'Read / View' : 'বিস্তারিত দেখুন')}
@@ -273,10 +273,10 @@ export const EducationLounge: React.FC = () => {
       {/* SUBSCRIPTION MANAGEMENT MODAL (Upgrading Free to Premium simulated billing) */}
       {showBillingModal && (
         <div className="fixed inset-0 bg-black/55 backdrop-blur-xs flex items-center justify-center z-50 p-4">
-          <div className="bg-white border-2 border-[#ffe9e8]" style={{ borderRadius: '24px', maxWidth: '440px', width: '100%' }}>
+          <div className="bg-white border-2 border-[#fce7f3]" style={{ borderRadius: '24px', maxWidth: '440px', width: '100%' }}>
             
             {/* Header */}
-            <div className="p-6 text-center border-b border-[#fff0f0] relative">
+            <div className="p-6 text-center border-b border-[#fce7f3] relative">
               <button 
                 onClick={() => setShowBillingModal(false)}
                 className="absolute right-4 top-4 text-gray-400 hover:text-gray-800"
@@ -284,49 +284,49 @@ export const EducationLounge: React.FC = () => {
                 ✕
               </button>
               
-              <div className="bg-[#ffdbcc] text-[#6d382d] p-3.5 rounded-2xl w-max mx-auto mb-3 flex items-center justify-center shadow-inner">
-                <Award className="w-8 h-8 fill-current text-amber-800 animate-spin-slow" />
+              <div className="bg-gradient-to-br from-[#ffe4e6] to-[#fce7f3] text-[#be185d] p-3.5 rounded-2xl w-max mx-auto mb-3 flex items-center justify-center shadow-inner">
+                <Award className="w-8 h-8 fill-current text-[#e11d48] animate-spin-slow" />
               </div>
-              <h3 className="font-sans font-bold text-lg text-[#261818]">
+              <h3 className="font-sans font-bold text-lg text-[#2d1527]">
                 {isEn ? 'Kalpa Pro+ Membership' : 'কল্প প্রো+ সাবস্ক্রিপশন'}
               </h3>
-              <p className="text-xs text-[#524340] font-sans mt-1">
+              <p className="text-xs text-[#703848] font-sans mt-1">
                 {isEn ? 'Safe, confidential & unlimited women\'s health protection.' : 'নারীদের নিরাপদ, সীমাহীন দীর্ঘমেয়াদী পূর্ণাঙ্গ স্বাস্থ্য সুরক্ষা'}
               </p>
             </div>
 
             <div className="p-6 space-y-4">
-              <p className="text-[11px] text-[#261818] font-sans font-semibold">
+              <p className="text-[11px] text-[#2d1527] font-sans font-semibold">
                 {isEn ? 'Unlock premium expert features in one click:' : 'সীমাহীন বিশেষজ্ঞ সেবা ও ফিচারসমূহ এক ক্লিকে আনলক করুন:'}
               </p>
               
               <div className="space-y-2.5 text-[11px] font-sans">
-                <div className="flex items-start gap-2 text-[#524340]">
-                  <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-[#703848]">
+                  <Check className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                   <span>{isEn ? 'HD video tutorials and courses by 10+ gynecologists and wellness experts.' : '১০+ গাইনোকোলজিস্ট ও ইয়োগা টিউটরের ফুল এইচডি ভিডিও এবং লাইভ গাইড'}</span>
                 </div>
-                <div className="flex items-start gap-2 text-[#524340]">
-                  <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-[#703848]">
+                  <Check className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                   <span>{isEn ? 'Encrypted cloud storage for prescription & ultrasound medical records.' : 'নিরাপদ ক্লাউড ডাটা ভল্ট (মেডিকেল প্রেসক্রিপশন ও আল্ট্রাসウンド ফাইল সংরক্ষণে সীমাহীন স্টোরেজ)'}</span>
                 </div>
-                <div className="flex items-start gap-2 text-[#524340]">
-                  <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                <div className="flex items-start gap-2 text-[#703848]">
+                  <Check className="w-4 h-4 text-rose-500 shrink-0 mt-0.5" />
                   <span>{isEn ? 'Daily AI intelligent hormonal & mental wellness analysis.' : 'দৈনিক হরমোন পরিবর্তন ও মানসিক সুস্থতাবিষয়ক এআই ইন্টেলিজেন্ট এনালাইসিস'}</span>
                 </div>
               </div>
 
               {/* Price card layout */}
-              <div className="bg-[#fff9f8] border border-[#ffe9e8] p-4 rounded-2xl text-center flex items-center justify-between">
+              <div className="bg-[#fff9fa] border border-[#fce7f3] p-4 rounded-2xl text-center flex items-center justify-between">
                 <div className="text-left font-sans">
-                  <span className="text-[9px] text-gray-400 uppercase tracking-widest block font-bold">
+                  <span className="text-[9px] text-[#703848] uppercase tracking-widest block font-bold">
                     {isEn ? 'Annual Special Offer' : 'বার্ষিক বিশেষ ছাড়'}
                   </span>
-                  <span className="text-xl font-black text-[#894f42] block mt-0.5">
+                  <span className="text-xl font-black text-[#e11d48] block mt-0.5">
                     {isEn ? '৳800 ' : '৮০০ ৳ '} 
-                    <span className="text-xs font-normal text-gray-500">{isEn ? '/ year' : '/ বছর'}</span>
+                    <span className="text-xs font-normal text-[#703848]">{isEn ? '/ year' : '/ বছর'}</span>
                   </span>
                 </div>
-                <span className="bg-red-100 text-red-800 text-[10px] font-bold font-sans px-2.5 py-0.5 rounded-full">
+                <span className="bg-rose-100 text-rose-700 text-[10px] font-bold font-sans px-2.5 py-0.5 rounded-full border border-rose-200">
                   {isEn ? 'Save 70%' : 'মেগা ৭০% ডিসকাউন্ট!'}
                 </span>
               </div>
@@ -334,13 +334,13 @@ export const EducationLounge: React.FC = () => {
               <div className="flex gap-3 pt-2">
                 <button
                   onClick={() => setShowBillingModal(false)}
-                  className="flex-1 border border-gray-200 hover:bg-gray-50 text-gray-500 font-bold font-sans py-2.5 rounded-xl text-xs transition-all cursor-pointer"
+                  className="flex-1 border border-[#fce7f3] hover:bg-[#fff0f5] text-[#703848] font-bold font-sans py-2.5 rounded-xl text-xs transition-all cursor-pointer"
                 >
                   {isEn ? 'Later' : 'পরে ভাববো'}
                 </button>
                 <button
                   onClick={handleUpgradeAction}
-                  className="flex-1 bg-gradient-to-r from-[#894f42] to-[#7e5541] text-white font-bold font-sans py-2.5 rounded-xl text-xs hover:brightness-115 transition-all shadow-md cursor-pointer"
+                  className="flex-1 bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] text-white font-bold font-sans py-2.5 rounded-xl text-xs transition-all shadow-md shadow-rose-200/80 cursor-pointer"
                 >
                   {isEn ? 'Join Pro+' : 'হ্যাঁ, প্রো+ যোগ হোন'}
                 </button>
