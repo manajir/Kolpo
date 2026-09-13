@@ -30,8 +30,8 @@ export const EducationLounge: React.FC = () => {
     triggerSimulationNotification(
       isEn ? 'Subscription Activated!' : 'সাবস্ক্রিপশন সফল!',
       isEn 
-        ? 'Thank you! You have successfully unlocked Kalpa Pro+ features.' 
-        : 'ধন্যবাদ! আপনি সফলভাবে কল্প প্রো+ অল-রাউন্ডার ফিচারসমূহ অ্যাক্টিভেট করেছেন।'
+        ? 'Thank you! You have successfully unlocked Diptee Pro+ features.' 
+        : 'ধন্যবাদ! আপনি সফলভাবে দীপ্তি প্রো+ অল-রাউন্ডার ফিচারসমূহ অ্যাক্টিভেট করেছেন।'
     );
   };
 
@@ -72,7 +72,7 @@ export const EducationLounge: React.FC = () => {
             </div>
             <div>
               <h3 className="font-sans font-bold text-lg text-[#2d1527]">
-                {isEn ? 'Kalpa Health Education & Learning' : 'কল্প লার্নিং অ্যান্ড এডুকেশন কর্নার'}
+                {isEn ? 'Diptee Health Education & Learning' : 'দীপ্তি লার্নিং অ্যান্ড এডুকেশন কর্নার'}
               </h3>
               <p className="text-xs text-[#703848] font-sans">
                 {isEn 
@@ -89,7 +89,7 @@ export const EducationLounge: React.FC = () => {
                 className="bg-gradient-to-r from-[#e11d48] to-[#db2777] hover:from-[#be185d] hover:to-[#c026d3] text-white font-sans font-bold text-xs px-4 py-2.5 rounded-2xl flex items-center gap-1.5 transition-all shadow-md shadow-rose-200/80 cursor-pointer active:scale-95"
               >
                 <Award className="w-4 h-4 fill-white" />
-                {isEn ? 'Get Kalpa Pro+' : 'কল্প প্রো+ এ মেম্বারশিপ নিন'}
+                {isEn ? 'Get Diptee Pro+' : 'দীপ্তি প্রো+ এ মেম্বারশিপ নিন'}
               </button>
             )}
           </div>
@@ -234,7 +234,7 @@ export const EducationLounge: React.FC = () => {
                     <div className="absolute inset-0 bg-[#2d1527]/70 backdrop-blur-xs flex flex-col items-center justify-center text-white p-3 text-center">
                       <Lock className="w-8 h-8 text-rose-300 mb-1" />
                       <span className="text-[11px] font-bold font-sans">
-                        {isEn ? 'Locked (Pro+ Only)' : 'কল্প প্রো+ মেম্বারশিপ লক'}
+                        {isEn ? 'Locked (Pro+ Only)' : 'দীপ্তি প্রো+ মেম্বারশিপ লক'}
                       </span>
                     </div>
                   )}
@@ -288,7 +288,7 @@ export const EducationLounge: React.FC = () => {
                 <Award className="w-8 h-8 fill-current text-[#e11d48] animate-spin-slow" />
               </div>
               <h3 className="font-sans font-bold text-lg text-[#2d1527]">
-                {isEn ? 'Kalpa Pro+ Membership' : 'কল্প প্রো+ সাবস্ক্রিপশন'}
+                {isEn ? 'Diptee Pro+ Membership' : 'দীপ্তি প্রো+ সাবস্ক্রিপশন'}
               </h3>
               <p className="text-xs text-[#703848] font-sans mt-1">
                 {isEn ? 'Safe, confidential & unlimited women\'s health protection.' : 'নারীদের নিরাপদ, সীমাহীন দীর্ঘমেয়াদী পূর্ণাঙ্গ স্বাস্থ্য সুরক্ষা'}

@@ -44,8 +44,8 @@ export const ForumView: React.FC = () => {
     triggerSimulationNotification(
       isEn ? 'Forum Post Created' : 'ফোরাম পোস্ট সফল', 
       isEn 
-        ? 'Your question has been anonymously posted to Kalpa Forum.' 
-        : 'আপনার গোপনীয়তা সুরক্ষিত রেখে প্রশ্নটি সফলভাবে কল্প ফোরামে পোস্ট করা হয়েছে।'
+        ? 'Your question has been anonymously posted to Diptee Forum.' 
+        : 'আপনার গোপনীয়তা সুরক্ষিত রেখে প্রশ্নটি সফলভাবে দীপ্তি ফোরামে পোস্ট করা হয়েছে।'
     );
   };
 
@@ -53,7 +53,7 @@ export const ForumView: React.FC = () => {
     if (!commentInputStr.trim() || !profile) return;
 
     const freshComment = {
-      authorName: profile.displayName || (isEn ? 'Kalpa Member' : 'কল্প সদস্য'),
+      authorName: profile.displayName || (isEn ? 'Diptee Member' : 'দীপ্তি সদস্য'),
       content: commentInputStr,
       createdAt: new Date().toISOString()
     };
@@ -109,7 +109,7 @@ export const ForumView: React.FC = () => {
             </div>
             <div>
               <h3 className="font-sans font-bold text-lg text-[#2d1527] flex items-center gap-2">
-                {isEn ? 'Kalpa Peer Support Forum' : 'কল্প সহমর্মী ফোরাম'}
+                {isEn ? 'Diptee Peer Support Forum' : 'দীপ্তি সহমর্মী ফোরাম'}
               </h3>
               <p className="text-xs text-[#703848] font-sans">
                 {isEn ? 'A confidential, supportive space for women\'s health discussions.' : 'গোপনীয়তা বজায় রেখে নারীদের পরস্পর সহযোগী মিলনস্থল'}

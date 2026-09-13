@@ -1,6 +1,6 @@
 {
-  "name": "কল্প",
-  "description": "কল্প - বাংলা ভাষায় নারীদের পিরিয়ড, ওভুলেশন, গর্ভধারণ ও পেরিমেনোপজ ট্র্যাকিং এবং সুরক্ষিত স্বাস্থ্য প্ল্যাটফর্ম।",
+  "name": "Diptee",
+  "description": "দীপ্তি (Diptee) - বাংলা ও ইংরেজি ভাষায় নারীদের পিরিয়ড, ওভুলেশন, গর্ভধারণ ও পেরিমেনোপজ ট্র্যাকিং এবং সুরক্ষিত স্বাস্থ্য প্ল্যাটফর্ম।",
   "requestFramePermissions": [],
   "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
 }

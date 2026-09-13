@@ -245,8 +245,8 @@ export const DocCenter: React.FC = () => {
           </div>
           <p className="text-[11px] text-rose-100 leading-relaxed font-sans">
             {isEn 
-              ? 'When your doctor inputs your 6-digit access PIN in the Kalpa Doctor Portal, they can securely view your health history. Test with your code below:' 
-              : 'ডাক্তার সাহেব তার চেম্বারে বসে আপনার এই ৬-ডিজিটের পিন কোডটি কল্প ডক্টর পোর্টালে লিখলেই আপনার সমস্ত মেডিকেল হিস্ট্রি সিকিউরলি দেখতে পারবেন। নিচের ডেমো বক্সে কোড লিখে টেস্ট করুন:'}
+              ? 'When your doctor inputs your 6-digit access PIN in the Diptee Doctor Portal, they can securely view your health history. Test with your code below:' 
+              : 'ডাক্তার সাহেব তার চেম্বারে বসে আপনার এই ৬-ডিজিটের পিন কোডটি দীপ্তি ডক্টর পোর্টালে লিখলেই আপনার সমস্ত মেডিকেল হিস্ট্রি সিকিউরলি দেখতে পারবেন। নিচের ডেমো বক্সে কোড লিখে টেস্ট করুন:'}
           </p>
 
           <form onSubmit={handleVerifyClinicCode} className="space-y-3">

@@ -210,13 +210,13 @@ const LIBRARY_ARTICLES: CourseMaterial[] = [
 
 export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [language, setLanguageState] = useState<Language>(() => {
-    const saved = localStorage.getItem('kalpa_lang');
+    const saved = localStorage.getItem('diptee_lang') || localStorage.getItem('kalpa_lang');
     return (saved === 'en' || saved === 'bn') ? saved : 'bn';
   });
 
   const setLanguage = (lang: Language) => {
     setLanguageState(lang);
-    localStorage.setItem('kalpa_lang', lang);
+    localStorage.setItem('diptee_lang', lang);
   };
 
   const t = (key: keyof typeof translations.bn): string => {
@@ -280,8 +280,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
       const initialAlerts = [
         {
           id: 'n-1',
-          title: 'কল্পের স্বাগতম শুভেচ্ছা',
-          message: 'নিরাপদ এবং সুরক্ষিত কল্প অ্যাপে আপনাকে সুস্বাগতম! আপনার স্বাস্থ্য সুরক্ষায় আমরা প্রতিশ্রুতিবদ্ধ।',
+          title: language === 'en' ? 'Welcome to Diptee' : 'দীপ্তির স্বাগতম শুভেচ্ছা',
+          message: language === 'en'
+            ? 'Welcome to the safe and confidential Diptee app! We are committed to protecting your health and privacy.'
+            : 'নিরাপদ এবং সুরক্ষিত দীপ্তি অ্যাপে আপনাকে সুস্বাগতম! আপনার স্বাস্থ্য সুরক্ষায় আমরা প্রতিশ্রুতিবদ্ধ।',
           timestamp: new Date(),
           read: false
         }
@@ -425,8 +427,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     const updated = { ...profile, currentStage: stage, ...details };
     await setProfile(updated);
     triggerSimulationNotification(
-      'ধাপ পরিবর্তন সম্পন্ন', 
-      `আপনার কল্প স্বাস্থ্য ট্র্যাকার বর্তমানে সফলভাবে "${stage === HealthStage.PREGNANCY ? 'গর্ভকালীন' : stage === HealthStage.PERIMENOPAUSE ? 'পেরিমেনোপজ' : 'পিরিয়ড ও ওভুলেশন'}" মোডে ডাইভার্ট হয়েছে।`
+      language === 'en' ? 'Stage Changed' : 'ধাপ পরিবর্তন সম্পন্ন', 
+      language === 'en'
+        ? `Your Diptee health tracker has switched to "${stage === HealthStage.PREGNANCY ? 'Pregnancy' : stage === HealthStage.PERIMENOPAUSE ? 'Perimenopause' : 'Period & Ovulation'}" mode.`
+        : `আপনার দীপ্তি স্বাস্থ্য ট্র্যাকার বর্তমানে সফলভাবে "${stage === HealthStage.PREGNANCY ? 'গর্ভকালীন' : stage === HealthStage.PERIMENOPAUSE ? 'পেরিমেনোপজ' : 'পিরিয়ড ও ওভুলেশন'}" মোডে ডাইভার্ট হয়েছে।`
     );
   };
 
@@ -545,8 +549,8 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     triggerSimulationNotification(
       language === 'en' ? 'Document Uploaded' : 'ডকুমেন্ট আপলোড সম্পন্ন',
       language === 'en' 
-        ? `Your medical file "${name}" has been encrypted and stored in your Kalpa cloud vault.` 
-        : `আপনার মেডিকেল ডস্ক ফাইল "${name}" সফলভাবে এনক্রিপ্ট হয়ে কল্প ক্লাউড আর্কাইভে জমা হয়েছে।`
+        ? `Your medical file "${name}" has been encrypted and stored in your Diptee cloud vault.` 
+        : `আপনার মেডিকেল ডস্ক ফাইল "${name}" সফলভাবে এনক্রিপ্ট হয়ে দীপ্তি ক্লাউড আর্কাইভে জমা হয়েছে।`
     );
   };
 
@@ -676,7 +680,10 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     setProfileState(mockProf);
     localStorage.setItem('kalpa_mock_profile', JSON.stringify(mockProf));
-    triggerSimulationNotification('লগ-ইন সফল হয়েছে', `কল্প সদস্য ড্যাশবোর্ডে স্বাগতম, ${name}!`);
+    triggerSimulationNotification(
+      language === 'en' ? 'Sign In Successful' : 'লগ-ইন সফল হয়েছে',
+      language === 'en' ? `Welcome to the Diptee Member Dashboard, ${name}!` : `দীপ্তি সদস্য ড্যাশবোর্ডে স্বাগতম, ${name}!`
+    );
   };
 
   const mockRegister = async (email: string, name: string, stage: HealthStage) => {
@@ -698,14 +705,20 @@ export const AppProvider: React.FC<{ children: React.ReactNode }> = ({ children 
     };
     setProfileState(mockProf);
     localStorage.setItem('kalpa_mock_profile', JSON.stringify(mockProf));
-    triggerSimulationNotification('নিবন্ধন সম্পন্ন', `কল্প পরিবারের নতুন সদস্য হিসেবে আপনার যাত্রা শুরু হলো, ${name}!`);
+    triggerSimulationNotification(
+      language === 'en' ? 'Registration Complete' : 'নিবন্ধন সম্পন্ন',
+      language === 'en' ? `Welcome as a new member of the Diptee family, ${name}!` : `দীপ্তি পরিবারের নতুন সদস্য হিসেবে আপনার যাত্রা শুরু হলো, ${name}!`
+    );
   };
 
   const upgradeSubscription = async () => {
     if (!profile) return;
     const upd = { ...profile, subActive: true };
     await setProfile(upd);
-    triggerSimulationNotification('কল্প প্রো প্লাস সক্রিয়!', 'অভিনন্দন! আপনি সফলভাবে কল্প লিমিটলেস ক্লাউড স্টোরেজ ও বিশেষজ্ঞ কোর্স ম্যাটেরিয়াল আনলক করেছেন।');
+    triggerSimulationNotification(
+      language === 'en' ? 'Diptee Pro+ Activated!' : 'দীপ্তি প্রো প্লাস সক্রিয়!',
+      language === 'en' ? 'Congratulations! You have unlocked Diptee unlimited cloud storage and specialist course material.' : 'অভিনন্দন! আপনি সফলভাবে দীপ্তি লিমিটলেস ক্লাউড স্টোরেজ ও বিশেষজ্ঞ কোর্স ম্যাটেরিয়াল আনলক করেছেন।'
+    );
   };
 
   const signOutUser = async () => {

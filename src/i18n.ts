@@ -3,11 +3,11 @@ export type Language = 'bn' | 'en';
 export const translations = {
   bn: {
     // Brand & Header
-    appName: 'কল্প',
+    appName: 'দীপ্তি',
     brandBadge: 'দ্বিভাষিক / Bilingual',
     tagline: 'নারীদের বিশ্বস্ত সুরক্ষাকবচ',
     encryptedData: 'এনক্রিপ্টেড ডাটা',
-    proVersion: 'কল্প প্রো+',
+    proVersion: 'দীপ্তি প্রো+',
     freeVersion: 'ফ্রি ভার্সন',
     notificationsTitle: 'নোটিফিকেশন রিমাইন্ডারস 🛡️',
     noNotifications: 'নতুন কোনো বিজ্ঞপ্তি নেই',
@@ -83,7 +83,7 @@ export const translations = {
     savingLogButton: 'সেভ হচ্ছে...',
 
     // AI Assistant / Daily Insights
-    aiTitle: 'কল্প AI মেডিকেল অ্যাসিস্ট্যান্ট',
+    aiTitle: 'দীপ্তি AI মেডিকেল অ্যাসিস্ট্যান্ট',
     aiSub: 'গাইনোকোলজিক্যাল পরামর্শ ও সরাসরি স্বাস্থ্য গাইডেন্স',
     askAiPlaceholder: 'আপনার যেকোনো শারীরিক সমস্যা বা প্রশ্ন বাংলায় বা ইংরেজিতে লিখুন...',
     askButton: 'পরামর্শ চান',
@@ -117,7 +117,7 @@ export const translations = {
     glassesPerDay: 'গ্লাস প্রতি দিন',
 
     // Education Lounge
-    eduTitle: 'কল্প এডুকেশন কুঠির ও নারী স্বাস্থ্য লাইব্রেরি',
+    eduTitle: 'দীপ্তি এডুকেশন কুঠির ও নারী স্বাস্থ্য লাইব্রেরি',
     eduSub: 'অভিজ্ঞ গাইনোকোলজিস্ট ও প্রসূতি চিকিৎসকদের আর্টিকেলে পরিপূর্ণ ডিরেক্টরি',
     searchArticlesPlaceholder: 'স্বাস্থ্য বিষয়ক আর্টিকেল বা কোর্স খুঁজুন...',
     allCategories: 'সব ক্যাটাগরি',
@@ -174,7 +174,7 @@ export const translations = {
     deleteFile: 'মুছে ফেলুন',
 
     // Auth Screen
-    authWelcomeTitle: 'কল্প (Kalpa)',
+    authWelcomeTitle: 'দীপ্তি (Diptee)',
     authTagline: 'বাংলা ও ইংরেজিতে নারীদের বিশ্বস্ত গোপন স্বাস্থ্য ট্র্যাকার',
     authFeature1: 'পিরিয়ড, ওভুলেশন উর্বরতা দিন, গর্ভাবস্থা ও পেরিমেনোপজের জটিল উপসর্গ গণনা ও নিখুঁত প্রেডিকশন',
     authFeature2: 'কোনো বিজ্ঞাপন নেই এবং আপনার সমস্ত ডাটা শক্তিশালী এন্ড-টু-এ্যান্ড এনক্রিপশন লকের অধীনে সম্পূর্ণ নিরাপদ ও গোপন',
@@ -189,24 +189,24 @@ export const translations = {
     loggingIn: 'লগইন হচ্ছে...',
     registerButton: 'নতুন সদস্য নিবন্ধন সম্পন্ন করুন ও ট্র্যাক শুরু করুন',
     registering: 'নিবন্ধন সম্পন্ন হচ্ছে...',
-    authDisclaimer: 'কল্প হেলথ ট্র্যাকার ব্যবহারে কোনো রকম পাসওয়ার্ড মনে রাখার ঝক্কি নেই। আপনার ইমেইল প্রদান করে সাথে সাথেই লোকাল এনক্রিপ্ট ক্লাউড ডাটাবেস সিকিউরলি তৈরি করে নিতে পারেন।',
+    authDisclaimer: 'দীপ্তি হেলথ ট্র্যাকার ব্যবহারে কোনো রকম পাসওয়ার্ড মনে রাখার ঝক্কি নেই। আপনার ইমেইল প্রদান করে সাথে সাথেই লোকাল এনক্রিপ্ট ক্লাউড ডাটাবেস সিকিউরলি তৈরি করে নিতে পারেন।',
 
     // Common & Actions
     cancel: 'বাতিল',
     close: 'বন্ধ করুন',
     save: 'সংরক্ষণ করুন',
     delete: 'ডিলিট',
-    loadingDb: 'কল্প ডাটাবেস সিকিউরলি লোড হচ্ছে...',
+    loadingDb: 'দীপ্তি ডাটাবেস সিকিউরলি লোড হচ্ছে...',
     privacyFirst: 'গোপনীয়তা ও ডাটা নিরাপত্তা আমাদের প্রথম অগ্রাধিকার 🔒',
     languageName: 'বাংলা',
   },
   en: {
     // Brand & Header
-    appName: 'Kalpa',
+    appName: 'Diptee',
     brandBadge: 'Bilingual / দ্বিভাষিক',
     tagline: "Women's Trusted Health Guard",
     encryptedData: 'Encrypted Data',
-    proVersion: 'Kalpa Pro+',
+    proVersion: 'Diptee Pro+',
     freeVersion: 'Free Edition',
     notificationsTitle: 'Notification Reminders 🛡️',
     noNotifications: 'No new notifications',
@@ -282,7 +282,7 @@ export const translations = {
     savingLogButton: 'Saving...',
 
     // AI Assistant / Daily Insights
-    aiTitle: 'Kalpa AI Medical Assistant',
+    aiTitle: 'Diptee AI Medical Assistant',
     aiSub: 'Gynecological insights & live health guidance',
     askAiPlaceholder: 'Ask any physical question or symptom guidance in English or Bengali...',
     askButton: 'Get Advice',
@@ -316,7 +316,7 @@ export const translations = {
     glassesPerDay: 'Glasses / day',
 
     // Education Lounge
-    eduTitle: 'Kalpa Education Lounge & Women Health Library',
+    eduTitle: 'Diptee Education Lounge & Women Health Library',
     eduSub: 'Rich directory authored by experienced gynecologists and obstetricians',
     searchArticlesPlaceholder: 'Search health articles or courses...',
     allCategories: 'All Categories',
@@ -373,7 +373,7 @@ export const translations = {
     deleteFile: 'Delete',
 
     // Auth Screen
-    authWelcomeTitle: 'Kalpa',
+    authWelcomeTitle: 'Diptee',
     authTagline: "Women's Trusted Private Health Tracker in Bengali & English",
     authFeature1: 'Accurate calculations & predictions for period, ovulation fertile window, pregnancy weeks, and perimenopause symptoms',
     authFeature2: 'Zero ads with end-to-end encryption locking all your health logs completely private',
@@ -395,7 +395,7 @@ export const translations = {
     close: 'Close',
     save: 'Save',
     delete: 'Delete',
-    loadingDb: 'Securely loading Kalpa Database...',
+    loadingDb: 'Securely loading Diptee Database...',
     privacyFirst: 'Privacy and data security are our top priorities 🔒',
     languageName: 'English',
   }

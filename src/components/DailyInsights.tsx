@@ -23,8 +23,8 @@ export const DailyInsights: React.FC = () => {
   // Initialize welcome message when language changes or mounts
   useEffect(() => {
     const welcomeMsg = isEn
-      ? "Welcome! I am your personal health companion, Kalpa Assistant. Feel free to ask any confidential questions about period cramp relief, pregnancy nutrition, or perimenopause symptoms. (Information provided is educational and not a substitute for clinical advice)."
-      : "আসসালামু আলাইকুম আপু! আমি আপনার ব্যক্তিগত সহকারী \"কল্প সহকারী\"। পিরিয়ড ব্যথার প্রতিকার, গর্ভাবস্থার পুষ্টি, বা পেরিমেনোপজের অস্থিরতা নিয়ে গোপনীয়তা বজায় রেখে যেকোনো প্রশ্ন করতে পারেন। (তথ্যগুলো শিক্ষামূলক এবং চিকিৎসকের বিকল্প নয়)";
+      ? "Welcome! I am your personal health companion, Diptee Assistant. Feel free to ask any confidential questions about period cramp relief, pregnancy nutrition, or perimenopause symptoms. (Information provided is educational and not a substitute for clinical advice)."
+      : "আসসালামু আলাইকুম আপু! আমি আপনার ব্যক্তিগত সহকারী \"দীপ্তি সহকারী\"। পিরিয়ড ব্যথার প্রতিকার, গর্ভাবস্থার পুষ্টি, বা পেরিমেনোপজের অস্থিরতা নিয়ে গোপনীয়তা বজায় রেখে যেকোনো প্রশ্ন করতে পারেন। (তথ্যগুলো শিক্ষামূলক এবং চিকিৎসকের বিকল্প নয়)";
 
     setMessages([
       {
@@ -157,7 +157,7 @@ export const DailyInsights: React.FC = () => {
               <div className="py-12 flex flex-col items-center justify-center gap-3">
                 <RefreshCw className="w-8 h-8 text-[#e11d48] animate-spin" />
                 <p className="text-xs text-[#703848] font-sans font-semibold">
-                  {isEn ? "Kalpa AI is analyzing your health logs..." : "আপনার স্বাস্থ্যলগ পর্যবেক্ষণ করছে কল্প AI..."}
+                  {isEn ? "Diptee AI is analyzing your health logs..." : "আপনার স্বাস্থ্যলগ পর্যবেক্ষণ করছে দীপ্তি AI..."}
                 </p>
               </div>
             ) : (
@@ -227,8 +227,8 @@ export const DailyInsights: React.FC = () => {
             </h4>
             <p className="text-[11px] text-[#703848] font-sans mt-1 leading-relaxed">
               {isEn 
-                ? "Kalpa end-to-end encrypts all your health logs, dates, and medical records. No third-party or advertising server ever accesses your private sensitive data." 
-                : "কল্প আপনার সমস্ত শারীরিক তথ্য যেমন পিরিয়ড তারিখ, গর্ভাবস্থার বিবরণ এবং ফাইলগুলো এন্ড-টু-এন্ড লোকাল এনক্রিপ্ট করে ক্লাউডে ট্রান্সফার করে। কোনো তৃতীয় পক্ষ বা বিজ্ঞাপনী সার্ভার আপনার এই ব্যক্তিগত স্বাস্থ্য স্পর্শকাতর ডাটা শেয়ার করতে পারবে না।"}
+                ? "Diptee end-to-end encrypts all your health logs, dates, and medical records. No third-party or advertising server ever accesses your private sensitive data." 
+                : "দীপ্তি আপনার সমস্ত শারীরিক তথ্য যেমন পিরিয়ড তারিখ, গর্ভাবস্থার বিবরণ এবং ফাইলগুলো এন্ড-টু-এন্ড লোকাল এনক্রিপ্ট করে ক্লাউডে ট্রান্সফার করে। কোনো তৃতীয় পক্ষ বা বিজ্ঞাপনী সার্ভার আপনার এই ব্যক্তিগত স্বাস্থ্য স্পর্শকাতর ডাটা শেয়ার করতে পারবে না।"}
             </p>
           </div>
         </div>
@@ -244,7 +244,7 @@ export const DailyInsights: React.FC = () => {
             </div>
             <div>
               <h4 className="text-xs font-bold text-[#2d1527] font-sans">
-                {isEn ? "Kalpa Assistant (AI Health Guide)" : "কল্প সহকারী (AI স্বাস্থ্য গাইড)"}
+                {isEn ? "Diptee Assistant (AI Health Guide)" : "দীপ্তি সহকারী (AI স্বাস্থ্য গাইড)"}
               </h4>
               <p className="text-[9px] text-[#703848] font-sans">
                 {isEn ? "Private & Confidential Chat" : "ব্যক্তিগত ও সম্পূর্ণ সিকিউরড চ্যাট"}
